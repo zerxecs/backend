@@ -1,13 +1,17 @@
-import Header from '../component/header';
+import React, { Suspense, lazy } from 'react';
 import '../css/landingpage.css'; 
-import homeImage from '../assets/home.webp'; 
-import aboutImage from '../assets/search.webp'; 
-import contactImage from '../assets/contact.webp'; 
+import homeImage from '../assets/home.avif'; 
+import aboutImage from '../assets/search.avif'; 
+import contactImage from '../assets/contact.avif'; 
+
+const Header = lazy(() => import('../component/header'));
 
 const LandingPage = () => {
   return (
     <div>
-      <Header />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Header />
+      </Suspense>
       
       <link rel="preload" as="image" href={homeImage} />
 
@@ -23,27 +27,27 @@ const LandingPage = () => {
             <p className='second-text'>Whether you’re an educator aiming to gauge your students’ progress, or just a trivia buff who loves challenging others, classiz is the place for you!</p>
           </div>
           <div className="col-12 col-md-6">
-            <img src={homeImage} alt="Home" className="img-fluid" width="600" height="400" loading="lazy" />
+            <img src={homeImage} alt="Home" className="img-fluid" width="600" height="400" />
           </div>
         </div>
       </section>
       
       {/* About Section */}
       <section id="about" className="about-section container">
-        <div className="row">
-          <div className="col-12 col-md-6">
-            <img src={aboutImage} alt="About" className="img-fluid" width="600" height="400" loading="lazy" />
-          </div>
-          <div className="col-12 col-md-6">
-            <div className="gradient-line my-3"></div>     
-            <h1 className="navbar-brand about-start">Get started!</h1>
-            <p className="lead mt-3">Want to experience the thrill of knowledge? Create engaging quizzes, gain insights, and embark on this knowledge journey with us? Dive right in!</p>
-            <div className="d-flex mt-3">
-              <a href="/register?role=instructor" className="btn btn-primary me-2">Register as Instructor</a>
-              <a href="/register?role=student" className="btn btn-primary">Register as Student</a>
-            </div>
+      <div className="row">
+        <div className="col-12 col-md-6">
+          <img src={aboutImage} alt="About" className="img-fluid responsive-img" width="600" height="400" loading="lazy" />
+        </div>
+        <div className="col-12 col-md-6">
+          <div className="gradient-line my-3"></div>
+          <h1 className="navbar-brand about-start">Get started!</h1>
+          <p className="lead mt-3">Want to experience the thrill of knowledge? Create engaging quizzes, gain insights, and embark on this knowledge journey with us? Dive right in!</p>
+          <div className="d-flex mt-3 regbtn">
+            <a href="/register?role=instructor" className="btn btn-primary me-2">Register as Instructor</a>
+            <a href="/register?role=student" className="btn btn-primary">Register as Student</a>
           </div>
         </div>
+      </div>
         
         <div className="row">
           <div className="col-12">
@@ -126,13 +130,13 @@ const LandingPage = () => {
         </div>
         
         <div className="social-icons mt-4">
-          <a href="" target="_blank" rel="noopener noreferrer" className="me-3">
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="me-3" aria-label="Facebook">
             <i className="fab fa-facebook-f"></i>
           </a>
-          <a href="" target="_blank" rel="noopener noreferrer" className="me-3">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="me-3" aria-label="Instagram">
             <i className="fab fa-instagram"></i>
           </a>
-          <a href="" target="_blank" rel="noopener noreferrer">
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
             <i className="fab fa-twitter"></i>
           </a>
         </div>
