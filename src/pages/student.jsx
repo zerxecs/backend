@@ -5,8 +5,8 @@ import '../css/Instructor.css';
 import { Icon } from '@iconify/react';
 import homeIcon from '@iconify/icons-heroicons/home-solid';
 import classesIcon from '@iconify/icons-icomoon-free/books';
-import createClassIcon from '@iconify/icons-ic/baseline-create-new-folder';
-import createActivityIcon from '@iconify/icons-mdi/pencil-plus';
+// import createClassIcon from '@iconify/icons-ic/baseline-create-new-folder';
+// import createActivityIcon from '@iconify/icons-mdi/pencil-plus';
 import quizzesIcon from '@iconify/icons-material-symbols/library-books';
 import examsIcon from '@iconify/icons-healthicons/i-exam-multiple-choice';
 import logoutIcon from '@iconify/icons-fluent/person-12-filled';
@@ -49,16 +49,16 @@ const Sidebar = ({ setContent, setShowPrivate }) => {
             <Icon icon={classesIcon} /> Classes
           </a>
         </li>
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <a href="#" className="nav-link" onClick={() => setContent("Create Class")}>
             <Icon icon={createClassIcon} /> Create Class
           </a>
-        </li>
-        <li className="nav-item">
+        </li> */}
+        {/* <li className="nav-item">
           <a href="#" className="nav-link" onClick={() => setContent("Create Activity")}>
             <Icon icon={createActivityIcon} /> Create Activity
           </a>
-        </li>
+        </li> */}
         <li className="nav-item">
           <div className="form-check form-switch">
             <input

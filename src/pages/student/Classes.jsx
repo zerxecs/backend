@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import personIcon from '../../media/person-icon.svg';
-import '../../css/Classes.css';
+import '../../css/studentClasses.css';
 
 const StudentClasses = () => {
   const [classes, setClasses] = useState([]); // All public classes
@@ -88,63 +88,72 @@ const StudentClasses = () => {
   };
 
   return (
-    <div id='classes' className="container">
+    <div id='student-classes' className="container">
       <main className="main-content">
         {error && <p className="error">{error}</p>}
         
-        <h2>Enter Class Code to Register for Private Class</h2>
-        <div className="register-class">
-          <input
-            type="text"
-            value={classCode}
-            onChange={(e) => setClassCode(e.target.value)}
-            placeholder="Enter class code"
-          />
-          <button onClick={handleRegisterClass}>Register</button>
+        <div className="section">
+          
+          <div className="join-class">
+          <h2 className="colored regtext">Enter Class Code to Register for Private Class</h2>
+            <div className="input-group">
+              <input
+                type="text"
+                value={classCode}
+                onChange={(e) => setClassCode(e.target.value)}
+                placeholder="Enter class code"
+              />
+              <button onClick={handleRegisterClass}>Register</button>
+            </div>
+          </div>
         </div>
 
-        <h2>Public Classes</h2>
-        {classes.length === 0 && <p>No public classes available.</p>}
-        <div className="grid">
-          {classes.map((classItem) => (
-            <div
-              className="card"
-              key={classItem._id}
-              onClick={() => handleClassClick(classItem._id)}
-            >
-              <div className="card-content">
-                <h3 className="card-title">{classItem.name}</h3>
-                <hr />
-                <p>{classItem.description}</p>
-                <p className="card-text">
-                  <img src={personIcon} alt="Students Icon" className="icon-image" />
-                  {classItem.students.length} Students Enrolled
-                </p>
+        <div className="section">
+          <h2 className="colored">Public Classes</h2>
+          {classes.length === 0 && <p className='no'>No public classes available.</p>}
+          <div className="grid">
+            {classes.map((classItem) => (
+              <div
+                className="card"
+                key={classItem._id}
+                onClick={() => handleClassClick(classItem._id)}
+              >
+                <div className="card-content">
+                  <h3 className="card-title">{classItem.name}</h3>
+                  <hr />
+                  <p>{classItem.description}</p>
+                  <p className="card-text">
+                    <img src={personIcon} alt="Students Icon" className="icon-image" />
+                    {classItem.students.length} Students Enrolled
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        <h2>Registered Private Classes</h2>
-        {registeredClasses.length === 0 && <p>No registered classes available.</p>}
-        <div className="grid">
-          {registeredClasses.map((classItem) => (
-            <div
-              className="card"
-              key={classItem._id}
-              onClick={() => handleClassClick(classItem._id)}
-            >
-              <div className="card-content">
-                <h3 className="card-title">{classItem.name}</h3>
-                <hr />
-                <p>{classItem.description}</p>
-                <p className="card-text">
-                  <img src={personIcon} alt="Students Icon" className="icon-image" />
-                  {classItem.students.length} Students Enrolled
-                </p>
+        <div className="section">
+          <h2 className="colored">Registered Private Classes</h2>
+          {registeredClasses.length === 0 && <p className='no' >No registered classes available.</p>}
+          <div className="grid">
+            {registeredClasses.map((classItem) => (
+              <div
+                className="card"
+                key={classItem._id}
+                onClick={() => handleClassClick(classItem._id)}
+              >
+                <div className="card-content">
+                  <h3 className="card-title">{classItem.name}</h3>
+                  <hr />
+                  <p>{classItem.description}</p>
+                  <p className="card-text">
+                    <img src={personIcon} alt="Students Icon" className="icon-image" />
+                    {classItem.students.length} Students Enrolled
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </main>
     </div>
