@@ -1,0 +1,163 @@
+/* General styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Inter", sans-serif;
+    background-color: hsl(0, 0%, 100%);
+}
+.class-content-container {
+   
+    padding: 2%;
+}
+
+.header-img {
+    width: 100%;
+    height: auto;
+    max-height: 150px; 
+    object-fit: cover; 
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 16px;
+    background-color: #3C2A5D;
+    border-radius: 15px;
+    height: 100px;
+    padding: 10px;
+    margin: 0 0 0 10%;
+
+    width: 90%;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.title-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    margin: 0;
+    text-align: start;
+}
+
+.divider {
+    margin: 16px 0;
+    border: 2px solid #DA8FF9;
+    margin-top: 10px;
+    width: 50%;
+} 
+
+.create-btn {
+    text-align: left;
+    background-color: transparent;
+    border: 2px solid #7E57C2;
+    color: #BA68C8;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%; 
+    margin: 20px 0px; 
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    margin: 2% 0 0 10%;
+
+    width: 90%;
+}
+
+.activity-icon, .quiz-icon, .exam-icon {
+    margin-right: 10px;
+    width: 25px;
+    height: auto;
+}
+
+.create-btn:hover {
+    background-color: #7E57C2;
+    color: #FFFFFF;
+}
+
+.assessments {
+    margin-top: 24px;
+    margin: 2% 0 0 10%;
+
+    width: 90%;
+}
+
+.subheading {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #BA68C8;
+    text-align: start;
+}
+
+.assessment-list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+}
+
+.assessment-btn {
+    text-align: left;
+    border: 2px solid #7E57C2;
+    color: #BA68C8;
+    padding: 10px 20px;
+    border-radius: 25px;
+    margin-bottom: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.assessment-btn:hover {
+    color: #fff;
+    background-color: #7E57C2;
+}
+
+@media (max-width: 425px) {
+    .header-content {
+        flex-direction: column;
+        height: auto;
+        align-items: flex-start;
+        padding: 10px;
+    }
+
+    .back-btn {
+        margin: 0;
+        align-self: flex-start;
+    }
+
+    .title {
+        font-size: 1rem;
+    }
+
+    .divider {
+        margin: 8px 0;
+    }
+}
+@media (max-width: 768px) {
+    #class-content .class-content-container {
+        width: 750px;
+        max-width: 110%;
+    }
+}
