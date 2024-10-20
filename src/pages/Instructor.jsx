@@ -6,7 +6,7 @@ import { Icon } from '@iconify/react';
 import homeIcon from '@iconify/icons-heroicons/home-solid';
 import classesIcon from '@iconify/icons-icomoon-free/books';
 import createClassIcon from '@iconify/icons-ic/baseline-create-new-folder';
-import createActivityIcon from '@iconify/icons-mdi/pencil-plus';
+// import createActivityIcon from '@iconify/icons-mdi/pencil-plus';
 import quizzesIcon from '@iconify/icons-material-symbols/library-books';
 import examsIcon from '@iconify/icons-healthicons/i-exam-multiple-choice';
 import logoutIcon from '@iconify/icons-fluent/person-12-filled';
@@ -21,10 +21,12 @@ import Quizzes from './instructor/Quizzes';
 import Exams from './instructor/Exams';
 import Logout from './instructor/Logout';
 import HelpSupport from './instructor/HelpSupport';
+import HeaderSideBar from '../component/HeaderSideBar';
 
 // Sidebar Component
-const Sidebar = ({ setContent, setShowPrivate }) => {
+const Sidebar = ({ setContent, setShowPrivate, isSidebarVisible }) => {
   const [isPrivate, setIsPrivate] = useState(true); // Default to showing private classes
+  const [isLinkedToClass, setIsLinkedToClass] = useState(false);
 
   const handleToggleChange = () => {
     setIsPrivate(!isPrivate);
@@ -32,7 +34,7 @@ const Sidebar = ({ setContent, setShowPrivate }) => {
   };
 
   return (
-    <div id="sidebar" className="d-flex flex-column flex-shrink-0 p-3 bg-light sidebar">
+    <div id="sidebar" className={`d-flex flex-column flex-shrink-0 p-3 bg-light sidebar ${isSidebarVisible ? 'visible' : 'hidden'}`}>
       <p className="navbar-brand classiz">
         class<span style={{ color: '#BA68C8' }}>iz.</span>
       </p>
@@ -40,25 +42,26 @@ const Sidebar = ({ setContent, setShowPrivate }) => {
       <ul className="nav nav-pills flex-column mb-auto">
         <li className="nav-item"><h6 className="nav-header">Menu</h6></li>
         <li className="nav-item">
-          <a href="#" className="nav-link active" onClick={() => setContent("Home")}>
+          <a href="#home-instructor" className="nav-link active" onClick={() => setContent("Home")}>
             <Icon icon={homeIcon} /> Home
           </a>
         </li>
         <li className="nav-item">
-          <a href="#" className="nav-link" onClick={() => setContent("Classes")}>
+          <a href="#classes" className="nav-link" onClick={() => setContent("Classes")}>
             <Icon icon={classesIcon} /> Classes
           </a>
         </li>
         <li className="nav-item">
-          <a href="#" className="nav-link" onClick={() => setContent("Create Class")}>
+          <a href="#create-class" className="nav-link" onClick={() => setContent("Create Class")}>
             <Icon icon={createClassIcon} /> Create Class
           </a>
         </li>
-        <li className="nav-item">
-          <a href="#" className="nav-link" onClick={() => setContent("Create Activity")}>
+        {/* <li className="nav-item">
+          <a href="#create-activity" className="nav-link" onClick={() => setContent("Create Activity")}>
             <Icon icon={createActivityIcon} /> Create Activity
           </a>
-        </li>
+        </li> */}
+      
         <li className="nav-item">
           <div className="form-check form-switch">
             <input
@@ -75,7 +78,7 @@ const Sidebar = ({ setContent, setShowPrivate }) => {
         </li>
         <li className="nav-item"><h6 className="nav-header">Assessment</h6></li>
         <li className="nav-item">
-          <a href="#" className="nav-link" onClick={() => setContent("Quizzes")}>
+          <a href="#quiz-instructor" className="nav-link" onClick={() => setContent("Quizzes")}>
             <Icon icon={quizzesIcon} /> Quizzes
           </a>
         </li>
@@ -115,6 +118,7 @@ const Sidebar = ({ setContent, setShowPrivate }) => {
 Sidebar.propTypes = {
   setContent: PropTypes.func.isRequired,
   setShowPrivate: PropTypes.func.isRequired, // Add this prop
+  isSidebarVisible: PropTypes.bool.isRequired,
 };
 
 const Content = ({ content, classes, addClass, setContent, showPrivate }) => {
@@ -158,16 +162,25 @@ const App = () => {
   const [content, setContent] = useState("Home");
   const [classes, setClasses] = useState([]);
   const [showPrivate, setShowPrivate] = useState(true); // State to track if private classes should be shown
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   const addClass = (newClass) => {
     setClasses([...classes, newClass]);
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarVisible(!isSidebarVisible);
+    document.body.classList.toggle('no-scroll', !isSidebarVisible);
+  };
+
   return (
-    <div className="d-flex" style={{ height: '100vh' }}>
-      <Sidebar setContent={setContent} setShowPrivate={setShowPrivate} /> {/* Pass the setter function */}
-      <div className="main-content flex-grow-1">
-        <Content content={content} classes={classes} addClass={addClass} setContent={setContent} showPrivate={showPrivate} /> {/* Pass the showPrivate state */}
+    <div className="d-flex flex-column" style={{ height: '100vh' }}>
+      <HeaderSideBar toggleSidebar={toggleSidebar} />
+      <div className="d-flex flex-grow-1">
+        <Sidebar setContent={setContent} setShowPrivate={setShowPrivate} isSidebarVisible={isSidebarVisible} /> {/* Pass the setter function */}
+        <div className="main-content flex-grow-1">
+          <Content content={content} classes={classes} addClass={addClass} setContent={setContent} showPrivate={showPrivate} /> {/* Pass the showPrivate state */}
+        </div>
       </div>
     </div>
   );

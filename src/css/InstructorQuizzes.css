@@ -221,6 +221,12 @@
         width: 40px;
         height: 40px;
     }
+    #instructor-quiz .divider {
+        border: 1px solid #888;
+        margin: 5% 0 5% -15%;
+        width: 130%;
+    }
+    
 }
 
 /* Phone layout */
