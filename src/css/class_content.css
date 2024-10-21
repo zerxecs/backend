@@ -1,18 +1,18 @@
 /* General styles */
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-body {
+#class-details body {
     margin: 0;
     padding: 0;
     font-family: "Inter", sans-serif;
     background-color: hsl(0, 0%, 100%);
 }
-.class-content-container {
+#class-details .class-content-container {
    
     padding: 2%;
 }
 
-.header-img {
+#class-details .header-img {
     width: 100%;
     height: auto;
     max-height: 150px; 
@@ -21,35 +21,35 @@ body {
     border-top-right-radius: 0.5rem;
 }
 
-.header-content {
+#class-details .header-content {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 16px;
     background-color: #3C2A5D;
     border-radius: 15px;
-    height: 100px;
+    height: 35%;
     padding: 10px;
-    margin: 0 0 0 10%;
+    margin: 0;
 
-    width: 90%;
+    width:100%;
 }
 
-.back-btn {
+#class-details .back-btn {
     background: none;
     border: none;
     cursor: pointer;
     margin-left: 10px;
 }
 
-.title-container {
+#class-details .title-container {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    height: 50%;
     
 }
 
-.title {
+#class-details .title {
     font-size: 1.5rem;
     font-weight: bold;
     color: #fff;
@@ -57,64 +57,43 @@ body {
     text-align: start;
 }
 
-.divider {
+#class-details .divider {
     margin: 16px 0;
     border: 2px solid #DA8FF9;
     margin-top: 10px;
     width: 50%;
 } 
 
-.create-btn {
-    text-align: left;
-    background-color: transparent;
-    border: 2px solid #7E57C2;
-    color: #BA68C8;
-    padding: 10px 20px;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: 100%; 
-    margin: 20px 0px; 
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    margin: 2% 0 0 10%;
 
-    width: 90%;
-}
-
-.activity-icon, .quiz-icon, .exam-icon {
+#class-details .activity-icon, #class-details .quiz-icon, #class-details .exam-icon {
     margin-right: 10px;
     width: 25px;
     height: auto;
 }
 
-.create-btn:hover {
-    background-color: #7E57C2;
-    color: #FFFFFF;
-}
 
-.assessments {
+#class-details .assessments {
     margin-top: 24px;
-    margin: 2% 0 0 10%;
+    margin: 2% 0;
 
-    width: 90%;
+    width: 100%;
 }
 
-.subheading {
+#class-details .subheading {
     font-size: 1rem;
     font-weight: 600;
     color: #BA68C8;
     text-align: start;
+    margin: 0 1%;
 }
 
-.assessment-list {
+#class-details .assessment-list {
     display: flex;
     flex-direction: column;
     margin-top: 8px;
 }
 
-.assessment-btn {
+#class-details .assessment-btn {
     text-align: left;
     border: 2px solid #7E57C2;
     color: #BA68C8;
@@ -129,34 +108,200 @@ body {
     align-items: center;
 }
 
-.assessment-btn:hover {
+#class-details .assessment-btn:hover {
     color: #fff;
     background-color: #7E57C2;
 }
 
+#class-details .description,  
+#class-details .class-code,
+#class-details .student-enroll {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #ffffff;
+    text-align:left;
+}
+.student-enroll {
+    margin: auto 2%;
+}
+#class-details .settings-btn{
+    background-color: transparent;
+    border: 2px;
+    color: #BA68C8;
+    
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+
+}
+#class-details .title-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+
+  
+#class-details .join-class {
+    background-color: #3C2A5D;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    width: 100%;
+    height: auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  #class-details .join-class label {
+    display: block;
+    color:#BA68C8;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    text-align: left;
+
+  
+  }
+  #class-details .regtext {
+    margin: 0 4% 10px 0;
+    color: #ffffff !important;
+    text-align: left;
+  }
+  #class-details .cd-input-group {
+    display: flex;
+    border: 2px solid #DA88F9;
+    border-radius: 10px; 
+    padding: 10px;
+    width: 95%;
+    overflow: hidden; 
+  }
+  #class-details  .cd-input-group input {
+    flex: 1;
+    padding: 10px;
+    border: none; 
+    font-size: 1rem;
+    outline: none;
+    border-radius: 5px 0 0 5px ;
+  }
+  #class-details  .center-btn{
+    background-color: #BA68C8;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 20%;
+    margin: 0 0 4% 20px;
+    transition: background-color 0.3s ease;
+  }
+  
+  #class-details .input-group button:hover {
+    background-color: #a144cd;
+  }
+  
+#class-details h4 {
+  font-size: 18px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+#class-details ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#class-details ul li {
+  font-size: 16px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#class-details ul li button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#class-details ul li button:hover {
+  background-color: #ff1a1a;
+}
+
+#class-details .error {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+#class-details .back-to-classdeets{
+    background-color:#BA68C8;
+    color: #fff !important;
+    border: none;
+    width: 20%;
+    border-radius: 15px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 50px 88% 0 0;
+    transition: background-color 0.2s;
+}
+
+#class-details .back-to-classdeets:hover {
+    background-color:#a754b6 !important;
+  }
+  
+
+
+  #class-details .create-btn  {
+    text-align: left;
+    background-color: transparent;
+    border: 2px solid #7E57C2;
+    color: #BA68C8;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%; 
+    margin: 0 auto; 
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    margin: 2% 0;
+
+    width: 100%;
+}
+#class-details .create-btn :hover {
+    background-color: #7E57C2;
+    color: #FFFFFF;
+}
 @media (max-width: 425px) {
-    .header-content {
+    #class-details  .header-content {
         flex-direction: column;
         height: auto;
         align-items: flex-start;
         padding: 10px;
     }
 
-    .back-btn {
+    #class-details .back-btn {
         margin: 0;
         align-self: flex-start;
     }
 
-    .title {
+    #class-details .title {
         font-size: 1rem;
     }
 
-    .divider {
+    #class-details    .divider {
         margin: 8px 0;
     }
 }
 @media (max-width: 768px) {
-    #class-content .class-content-container {
+    #class-details .class-content-container {
         width: 750px;
         max-width: 110%;
     }

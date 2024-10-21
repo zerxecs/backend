@@ -41,7 +41,8 @@
 }
 
 #home-user .welcome-title .name {
-  margin-right: 70%;   
+margin: 0;
+width: 100%;
 }
 
 .grid {

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import personIcon from '../../media/person-icon.svg';
 import '../../css/Classes.css';
 import '../../css/CreateClass.css';
+import ClassDetails from './ClassDetails'; // Import ClassDetails component
 
 const Classes = ({ showPrivate }) => {
   const [classes, setClasses] = useState([]);
   const [error, setError] = useState('');
-  const navigate = useNavigate(); // useNavigate hook
+  const [selectedClass, setSelectedClass] = useState(null); // State for selected class
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -33,16 +34,28 @@ const Classes = ({ showPrivate }) => {
 
     fetchClasses();
   }, []);
-  
-  const handleClassClick = (classId) => {
-    navigate(`/class/${classId}`); // Navigate to class details page
+
+  const getInitials = (name) => {
+    return name.split(' ').map(word => word[0]).join('');
+  };
+
+  const handleCardClick = (classItem) => {
+    setSelectedClass(classItem);
+  };
+
+  const handleBackClick = () => {
+    setSelectedClass(null);
   };
 
   // Filter classes based on the toggle state
-  const displayedClasses = classes.filter(classItem => 
-    (showPrivate && classItem.type === 'private') || 
+  const displayedClasses = classes.filter(classItem =>
+    (showPrivate && classItem.type === 'private') ||
     (!showPrivate && classItem.type === 'public')
   );
+
+  if (selectedClass) {
+    return <ClassDetails selectedClass={selectedClass} onBack={handleBackClick} />;
+  }
 
   return (
     <div id='classes' className="container">
@@ -54,14 +67,21 @@ const Classes = ({ showPrivate }) => {
             <div
               className="card"
               key={index}
-              onClick={() => handleClassClick(classItem._id)}
+              onClick={() => handleCardClick(classItem)}
             >
+              <div className="card-image-container">
+                {getInitials(classItem.name)}
+              </div>
               <div className="card-content">
                 <h3 className="card-title">{classItem.name}</h3>
                 <hr />
-                <p>{classItem.description}</p>
+                <p className='card-description'>{classItem.description}</p>
                 <p className="card-text">
-                  <img src={personIcon} alt="Students Icon" className="icon-image" />
+                  <img
+                    src={personIcon}
+                    alt="Students Icon"
+                    className="icon-image"
+                  />
                   {classItem.students.length} Students Enrolled
                 </p>
               </div>
@@ -71,6 +91,10 @@ const Classes = ({ showPrivate }) => {
       </main>
     </div>
   );
+};
+
+Classes.propTypes = {
+  showPrivate: PropTypes.bool.isRequired,
 };
 
 export default Classes;

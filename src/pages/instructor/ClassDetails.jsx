@@ -1,44 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import personIcon from '../../media/person-icon.svg';
+import backIcon from '../../media/back.svg';
+import settingsIcon from '../../media/settings.svg'; // Import settings icon
+import activityIcon from '../../media/activity.svg';
+import quizIcon from '../../media/quiz.svg';
+import examIcon from '../../media/exam.svg';
+import '../../css/class_content.css';
+import CreateActivity from './CreateActivity'; // Corrected import
 
-
-const ClassDetails = () => {
-  const { classId } = useParams();
-  const [selectedClass, setSelectedClass] = useState(null);
-  const [registeredStudents, setRegisteredStudents] = useState([]); // For selected class students
+const ClassDetails = ({ selectedClass, onBack }) => {
+  const [registeredStudents, setRegisteredStudents] = useState(selectedClass.students); // For selected class students
   const [filteredStudents, setFilteredStudents] = useState([]); // For search results
   const [searchTerm, setSearchTerm] = useState(''); // Store the search input
   const [students, setStudents] = useState([]); // Store selected students
   const [error, setError] = useState('');
-
-  // Fetch class details and students
-  useEffect(() => {
-    const fetchClassDetails = async () => {
-      try {
-        const response = await fetch(`http://localhost:5000/api/class/${classId}`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-
-        const data = await response.json();
-        if (data.success) {
-          setSelectedClass(data.class);
-          setRegisteredStudents(data.class.students);
-        } else {
-          setError(data.error || 'Error fetching class details');
-        }
-      } catch (err) {
-        console.error('Error fetching class details:', err);
-        setError('An error occurred while fetching class details.');
-      }
-    };
-
-    fetchClassDetails();
-  }, [classId]);
+  const [showSettings, setShowSettings] = useState(false); // State for showing settings
+  const [showCreateActivity, setShowCreateActivity] = useState(false); // State for showing CreateActivity
 
   // Fetch students to add (search functionality)
   const handleSearch = async (e) => {
@@ -146,70 +124,127 @@ const ClassDetails = () => {
     }
   };
 
+  const toggleSettings = () => {
+    setShowSettings(!showSettings); // Toggle the visibility of the settings section
+  };
+
+  // Define the handleCreateActivityClick function
+  const handleCreateActivityClick = () => {
+    setShowCreateActivity(true); // Show the CreateActivity component
+  };
+
+  // Define the handleBackToClassDetails function
+  const handleBackToClassDetails = () => {
+    setShowCreateActivity(false); // Hide the CreateActivity component
+  };
+
   return (
-    <div className="container">
+    <div id="class-details" className="container">
       <main className="main-content">
         {error && <p className="error">{error}</p>}
         {selectedClass && (
           <>
-            <h2>{selectedClass.name}</h2>
-            <p><strong>Description:</strong> {selectedClass.description}</p>
-            {selectedClass.type === 'private' ? (
-              <p><strong>Class Code:</strong> {selectedClass.code}</p>
+            {showCreateActivity ? (
+              <CreateActivity onBackClick={handleBackToClassDetails} />
             ) : (
-              <p><strong>Class Type:</strong> Public</p>
-            )}
-            <h4>Enrolled Students:</h4>
-            <ul>
-              {registeredStudents.length > 0 ? (
-                registeredStudents.map((student, index) => (
-                  <li key={index}>
-                    {student.fname} {student.lname} ({student.email})
-                    <button type="button" onClick={() => handleRemoveStudentFromClass(student.email)}>
-                      Remove
-                    </button>
-                  </li>
-                ))
-              ) : (
-                <p>No students enrolled.</p>
-              )}
-            </ul>
-
-            <h4>Add Student:</h4>
-            <form onSubmit={handleAddStudent}>
-              <div className="form-group">
-                <label htmlFor="searchTerm">Search for a student</label>
-                <input
-                  type="text"
-                  id="searchTerm"
-                  value={searchTerm}
-                  onChange={handleSearch}
-                  placeholder="Enter name or email"
-                  className="form-control"
-                />
-                {filteredStudents.length > 0 && (
-                  <ul className="student-search-results">
-                    {filteredStudents.map(student => (
-                      <li key={student._id} onClick={() => handleSelectStudent(student)}>
-                        {`${student.fname} ${student.lname} (${student.email})`}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-
-              <div className="selected-students">
-                {students.map(student => (
-                  <div key={student.email} className="selected-student">
-                    <span>{`${student.fname} ${student.lname}`}</span>
-                    <button type="button" onClick={() => handleRemoveStudent(student.email)}>
-                      Remove
-                    </button>
+              <>
+                <div id="class-details" className="header-content">
+                  <button className="back-btn" onClick={onBack}>
+                    <img src={backIcon} alt="Back Icon" />
+                  </button>
+                  <div className="title-container">
+                    <div className="title-row">
+                      <h1 className="title">{selectedClass.name}</h1>
+                      <button className="settings-btn" onClick={toggleSettings}>
+                        <img src={settingsIcon} alt="Settings Icon" />
+                      </button>
+                    </div>
+                    <hr className="divider" />
+                    <p className="description"><strong>Description:</strong> {selectedClass.description}</p>
+                    {selectedClass.type === 'private' ? (
+                      <p className="class-code"><strong>Class Code:</strong> {selectedClass.code}</p>
+                    ) : (
+                      <p className="class-code"><strong>Class Type:</strong> Public</p>
+                    )}
                   </div>
-                ))}
-              </div>
-              <button type="submit" className="center-btn">Add Students to Class</button>
-            </form>
+                </div>
+                {!showSettings && (
+                  <>
+                    <button className="create-btn" onClick={handleCreateActivityClick}>
+                      <img src={activityIcon} alt="Activity Icon" className="activity-icon" /> Create Activity
+                    </button>
+                    <div className="assessments">
+                      <h2 className="subheading">PRIVATE ASSESSMENTS</h2>
+                      <div className="assessment-list">
+                        <button className="assessment-btn">
+                          <img src={quizIcon} alt="Quiz Icon" className="quiz-icon" /> Quizzes
+                        </button>
+                        <button className="assessment-btn">
+                          <img src={examIcon} alt="Exam Icon" className="exam-icon" /> Exams
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
+                {showSettings && (
+                  <div id="class-details" className="settings-section">
+                    <div className="join-class">
+                      <h3 className="colored regtext">Add Student</h3>
+                      <form onSubmit={handleAddStudent}>
+                        <div className="form-group">
+                          <label htmlFor="searchTerm">Search for a student</label>
+                          <input
+                            type="text"
+                            id="searchTerm"
+                            value={searchTerm}
+                            onChange={handleSearch}
+                            placeholder="Enter name or email"
+                            className="cd-input-group"
+                          />
+                          {filteredStudents.length > 0 && (
+                            <ul className="student-search-results">
+                              {filteredStudents.map(student => (
+                                <li key={student._id} onClick={() => handleSelectStudent(student)}>
+                                  {`${student.fname} ${student.lname} (${student.email})`}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                        <div className="selected-students">
+                          {students.map(student => (
+                            <div key={student.email} className="selected-student">
+                              <span>{`${student.fname} ${student.lname}`}</span>
+                              <button type="button" onClick={() => handleRemoveStudent(student.email)}>
+                                Remove
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                        <button type="submit" className="center-btn">Add Students to Class</button>
+                      </form>
+
+                      <h3 className="colored regtext">Enrolled Students</h3>
+                      <ul>
+                        {registeredStudents.length > 0 ? (
+                          registeredStudents.map((student, index) => (
+                            <li key={index}>
+                              {student.fname} {student.lname} ({student.email})
+                              <button type="button" onClick={() => handleRemoveStudentFromClass(student.email)}>
+                                Remove
+                              </button>
+                            </li>
+                          ))
+                        ) : (
+                          <p className="student-enroll">No students enrolled.</p>
+                        )}
+                      </ul>
+                    </div>
+                    <button className="back-to-classdeets" onClick={toggleSettings}>Back to Class Details</button>
+                  </div>
+                )}
+              </>
+            )}
           </>
         )}
       </main>
@@ -218,7 +253,8 @@ const ClassDetails = () => {
 };
 
 ClassDetails.propTypes = {
-  classId: PropTypes.string.isRequired, // Define prop type for classId if needed
+  selectedClass: PropTypes.object.isRequired, // Define prop type for selectedClass
+  onBack: PropTypes.func.isRequired, // Define prop type for onBack
 };
 
 export default ClassDetails;

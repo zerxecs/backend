@@ -6,6 +6,7 @@
   padding: auto;
 }
 
+
 #create-activity label, #create-activity input {
   text-align: left;
 }
@@ -101,8 +102,10 @@
 @media (max-width: 768px) {
  
   .main-content {
-width: 95%; 
-  
+  width:800px ; 
+  max-width: auto;
+  margin: 0 25% 0 0;
+
   }
 
   #create-activity .btn-group {

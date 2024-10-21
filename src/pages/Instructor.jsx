@@ -6,7 +6,6 @@ import { Icon } from '@iconify/react';
 import homeIcon from '@iconify/icons-heroicons/home-solid';
 import classesIcon from '@iconify/icons-icomoon-free/books';
 import createClassIcon from '@iconify/icons-ic/baseline-create-new-folder';
-// import createActivityIcon from '@iconify/icons-mdi/pencil-plus';
 import quizzesIcon from '@iconify/icons-material-symbols/library-books';
 import examsIcon from '@iconify/icons-healthicons/i-exam-multiple-choice';
 import logoutIcon from '@iconify/icons-fluent/person-12-filled';
@@ -26,7 +25,6 @@ import HeaderSideBar from '../component/HeaderSideBar';
 // Sidebar Component
 const Sidebar = ({ setContent, setShowPrivate, isSidebarVisible }) => {
   const [isPrivate, setIsPrivate] = useState(true); // Default to showing private classes
-  const [isLinkedToClass, setIsLinkedToClass] = useState(false);
 
   const handleToggleChange = () => {
     setIsPrivate(!isPrivate);
@@ -56,11 +54,6 @@ const Sidebar = ({ setContent, setShowPrivate, isSidebarVisible }) => {
             <Icon icon={createClassIcon} /> Create Class
           </a>
         </li>
-        {/* <li className="nav-item">
-          <a href="#create-activity" className="nav-link" onClick={() => setContent("Create Activity")}>
-            <Icon icon={createActivityIcon} /> Create Activity
-          </a>
-        </li> */}
       
         <li className="nav-item">
           <div className="form-check form-switch">
@@ -124,9 +117,9 @@ Sidebar.propTypes = {
 const Content = ({ content, classes, addClass, setContent, showPrivate }) => {
   switch(content) {
     case "Home":
-      return <Home classes={classes} onCardClick={(classItem) => console.log(classItem)} setContent={setContent} />;
+      return <Home showPrivate={showPrivate} setContent={setContent} />; // Pass showPrivate and setContent props
     case "Classes":
-      return <Classes classes={classes} showPrivate={showPrivate} />; // Pass showPrivate prop
+      return <Classes showPrivate={showPrivate} />; // Pass showPrivate prop
     case "Create Class":
       return <CreateClass addClass={addClass} />;
     case "Create Activity":

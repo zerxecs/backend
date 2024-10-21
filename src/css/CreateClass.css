@@ -231,8 +231,8 @@ body {
 
 @media (max-width: 480px) {
   #create-class .create-class-container {
-    width: 100%;
-    margin: 0 auto;
+    width: 110%;
+    margin: -2% 25%;
     height: auto;
     padding: 0 15px 15px;
   }

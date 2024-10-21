@@ -17,7 +17,6 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/instructor" element={<Instructor />} /> 
           <Route path="/student" element={<Student />} /> 
-          <Route path="/class/:classId" element={<ClassDetails />} /> {/* New route for ClassDetails */}
         </Routes>
       </div>
     </Router>
