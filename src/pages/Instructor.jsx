@@ -32,7 +32,7 @@ const Sidebar = ({ setContent, setShowPrivate, isSidebarVisible }) => {
   };
 
   return (
-    <div id="sidebar" className={`d-flex flex-column flex-shrink-0 p-3 bg-light sidebar ${isSidebarVisible ? 'visible' : 'hidden'}`}>
+    <div id="sidebar" className={`d-flex flex-column flex-shrink-0 p-3 bg-light sidebar ${isSidebarVisible ? 'visible' : 'hidden'} fixed-sidebar`}>
       <p className="navbar-brand classiz">
         class<span style={{ color: '#BA68C8' }}>iz.</span>
       </p>

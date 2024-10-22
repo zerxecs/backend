@@ -84,7 +84,7 @@ const Home = ({ showPrivate, setContent }) => {
         <div className="main-card">
           {error && <p className="error">{error}</p>}
           <h2 className="welcome-title">
-            Welcome to class<span className="colored">iz</span>,  {'  '}
+            Welcome to class<span className="colored">iz</span>, <br />
             <span className='name'>
                {user ? user.fname : ' User'}!
             </span> {/* Display the email if fetched, otherwise display 'User' */}
@@ -101,7 +101,7 @@ const Home = ({ showPrivate, setContent }) => {
               <div className="card-image-container">
                 {getInitials(classItem.name)}
               </div>
-              <div className="card-content">
+              <div id='home-user' className="card-content">
                 <h3 className="card-title">{classItem.name}</h3>
                 <hr />
                 <p className='card-description'>{classItem.description}</p>
