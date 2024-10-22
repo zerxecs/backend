@@ -33,7 +33,7 @@ const CreateActivity = ({ onBackClick }) => {
   };
 
   return (
-    <div id='create-activity'>     
+    <div id='create-activity' >     
       <div className="btn-group">
          <button className="back-btn" onClick={onBackClick}>
           <img src={backIcon} alt="Back Icon" />

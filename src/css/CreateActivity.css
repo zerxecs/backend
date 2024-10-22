@@ -1,7 +1,8 @@
-.main-content {
+#create-activity .main-content {
   display: flex;
   flex-direction: column;
-  width:90%;
+  width:110%;
+  margin: 0 0 0 1%;
   box-sizing: border-box;
   padding: auto;
 }
@@ -12,10 +13,10 @@
 
 #create-activity .btn-group {
   display: flex;
-  margin: 0 10%;
+  margin: 0 2%;
 }
 #create-activity .icon-group{
-  margin: 0;
+  margin: 0 10%;
 }
 #create-activity .btn-primary {
   background-color: transparent;
