@@ -1,17 +1,11 @@
 const mongoose = require('mongoose');
-
 const questionSchema = new mongoose.Schema({
     question: {
         type: String,
-        required: true,
-        trim: true
+        required: true
     },
     choices: {
         type: [String],
-        validate: {
-            validator: (v) => v.length === 4,
-            message: 'Each question must have exactly 4 choices.'
-        },
         required: true
     },
     correct_answer: {
@@ -20,8 +14,7 @@ const questionSchema = new mongoose.Schema({
     },
     points: {
         type: Number,
-        required: true,
-        min: 0
+        required: true
     }
 });
 

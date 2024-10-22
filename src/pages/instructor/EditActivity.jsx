@@ -13,7 +13,7 @@ import backIcon from './../../media/back.svg';
 import '../../css/CreateActivity.css';
 import '../../css/settings_style.css';
 
-const CreateActivity = ({ onBackClick, selectedClass, quiz: initialQuiz }) => {
+const EditActivity = ({ onBackClick, selectedClass, quiz: initialQuiz }) => {
   const [activeComponent, setActiveComponent] = useState('questions');
   const [quiz, setQuiz] = useState(initialQuiz || {
     quiz_title: '',
@@ -61,12 +61,13 @@ const CreateActivity = ({ onBackClick, selectedClass, quiz: initialQuiz }) => {
           <img src={questionIcon} alt="Question Icon" className="btn-primary-icon" />
           Questions
         </button>
-        <button
+        {/* Commenting out the settings button */}
+        {/* <button
           className={`btn-primary ${activeComponent === 'settings' ? 'active' : ''}`}
           onClick={() => handleButtonClick('settings')}
         >
           <img src={settingsIcon} alt="Settings Icon" className="btn-primary-icon" />Settings
-        </button>
+        </button> */}
       </div>
       <div className="icon-group">
         <button
@@ -84,11 +85,12 @@ const CreateActivity = ({ onBackClick, selectedClass, quiz: initialQuiz }) => {
       </div>
       <div className="main-content">
         {activeComponent === 'questions' && (
-          <QuizQuestions quiz={quiz} setQuiz={setQuiz} selectedClass={selectedClass} />
+          <QuizQuestions quiz={quiz} setQuiz={setQuiz} selectedClass={selectedClass} isEditMode={true} />
         )}
-        {activeComponent === 'settings' && (
+        {/* Commenting out the settings component */}
+        {/* {activeComponent === 'settings' && (
           <QuizSettings quiz={quiz} setQuiz={setQuiz} />
-        )}
+        )} */}
         {activeComponent === 'overview' && <QuizOverview quiz={quiz} />}
       </div>
       <button onClick={handleSave} className="btn-save">Save</button>
@@ -96,10 +98,10 @@ const CreateActivity = ({ onBackClick, selectedClass, quiz: initialQuiz }) => {
   );
 };
 
-CreateActivity.propTypes = {
+EditActivity.propTypes = {
   onBackClick: PropTypes.func.isRequired,
   selectedClass: PropTypes.object.isRequired, // Ensure selectedClass is required
   quiz: PropTypes.object, // Quiz can be null or an object
 };
 
-export default CreateActivity;
+export default EditActivity;

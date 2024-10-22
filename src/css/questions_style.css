@@ -44,7 +44,8 @@
     border-radius: 10px;
     padding-top: 8px;
     padding-bottom: 4px;
-    margin-bottom: 10px;
+    margin: 0 0 10px 95%;
+    justify-content: right!important;
     border: 2px solid #BA68C8;
     cursor: pointer;
 }
@@ -64,7 +65,10 @@
     font-weight: bold;
     color: #fff;
 }
+#quiz-form  .input .option{
+    width: 50%;
 
+}
 #quiz-form .input, #quiz-form .textarea {
     position: relative;
     background-color: transparent;

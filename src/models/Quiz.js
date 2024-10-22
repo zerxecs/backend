@@ -1,93 +1,86 @@
 const mongoose = require('mongoose');
-
 const questionSchema = new mongoose.Schema({
     question: {
         type: String,
-        required: true, // Ensure question text is required
-        trim: true // Trim whitespace
+        required: true
     },
     choices: {
         type: [String],
-        validate: {
-            validator: (v) => v.length === 4, // Ensure exactly 4 choices
-            message: 'Each question must have exactly 4 choices.'
-        },
-        required: true // Ensure choices are required
+        required: true
     },
     correct_answer: {
         type: String,
-        required: true // Ensure correct answer is required
+        required: true
     },
     points: {
         type: Number,
-        required: true,
-        min: 0 // Ensure points are non-negative
+        required: true
     }
 });
 
 const quizSchema = new mongoose.Schema({
     quiz_title: {
         type: String,
-        required: true, // Ensure quiz title is required
-        trim: true // Trim whitespace
+        required: true,
+        trim: true
     },
     quiz_desc: {
         type: String,
-        required: true, // Ensure quiz description is required
-        trim: true // Trim whitespace
+        required: true,
+        trim: true
     },
     quiz_instructions: {
         type: String,
-        required: true, // Ensure quiz instructions are required
-        trim: true // Trim whitespace
+        required: true,
+        trim: true
     },
     class_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Class',
-        required: true // Class reference is required
+        required: true
     },
     questions: {
         type: [questionSchema],
-        required: true, // Ensure questions array is required
+        required: true
     },
     timeLimit: {
         hours: {
             type: Number,
             required: true,
-            min: 0 // Ensure hours are non-negative
+            min: 0
         },
         minutes: {
             type: Number,
             required: true,
-            min: 0, // Ensure minutes are non-negative
-            max: 59 // Ensure minutes are less than 60
+            min: 0,
+            max: 59
         },
         seconds: {
             type: Number,
             required: true,
-            min: 0, // Ensure seconds are non-negative
-            max: 59 // Ensure seconds are less than 60
+            min: 0,
+            max: 59
         }
     },
     deadline: {
         date: {
             type: String,
-            required: true // Ensure deadline date is required
+            required: true
         },
         time: {
             type: String,
-            required: true // Ensure deadline time is required
+            required: true
         }
     },
     passingScore: {
         type: Number,
         required: true,
-        min: 0 // Ensure passing score is non-negative
+        min: 0
     },
     attemptsAllowed: {
         type: Number,
         required: true,
-        min: 1 // Ensure at least 1 attempt is allowed
+        min: 1
     }
 });
 

@@ -2,29 +2,30 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import personIcon from '../../media/person-icon.svg';
 import backIcon from '../../media/back.svg';
-import settingsIcon from '../../media/settings.svg'; // Import settings icon
+import settingsIcon from '../../media/settings.svg';
 import activityIcon from '../../media/activity.svg';
 import quizIcon from '../../media/quiz.svg';
 import examIcon from '../../media/exam.svg';
 import '../../css/class_content.css';
-import CreateActivity from './CreateActivity'; // Corrected import
+import CreateActivity from './CreateActivity';
+import ClassQuizzes from './ClassQuizzes'; // Import ClassQuizzes
 
 const ClassDetails = ({ selectedClass, onBack }) => {
-  const [registeredStudents, setRegisteredStudents] = useState(selectedClass.students); // For selected class students
-  const [filteredStudents, setFilteredStudents] = useState([]); // For search results
-  const [searchTerm, setSearchTerm] = useState(''); // Store the search input
-  const [students, setStudents] = useState([]); // Store selected students
+  const [registeredStudents, setRegisteredStudents] = useState(selectedClass.students);
+  const [filteredStudents, setFilteredStudents] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [students, setStudents] = useState([]);
   const [error, setError] = useState('');
-  const [showSettings, setShowSettings] = useState(false); // State for showing settings
-  const [showCreateActivity, setShowCreateActivity] = useState(false); // State for showing CreateActivity
+  const [showSettings, setShowSettings] = useState(false);
+  const [showCreateActivity, setShowCreateActivity] = useState(false);
+  const [showQuizzes, setShowQuizzes] = useState(false); // State for showing quizzes
 
-  // Fetch students to add (search functionality)
   const handleSearch = async (e) => {
-    const term = e.target.value; // Get the search term
-    setSearchTerm(term); // Update the search term
+    const term = e.target.value;
+    setSearchTerm(term);
 
     if (!term) {
-      setFilteredStudents([]); // Clear results if the search term is empty
+      setFilteredStudents([]);
       return;
     }
 
@@ -38,12 +39,11 @@ const ClassDetails = ({ selectedClass, onBack }) => {
 
       const data = await response.json();
       if (data.success) {
-        // Filter students based on the query
         const results = data.students.filter(student =>
           `${student.fname} ${student.lname}`.toLowerCase().includes(term.toLowerCase()) ||
           student.email.toLowerCase().includes(term.toLowerCase())
         );
-        setFilteredStudents(results); // Update filtered results
+        setFilteredStudents(results);
       } else {
         setError(data.error || 'Error fetching student search results');
       }
@@ -53,21 +53,18 @@ const ClassDetails = ({ selectedClass, onBack }) => {
     }
   };
 
-  // Select a student to be added to the class
   const handleSelectStudent = (student) => {
     if (!students.some(s => s.email === student.email)) {
       setStudents([...students, student]);
     }
-    setFilteredStudents([]); // Clear search results after selection
-    setSearchTerm(''); // Clear the search input
+    setFilteredStudents([]);
+    setSearchTerm('');
   };
 
-  // Remove a student from the selection list
   const handleRemoveStudent = (email) => {
     setStudents(students.filter(student => student.email !== email));
   };
 
-  // Remove a student from the class
   const handleRemoveStudentFromClass = async (studentEmail) => {
     try {
       const response = await fetch(`http://localhost:5000/api/class/${selectedClass._id}/remove-student`, {
@@ -81,7 +78,7 @@ const ClassDetails = ({ selectedClass, onBack }) => {
 
       const data = await response.json();
       if (data.success) {
-        setRegisteredStudents(data.class.students); // Update registered students
+        setRegisteredStudents(data.class.students);
       } else {
         setError(data.error || 'Error removing student');
       }
@@ -91,7 +88,6 @@ const ClassDetails = ({ selectedClass, onBack }) => {
     }
   };
 
-  // Add selected students to the class
   const handleAddStudent = async (e) => {
     e.preventDefault();
     if (students.length === 0) {
@@ -113,8 +109,8 @@ const ClassDetails = ({ selectedClass, onBack }) => {
 
       const data = await response.json();
       if (data.success) {
-        setRegisteredStudents(data.class.students); // Update class with new students
-        setStudents([]); // Clear selected students
+        setRegisteredStudents(data.class.students);
+        setStudents([]);
       } else {
         setError(data.error || 'Error adding students');
       }
@@ -125,17 +121,23 @@ const ClassDetails = ({ selectedClass, onBack }) => {
   };
 
   const toggleSettings = () => {
-    setShowSettings(!showSettings); // Toggle the visibility of the settings section
+    setShowSettings(!showSettings);
   };
 
-  // Define the handleCreateActivityClick function
   const handleCreateActivityClick = () => {
-    setShowCreateActivity(true); // Show the CreateActivity component
+    setShowCreateActivity(true);
   };
 
-  // Define the handleBackToClassDetails function
   const handleBackToClassDetails = () => {
-    setShowCreateActivity(false); // Hide the CreateActivity component
+    setShowCreateActivity(false);
+  };
+
+  const handleShowQuizzes = () => {
+    setShowQuizzes(true);
+  };
+
+  const handleBackFromQuizzes = () => {
+    setShowQuizzes(false);
   };
 
   return (
@@ -146,6 +148,8 @@ const ClassDetails = ({ selectedClass, onBack }) => {
           <>
             {showCreateActivity ? (
               <CreateActivity onBackClick={handleBackToClassDetails} selectedClass={selectedClass} />
+            ) : showQuizzes ? (
+              <ClassQuizzes selectedClass={selectedClass} onBack={handleBackFromQuizzes} />
             ) : (
               <>
                 <div id="class-details" className="header-content">
@@ -176,7 +180,7 @@ const ClassDetails = ({ selectedClass, onBack }) => {
                     <div className="assessments">
                       <h2 className="subheading">PRIVATE ASSESSMENTS</h2>
                       <div className="assessment-list">
-                        <button className="assessment-btn">
+                        <button className="assessment-btn" onClick={handleShowQuizzes}>
                           <img src={quizIcon} alt="Quiz Icon" className="quiz-icon" /> Quizzes
                         </button>
                         <button className="assessment-btn">
@@ -253,8 +257,8 @@ const ClassDetails = ({ selectedClass, onBack }) => {
 };
 
 ClassDetails.propTypes = {
-  selectedClass: PropTypes.object.isRequired, // Define prop type for selectedClass
-  onBack: PropTypes.func.isRequired, // Define prop type for onBack
+  selectedClass: PropTypes.object.isRequired,
+  onBack: PropTypes.func.isRequired,
 };
 
 export default ClassDetails;

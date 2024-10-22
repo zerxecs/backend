@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types'; 
 import '../css/questions_style.css';
 import addIcon from './../media/add.svg';
+import deleteIcon from './../media/delete.svg'; // Import delete icon
 
-const QuizQuestions = ({ quiz, setQuiz, selectedClass }) => {
+const QuizQuestions = ({ quiz, setQuiz, selectedClass, isEditMode }) => {
     const navigate = useNavigate();
 
     const handleChange = (e, index, choiceIndex) => {
@@ -36,12 +37,17 @@ const QuizQuestions = ({ quiz, setQuiz, selectedClass }) => {
         });
     };
 
+    const deleteQuestion = (index) => {
+        const updatedQuestions = quiz.questions.filter((_, i) => i !== index);
+        setQuiz({ ...quiz, questions: updatedQuestions });
+    };
+
     const isQuizValid = () => {
         const { quiz_title, quiz_desc, quiz_instructions, questions, timeLimit, deadline, passingScore, attemptsAllowed } = quiz;
 
         // Check if quiz settings fields are filled
-        if (!timeLimit.hours || !timeLimit.minutes || !timeLimit.seconds || 
-            !deadline.date || !deadline.time ||
+        if (!timeLimit || !timeLimit.hours || !timeLimit.minutes || !timeLimit.seconds || 
+            !deadline || !deadline.date || !deadline.time ||
             !passingScore || !attemptsAllowed) {
             return false;
         }
@@ -66,18 +72,22 @@ const QuizQuestions = ({ quiz, setQuiz, selectedClass }) => {
             return;
         }
 
-        const quizData = {
-            ...quiz,
-            class_id: selectedClass._id,
-            timeLimit: quiz.timeLimit,
-            deadline: quiz.deadline,
-            passingScore: quiz.passingScore,
-            attemptsAllowed: quiz.attemptsAllowed,
-        };
+        // Prepare the data to send based on edit mode
+        const quizData = isEditMode ? 
+            { questions: quiz.questions } : 
+            {
+                ...quiz,
+                class_id: selectedClass._id,
+            };
 
         try {
-            const response = await axios.post('http://localhost:5000/api/quizzes', quizData);
-            console.log(response.data);
+            if (isEditMode) {
+                const response = await axios.put(`http://localhost:5000/api/quizzes/${quiz._id}`, quizData);
+                console.log('Quiz updated:', response.data);
+            } else {
+                const response = await axios.post('http://localhost:5000/api/quizzes', quizData);
+                console.log('Quiz created:', response.data);
+            }
             navigate('/quizzes');
         } catch (error) {
             console.error('There was an error!', error);
@@ -127,6 +137,9 @@ const QuizQuestions = ({ quiz, setQuiz, selectedClass }) => {
                 {quiz.questions.map((q, index) => (
                     <div className="cardQuestions" key={index}>
                         <div className="question-set">
+                            <button type="button" className="btn-delete" onClick={() => deleteQuestion(index)}>
+                                <img src={deleteIcon} alt="Delete Icon" />
+                            </button>
                             <label htmlFor={`question-${index}`} className="form-label">Provide the question</label>
                             <input 
                                 type="text" 
@@ -182,7 +195,7 @@ const QuizQuestions = ({ quiz, setQuiz, selectedClass }) => {
                     <img src={addIcon} alt="Add Icon" />
                 </button>
 
-                <button type="submit" className="btn-create">Create</button>
+                <button type="submit" className="btn-create">{isEditMode ? 'Save' : 'Create'}</button>
             </form>
         </div>
     );
@@ -215,6 +228,7 @@ QuizQuestions.propTypes = {
     }).isRequired,
     setQuiz: PropTypes.func.isRequired,
     selectedClass: PropTypes.object.isRequired,
+    isEditMode: PropTypes.bool.isRequired,
 };
 
 export default QuizQuestions;
