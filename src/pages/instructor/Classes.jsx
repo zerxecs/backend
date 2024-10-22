@@ -58,8 +58,8 @@ const Classes = ({ showPrivate }) => {
   }
 
   return (
-    <div id='classes' className="container">
-      <main className="main-content">
+    <div id='classes'  className="main-content">
+     
         {error && <p className="error">{error}</p>}
         {displayedClasses.length === 0 && <p>No classes available.</p>}
         <div className="grid">
@@ -88,7 +88,7 @@ const Classes = ({ showPrivate }) => {
             </div>
           ))}
         </div>
-      </main>
+   
     </div>
   );
 };

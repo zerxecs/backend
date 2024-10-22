@@ -79,8 +79,8 @@ const Home = ({ showPrivate, setContent }) => {
   }
 
   return (
-    <div id='home-user' className="container">
-      <main className="main-content">
+    <div id='home-user' className="main-content">
+   
         <div className="main-card">
           {error && <p className="error">{error}</p>}
           <h2 className="welcome-title">
@@ -122,7 +122,6 @@ const Home = ({ showPrivate, setContent }) => {
             See more
           </a>
         )}
-      </main>
     </div>
   );
 };

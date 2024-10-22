@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100..900&display=swap');
-
+#home-user.main-content {
+  display: flex;
+  flex-direction: column;
+  width:90%;
+  box-sizing: border-box;
+  padding: auto;
+}
 #home-user body {
   margin: 0;
   padding: 0;
@@ -131,28 +137,24 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 425px) and (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;
     display: flex;
     
   }
-  #home-user .container {
+  /* #home-user .container {
     height: 100%;
     width: 100%;
-    margin: 0 auto;
-  }
+    margin: 0 0 0 25rem;
+
+  } */
 
  
 #home-user .main-card {
-  display: flex;
-  padding-left: 5rem;
-  align-items: center; 
-  border: solid 1px transparent;
-  border-radius: 10px;
-  height: 15rem;
-  width:53%;
-  padding: 4%;
+ 
+  width:auto;
+  padding: 5%;
   margin: 5% 0 0 0;
   background: rgb(60,41,92);
 }
@@ -181,11 +183,11 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 100%; 
-  max-width:420px; 
+  width:auto;
+  max-width: 75rem !important; 
   height: 100%; 
   margin: 0;
-  padding: 0 15px; 
+  /* padding: 0 15px;  */
   box-sizing: border-box; 
 }
 
@@ -193,10 +195,11 @@
   display: flex;
   flex-direction: column;
   flex: 2;
-  width: 10rem !important;
+  width: 14rem !important;
   height: 10rem !important;
-  
-  padding: 1rem 1rem 1rem 10rem; 
+  box-sizing: border-box; 
+
+  padding: 1rem 1rem 1rem 9.5rem; 
 
 }
 
@@ -206,11 +209,10 @@
   max-width: 35rem;
   flex: 1;
   height:100%;
-  width: auto;
-  max-width: 35%;
+  width: 120px;
   margin-right: 10px;
   font-size: 35px;
-  padding: 12% 0 0 0;
+  padding: 45px 0 0 0;
 }
 
 #home-user .card-title {
@@ -239,17 +241,24 @@
 
 }
 
- @media (max-width: 480px) {
+ @media (max-width: 425px) {
   #home-user .card {
-    /* display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 100%;
-    max-width: 100%; 
-    height: auto;
-    margin: 0; 
-    padding: 0 15px; 
-    box-sizing: border-box;  */
+    width:auto;
+
+  }
+ 
+    #home-user .card-image-container {
+
+      border-radius: 25px 0 0 25px;
+      max-width: 35rem;
+      flex: 1;
+      height:100%;
+      width: 30%;
+      max-width: 30%;
+      margin-right: 10px;
+      font-size: 35px;
+      padding: 12% 0 0 0;
+    
   }
 }
 
