@@ -145,7 +145,7 @@ const ClassDetails = ({ selectedClass, onBack }) => {
         {selectedClass && (
           <>
             {showCreateActivity ? (
-              <CreateActivity onBackClick={handleBackToClassDetails} />
+              <CreateActivity onBackClick={handleBackToClassDetails} selectedClass={selectedClass} />
             ) : (
               <>
                 <div id="class-details" className="header-content">

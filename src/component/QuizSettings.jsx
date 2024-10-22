@@ -1,6 +1,5 @@
 import React from 'react';
 import './../css/settings_style.css';
-
 import timerIcon from './../media/timer.svg';
 import passingIcon from './../media/passing.svg';
 import retryIcon from './../media/retry.svg';
@@ -15,11 +14,11 @@ const QuizSettings = ({ quiz, setQuiz }) => {
     } else if (name in deadline) {
       setQuiz({ ...quiz, deadline: { ...deadline, [name]: value } });
     } else if (name === 'passingScore') {
-      if (value === '' || (Number.isInteger(Number(value)) && Number(value) > 0)) {
+      if (value === '' || (Number.isInteger(Number(value)) && Number(value) >= 0)) {
         setQuiz({ ...quiz, passingScore: value });
       }
     } else if (name === 'attemptsAllowed') {
-      if (value === '' || (Number.isInteger(Number(value)) && Number(value) > 0)) {
+      if (value === '' || (Number.isInteger(Number(value)) && Number(value) >= 1)) {
         setQuiz({ ...quiz, attemptsAllowed: value });
       }
     }
@@ -30,9 +29,11 @@ const QuizSettings = ({ quiz, setQuiz }) => {
     setQuiz({ ...quiz, options: { ...options, [name]: checked } });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic
+  const handleKeyPress = (e) => {
+    const charCode = e.charCode;
+    if (charCode < 48 || charCode > 57) {
+      e.preventDefault();
+    }
   };
 
   return (
@@ -51,6 +52,8 @@ const QuizSettings = ({ quiz, setQuiz }) => {
               placeholder="Hours"
               name="hours"
               value={timeLimit.hours}
+              min="0"
+              onKeyPress={handleKeyPress}
               onChange={handleInputChange}
             />
             <input
@@ -59,6 +62,9 @@ const QuizSettings = ({ quiz, setQuiz }) => {
               placeholder="Minutes"
               name="minutes"
               value={timeLimit.minutes}
+              min="0"
+              max="59"
+              onKeyPress={handleKeyPress}
               onChange={handleInputChange}
             />
             <input
@@ -67,6 +73,9 @@ const QuizSettings = ({ quiz, setQuiz }) => {
               placeholder="Seconds"
               name="seconds"
               value={timeLimit.seconds}
+              min="0"
+              max="59"
+              onKeyPress={handleKeyPress}
               onChange={handleInputChange}
             />
           </div>
@@ -88,6 +97,7 @@ const QuizSettings = ({ quiz, setQuiz }) => {
             value={deadline.time}
             onChange={handleInputChange}
           />
+          <p className="help-text">Set a deadline for quiz completion</p>
         </div>
         <div className="input-group">
           <div className="title-wrapper">
@@ -97,13 +107,14 @@ const QuizSettings = ({ quiz, setQuiz }) => {
           <input
             type="number"
             className="input-field"
-            placeholder="score"
+            placeholder="Passing Score"
             name="passingScore"
             value={passingScore}
+            min="0"
+            onKeyPress={handleKeyPress}
             onChange={handleInputChange}
-            min="1"
           />
-          <p className="help-text">Set the required score to pass the quiz or exam</p>
+          <p className="help-text">Set a score required to pass the quiz</p>
         </div>
         <div className="input-group">
           <div className="title-wrapper">
@@ -113,58 +124,15 @@ const QuizSettings = ({ quiz, setQuiz }) => {
           <input
             type="number"
             className="input-field"
-            placeholder="points"
+            placeholder="Attempts Allowed"
             name="attemptsAllowed"
             value={attemptsAllowed}
-            onChange={handleInputChange}
             min="1"
+            onKeyPress={handleKeyPress}
+            onChange={handleInputChange}
           />
-          <p className="help-text">Set the number of attempts each student is allowed to attempt.</p>
+          <p className="help-text">Set the number of attempts allowed for the quiz</p>
         </div>
-
-        <h2 className="section-title">Respondents’</h2>
-        <div className="options">
-          <div className="option">
-            <span className="description">Allow respondents to view which questions they answered incorrectly.</span>
-            <label className="switch">
-              <input
-                type="checkbox"
-                name="viewIncorrect"
-                checked={options.viewIncorrect}
-                onChange={handleOptionChange}
-              />
-              <span className="slider"></span>
-            </label>
-          </div>
-
-          <div className="option">
-            <span className="description">Decide if respondents can view the correct answers once the grades are released.</span>
-            <label className="switch">
-              <input
-                type="checkbox"
-                name="viewCorrect"
-                checked={options.viewCorrect}
-                onChange={handleOptionChange}
-              />
-              <span className="slider"></span>
-            </label>
-          </div>
-
-          <div className="option">
-            <span className="description">Select whether respondents can view the total possible points and the points they received for each question.</span>
-            <label className="switch">
-              <input
-                type="checkbox"
-                name="viewPoints"
-                checked={options.viewPoints}
-                onChange={handleOptionChange}
-              />
-              <span className="slider"></span>
-            </label>
-          </div>
-        </div>
-
-        <button className="btn-save" onClick={handleSubmit}>Save</button>
       </div>
     </div>
   );
