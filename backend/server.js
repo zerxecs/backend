@@ -22,16 +22,20 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true 
   .catch(err => console.error('MongoDB connection error:', err));
 
 // User Routes
-const userRoutes = require('./routes/userRoutes'); // Adjusted path to use relative path
-app.use('/api', userRoutes); // Mount user routes
+const userRoutes = require('./routes/userRoutes');
+app.use('/api', userRoutes);
 
 // Class Routes
-const classRoutes = require('./routes/classRoutes'); // Adjusted path to use relative path
-app.use('/api', classRoutes); // Mount class routes
+const classRoutes = require('./routes/classRoutes');
+app.use('/api', classRoutes);
 
 // Student Routes
-const studentRoutes = require('./routes/studentRoutes'); // Adjusted path to use relative path
-app.use('/api', studentRoutes); // Mount student routes
+const studentRoutes = require('./routes/studentRoutes');
+app.use('/api', studentRoutes);
+
+// Quiz Routes
+const quizRoutes = require('./routes/quizRoutes');
+app.use('/api/quizzes', quizRoutes); // Mount quiz routes
 
 // Start server
 app.listen(PORT, () => {

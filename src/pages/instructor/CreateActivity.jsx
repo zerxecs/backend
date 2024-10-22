@@ -25,7 +25,16 @@ const CreateActivity = ({ onBackClick }) => {
         correct_answer: '',
         points: ''
       }
-    ]
+    ],
+    timeLimit: { hours: '', minutes: '', seconds: '' },
+    deadline: { date: '', time: '' },
+    passingScore: '',
+    attemptsAllowed: '',
+    options: {
+      viewIncorrect: false,
+      viewCorrect: false,
+      viewPoints: false,
+    }
   });
 
   const handleButtonClick = (component) => {
@@ -69,7 +78,7 @@ const CreateActivity = ({ onBackClick }) => {
       </div>
       <div className="main-content">
         {activeComponent === 'questions' && <QuizQuestions quiz={quiz} setQuiz={setQuiz} />}
-        {activeComponent === 'settings' && <QuizSettings />}
+        {activeComponent === 'settings' && <QuizSettings quiz={quiz} setQuiz={setQuiz} />}
         {activeComponent === 'overview' && <QuizOverview quiz={quiz} />}
       </div>
     </div>

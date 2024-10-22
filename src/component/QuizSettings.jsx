@@ -1,41 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './../css/settings_style.css';
 
 import timerIcon from './../media/timer.svg';
 import passingIcon from './../media/passing.svg';
 import retryIcon from './../media/retry.svg';
 
-const QuizSettings = () => {
-  const [timeLimit, setTimeLimit] = useState({ hours: '', minutes: '', seconds: '' });
-  const [deadline, setDeadline] = useState({ date: '', time: '' });
-  const [passingScore, setPassingScore] = useState('');
-  const [attemptsAllowed, setAttemptsAllowed] = useState('');
-  const [options, setOptions] = useState({
-    viewIncorrect: false,
-    viewCorrect: false,
-    viewPoints: false,
-  });
+const QuizSettings = ({ quiz, setQuiz }) => {
+  const { timeLimit, deadline, passingScore, attemptsAllowed, options } = quiz;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name in timeLimit) {
-      setTimeLimit({ ...timeLimit, [name]: value });
+      setQuiz({ ...quiz, timeLimit: { ...timeLimit, [name]: value } });
     } else if (name in deadline) {
-      setDeadline({ ...deadline, [name]: value });
+      setQuiz({ ...quiz, deadline: { ...deadline, [name]: value } });
     } else if (name === 'passingScore') {
       if (value === '' || (Number.isInteger(Number(value)) && Number(value) > 0)) {
-        setPassingScore(value);
+        setQuiz({ ...quiz, passingScore: value });
       }
     } else if (name === 'attemptsAllowed') {
       if (value === '' || (Number.isInteger(Number(value)) && Number(value) > 0)) {
-        setAttemptsAllowed(value);
+        setQuiz({ ...quiz, attemptsAllowed: value });
       }
     }
   };
 
   const handleOptionChange = (e) => {
     const { name, checked } = e.target;
-    setOptions({ ...options, [name]: checked });
+    setQuiz({ ...quiz, options: { ...options, [name]: checked } });
   };
 
   const handleSubmit = (e) => {

@@ -1,24 +1,10 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/questions_style.css';
 import addIcon from './../media/add.svg';
 
-const QuizQuestions = () => {
-    const [quiz, setQuiz] = useState({
-        quiz_title: '',
-        quiz_desc: '',
-        quiz_instructions: '',
-        questions: [
-            {
-                question: '',
-                choices: ['', '', '', ''],
-                correct_answer: '',
-                points: ''
-            }
-        ]
-    });
-
+const QuizQuestions = ({ quiz, setQuiz }) => {
     const navigate = useNavigate();
 
     const handleChange = (e, index, choiceIndex) => {
@@ -51,7 +37,7 @@ const QuizQuestions = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('http://localhost:3000/api/quizzes', quiz)
+        axios.post('http://localhost:5000/api/quizzes', quiz) // Ensure the URL matches your backend
             .then(response => {
                 console.log(response.data);
                 navigate('/quizzes');
