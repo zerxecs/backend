@@ -6,32 +6,33 @@ import calendarIcon from '../../media/calendar.svg';
 import quizOverviewIcon from '../../media/quiz_overview.svg';
 import studentRecordIcon from '../../media/records.svg';
 import EditActivity from './EditActivity'; // Import EditActivity component
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const ClassQuizzes = ({ selectedClass, onBack }) => {
+const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
     const [quizzes, setQuizzes] = useState([]);
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [selectedQuiz, setSelectedQuiz] = useState(null); // State to manage selected quiz
 
-    useEffect(() => {
-        // Fetch quizzes for the selected class
-        const fetchQuizzes = async () => {
-            try {
-                const response = await fetch(`http://localhost:5000/api/quizzes?class_id=${selectedClass._id}`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    setQuizzes(data);
-                } else {
-                    console.error('Error fetching quizzes:', data.error);
-                }
-            } catch (error) {
-                console.error('Error fetching quizzes:', error);
+    const fetchQuizzes = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/quizzes?class_id=${selectedClass._id}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setQuizzes(data);
+            } else {
+                console.error('Error fetching quizzes:', data.error);
             }
-        };
+        } catch (error) {
+            console.error('Error fetching quizzes:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchQuizzes();
     }, [selectedClass]);
 
@@ -43,12 +44,31 @@ const ClassQuizzes = ({ selectedClass, onBack }) => {
         setSelectedQuiz(quiz); // Set the selected quiz
     };
 
+    const handleQuizUpdate = (updatedQuiz) => {
+        setQuizzes((prevQuizzes) =>
+            prevQuizzes.map((quiz) => (quiz._id === updatedQuiz._id ? updatedQuiz : quiz))
+        );
+        setSelectedQuiz(null); // Close the EditActivity component
+        fetchQuizzes(); // Fetch the latest quizzes after an update
+        toast.success('Quiz updated successfully!', {
+            className: 'custom-toast'
+        });
+        if (onQuizUpdateSuccess) {
+            onQuizUpdateSuccess(updatedQuiz); 
+        }
+    };
+
     if (selectedQuiz) {
-        return <EditActivity onBackClick={() => setSelectedQuiz(null)} selectedClass={selectedClass} quiz={selectedQuiz} />;
+        return (
+            <>
+                <EditActivity onBackClick={() => setSelectedQuiz(null)} selectedClass={selectedClass} quiz={selectedQuiz} onQuizUpdate={handleQuizUpdate} />
+                <ToastContainer />
+            </>
+        );
     }
 
     return (
-        <div id='instructor-quiz' className="container">
+        <div id='instructor-quiz' >
             <header className="header">
                 <button className="button" onClick={onBack}>Back</button>
                 <button className="button">Upcoming</button>
@@ -57,7 +77,8 @@ const ClassQuizzes = ({ selectedClass, onBack }) => {
 
                 <div className="dropdown">
                     <button className="button dropdown-button" onClick={toggleDropdown}>
-                        <FaFilter className="filter-icon" />Filter By
+                        <FaFilter className="filter-icon" /> 
+                         <span className="hide-text">Filter By</span>
                     </button>
                     {dropdownVisible && (
                         <div className="dropdown-menu">
@@ -76,7 +97,7 @@ const ClassQuizzes = ({ selectedClass, onBack }) => {
                         <div className="quiz-wrapper">
                             <div className="details-wrapper">
                                 <h2 className="quiz-title">{quiz.quiz_title}</h2>
-                                <hr />
+                                <div className="card-divider" />
                                 {quiz.deadline && (
                                     <div className="date-wrapper">
                                         <img src={calendarIcon} alt="Calendar Icon" className="image icon" />
@@ -120,6 +141,7 @@ const ClassQuizzes = ({ selectedClass, onBack }) => {
                     </div>
                 ))}
             </div>
+            <ToastContainer />
         </div>
     );
 };
@@ -127,6 +149,7 @@ const ClassQuizzes = ({ selectedClass, onBack }) => {
 ClassQuizzes.propTypes = {
     selectedClass: PropTypes.object.isRequired,
     onBack: PropTypes.func.isRequired,
+    onQuizUpdateSuccess: PropTypes.func, // Add new prop type
 };
 
 export default ClassQuizzes;

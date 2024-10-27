@@ -2,11 +2,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 #class-details body {
-    margin: 0;
-    padding: 0;
     font-family: "Inter", sans-serif;
     background-color: hsl(0, 0%, 100%);
 }
+#class-details{
+margin: 0 10%;
+padding: 2%;
+
+width:90%;
+}
+#class-details .main-content {
+  display: flex;
+  flex-direction: column;
+  width:90%;
+  margin: 0 0 0 10%;
+  box-sizing: border-box;
+  padding: auto;
+}
+
 #class-details .class-content-container {
    
     padding: 2%;
@@ -146,10 +159,11 @@
 #class-details .join-class {
     background-color: #3C2A5D;
     padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
-    width: 100%;
+    border-radius: 15px;
+    margin: 20px 0 0 -14%;
+    width: 116%;
     height: auto;
+    justify-content: start;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
   
@@ -184,6 +198,7 @@
     border-radius: 5px 0 0 5px ;
   }
   #class-details  .center-btn{
+    text-align: center;
     background-color: #BA68C8;
     color: white;
     padding: 10px 20px;
@@ -219,7 +234,17 @@
   align-items: center;
 }
 
-#class-details ul li button {
+.selected-students {
+  display: flex;
+  margin: 15px;  
+  align-items: center;
+}
+
+.selected-students span {
+  margin-right: 10px;
+  color: #ffff;
+}
+#class-details .remove-btn {
   background-color: #ff4d4d;
   color: white;
   border: none;
@@ -228,7 +253,7 @@
   border-radius: 5px;
 }
 
-#class-details ul li button:hover {
+#class-details .remove-btn:hover {
   background-color: #ff1a1a;
 }
 
@@ -247,7 +272,7 @@
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    margin: 50px 88% 0 0;
+    margin: 50px 0 0 -70rem;
     transition: background-color 0.2s;
 }
 
@@ -275,34 +300,109 @@
 
     width: 100%;
 }
-#class-details .create-btn :hover {
-    background-color: #7E57C2;
+#class-details .create-btn:hover {
+    background-color: #7E57C2 !important;
     color: #FFFFFF;
 }
-@media (max-width: 425px) {
-    #class-details  .header-content {
-        flex-direction: column;
-        height: auto;
-        align-items: flex-start;
-        padding: 10px;
-    }
 
-    #class-details .back-btn {
-        margin: 0;
-        align-self: flex-start;
-    }
-
-    #class-details .title {
-        font-size: 1rem;
-    }
-
-    #class-details    .divider {
-        margin: 8px 0;
-    }
+#class-details .enrolled-students-table {
+  margin-top: 30px;
+  background: linear-gradient(to right, #4e3579, #7E57C2);
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 15px;
+  overflow: hidden;
 }
+
+#class-details .enrolled-students-table th,
+#class-details .enrolled-students-table td {
+  padding: 12px;
+  text-align: left;
+}
+
+#class-details .enrolled-students-table th {
+  text-align: center;
+  color: white;
+  border: none;
+}
+
+#class-details .enrolled-students-table td {
+  text-align: center;
+  background-color: #5B4C76;
+  color: white;
+  border: 5px solid #3C2A5D;
+  border-left: none;
+  border-right: none;
+}
+
+#class-details .enrolled-students-table .remove-btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+#class-details .enrolled-students-table .remove-btn:hover {
+  background-color: #ff1a1a;
+}
+
+
+
 @media (max-width: 768px) {
+
+  #class-details{
+    margin: 7% 5%;
+    padding: 0;
+
+    width:90%;
+    }
     #class-details .class-content-container {
         width: 750px;
         max-width: 110%;
     }
+
+    #class-details .join-class {
+     
+      margin: 10px 0 0 -5%;
+      width: 110%;
+      height: auto;
+      justify-content: start;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    #class-details .back-to-classdeets ,  #class-details .center-btn{
+   
+      width: 40%;
+      
+  }
+  #class-details .enrolled-students-table th,
+  #class-details .enrolled-students-table td {
+    padding: 8px 10px;
+  }
+}
+
+
+@media (max-width: 425px) {
+
+
+  #class-details  .header-content {
+      flex-direction: column;
+      height: auto;
+      align-items: flex-start;
+      padding: 10px;
+  }
+
+  #class-details .back-btn {
+      margin: 0;
+      align-self: flex-start;
+  }
+
+  #class-details .title {
+      font-size: 1rem;
+  }
+
+  #class-details    .divider {
+      margin: 8px 0;
+  }
 }

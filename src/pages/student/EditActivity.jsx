@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import QuizQuestions from '../../component/QuizQuestions';
+import EditQuestion from '../../component/EditQuestion'; // Import EditQuestion
 import QuizSettings from '../../component/QuizSettings';
 import QuizOverview from '../../component/QuizOverview';
 import axios from 'axios';
@@ -13,7 +13,7 @@ import backIcon from './../../media/back.svg';
 import '../../css/CreateActivity.css';
 import '../../css/settings_style.css';
 
-const CreateActivity = ({ onBackClick, selectedClass, quiz: initialQuiz }) => {
+const EditActivity = ({ onBackClick, selectedClass, quiz: initialQuiz, onQuizUpdate }) => {
   const [activeComponent, setActiveComponent] = useState('questions');
   const [quiz, setQuiz] = useState(initialQuiz || {
     quiz_title: '',
@@ -42,6 +42,7 @@ const CreateActivity = ({ onBackClick, selectedClass, quiz: initialQuiz }) => {
     try {
       const response = await axios.put(`http://localhost:5000/api/quizzes/${quiz._id}`, quiz);
       console.log('Quiz updated:', response.data);
+      // onQuizUpdate(response.data); // Notify parent component about the update
     } catch (error) {
       console.error('Error updating quiz:', error);
     }
@@ -84,22 +85,23 @@ const CreateActivity = ({ onBackClick, selectedClass, quiz: initialQuiz }) => {
       </div>
       <div className="main-content">
         {activeComponent === 'questions' && (
-          <QuizQuestions quiz={quiz} setQuiz={setQuiz} selectedClass={selectedClass} />
+          <EditQuestion quiz={quiz} setQuiz={setQuiz} selectedClass={selectedClass} onQuizUpdate={onQuizUpdate} />
         )}
         {activeComponent === 'settings' && (
           <QuizSettings quiz={quiz} setQuiz={setQuiz} />
         )}
         {activeComponent === 'overview' && <QuizOverview quiz={quiz} />}
       </div>
-      {/* <button onClick={handleSave} className="btn-save">Save</button> */}
+      <button onClick={handleSave} className="btn-save">Save</button>
     </div>
   );
 };
 
-CreateActivity.propTypes = {
+EditActivity.propTypes = {
   onBackClick: PropTypes.func.isRequired,
   selectedClass: PropTypes.object.isRequired, // Ensure selectedClass is required
   quiz: PropTypes.object, // Quiz can be null or an object
+  onQuizUpdate: PropTypes.func.isRequired, // Add prop type for onQuizUpdate
 };
 
-export default CreateActivity;
+export default EditActivity;

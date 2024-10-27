@@ -6,7 +6,7 @@ import '../css/questions_style.css';
 import addIcon from './../media/add.svg';
 import deleteIcon from './../media/delete.svg'; // Import delete icon
 
-const QuizQuestions = ({ quiz, setQuiz, selectedClass, isEditMode }) => {
+const QuizQuestions = ({ quiz, setQuiz, selectedClass }) => {
     const navigate = useNavigate();
 
     const handleChange = (e, index, choiceIndex) => {
@@ -72,22 +72,15 @@ const QuizQuestions = ({ quiz, setQuiz, selectedClass, isEditMode }) => {
             return;
         }
 
-        // Prepare the data to send based on edit mode
-        const quizData = isEditMode ? 
-            { questions: quiz.questions } : 
-            {
-                ...quiz,
-                class_id: selectedClass._id,
-            };
+        // Prepare the data to send
+        const quizData = {
+            ...quiz,
+            class_id: selectedClass._id,
+        };
 
         try {
-            if (isEditMode) {
-                const response = await axios.put(`http://localhost:5000/api/quizzes/${quiz._id}`, quizData);
-                console.log('Quiz updated:', response.data);
-            } else {
-                const response = await axios.post('http://localhost:5000/api/quizzes', quizData);
-                console.log('Quiz created:', response.data);
-            }
+            const response = await axios.post('http://localhost:5000/api/quizzes', quizData);
+            console.log('Quiz created:', response.data);
             navigate('/quizzes');
         } catch (error) {
             console.error('There was an error!', error);
@@ -195,7 +188,7 @@ const QuizQuestions = ({ quiz, setQuiz, selectedClass, isEditMode }) => {
                     <img src={addIcon} alt="Add Icon" />
                 </button>
 
-                <button type="submit" className="btn-create">{isEditMode ? 'Save' : 'Create'}</button>
+                <button type="submit" className="btn-create">Create</button>
             </form>
         </div>
     );
@@ -228,7 +221,6 @@ QuizQuestions.propTypes = {
     }).isRequired,
     setQuiz: PropTypes.func.isRequired,
     selectedClass: PropTypes.object.isRequired,
-    isEditMode: PropTypes.bool.isRequired,
 };
 
 export default QuizQuestions;

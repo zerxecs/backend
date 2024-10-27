@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import personIcon from '../../media/person-icon.svg';
-import '../../css/Classes.css';
-import '../../css/CreateClass.css';
+import '../../css/Home.css';
 import ClassDetails from './ClassDetails'; // Import ClassDetails component
 
 const Home = ({ showPrivate, setContent }) => {
@@ -81,7 +80,7 @@ const Home = ({ showPrivate, setContent }) => {
   return (
     <div id='home-user' className="main-content">
    
-        <div className="main-card">
+        <div className="welcome-card">
           {error && <p className="error">{error}</p>}
           <h2 className="welcome-title">
             Welcome to class<span className="colored">iz</span>, <br />
