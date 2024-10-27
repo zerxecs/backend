@@ -7,7 +7,7 @@ import '../../css/CreateClass.css';
 import '../../css/studentClasses.css';
 import StudentClassDetails from './StudentClassDetails'; // Import ClassDetails component
 
-const Home = ({ showPrivate }) => {
+const Home = ({ showPrivate, setContent }) => {
   const [classes, setClasses] = useState([]); // All classes
   const [registeredClasses, setRegisteredClasses] = useState([]); // Registered private classes
   const [error, setError] = useState('');
@@ -130,6 +130,9 @@ const Home = ({ showPrivate }) => {
   // Filter classes based on the toggle state
   const displayedClasses = showPrivate ? registeredClasses : classes.filter(classItem => classItem.type === 'public');
 
+  // Limit the displayed classes to 4
+  const limitedClasses = displayedClasses.slice(0, 4);
+
   if (selectedClass) {
     return <StudentClassDetails selectedClass={selectedClass} onBack={handleBackClick} />;
   }
@@ -150,9 +153,9 @@ const Home = ({ showPrivate }) => {
 
       <div className="section">
         <h2 className="colored">{showPrivate ? 'Private Classes' : 'Public Classes'}</h2>
-        {displayedClasses.length === 0 && <p className='no'>No classes available.</p>}
+        {limitedClasses.length === 0 && <p className='no'>No classes available.</p>}
         <div className="grid">
-          {displayedClasses.map((classItem, index) => (
+          {limitedClasses.map((classItem, index) => (
             <div
               className="card"
               key={index}
@@ -177,6 +180,11 @@ const Home = ({ showPrivate }) => {
             </div>
           ))}
         </div>
+        {displayedClasses.length > 4 && (
+          <a href="#" className="nav-link see-more-btn" onClick={() => setContent("Classes")}>
+            See more
+          </a>
+        )}
       </div>
     </div>
   );
@@ -184,6 +192,7 @@ const Home = ({ showPrivate }) => {
 
 Home.propTypes = {
   showPrivate: PropTypes.bool.isRequired,
+  setContent: PropTypes.func.isRequired,
 };
 
 export default Home;

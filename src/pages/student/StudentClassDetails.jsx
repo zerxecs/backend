@@ -10,23 +10,20 @@ import '../../css/class_content.css';
 import StudentClassQuizzes from './StudentClassQuizzes'; // Import ClassQuizzes
 
 const ClassDetails = ({ selectedClass, onBack }) => {
-  const [registeredStudents, setRegisteredStudents] = useState(selectedClass.students);
-  const [filteredStudents, setFilteredStudents] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [students, setStudents] = useState([]);
+  const [registeredStudents, setRegisteredStudents] = useState([]);
+  const [refresh, setRefresh] = useState(false); // State for triggering refresh
+
   const [error, setError] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const [showQuizzes, setShowQuizzes] = useState(false); // State for showing quizzes
 
-  const handleSearch = async (e) => {
-    const term = e.target.value;
-    setSearchTerm(term);
+  useEffect(() => {
+    console.log('Selected class:', selectedClass);
+    fetchRegisteredStudents();
+  }, [selectedClass, refresh]); 
 
-    if (!term) {
-      setFilteredStudents([]);
-      return;
-    }
-
+  // Fetches the list of registered students for the selected class
+  const fetchRegisteredStudents = async () => {
     try {
       const response = await fetch(`http://localhost:5000/api/students`, {
         method: 'GET',
@@ -37,87 +34,18 @@ const ClassDetails = ({ selectedClass, onBack }) => {
 
       const data = await response.json();
       if (data.success) {
-        const results = data.students.filter(student =>
-          `${student.fname} ${student.lname}`.toLowerCase().includes(term.toLowerCase()) ||
-          student.email.toLowerCase().includes(term.toLowerCase())
+        const registered = data.students.filter(student =>
+          selectedClass.students.includes(student.email)
         );
-        setFilteredStudents(results);
+        setRegisteredStudents(registered);
       } else {
-        setError(data.error || 'Error fetching student search results');
+        setError(data.error || 'Error fetching registered students');
       }
     } catch (err) {
-      console.error('Error searching students:', err);
-      setError('An error occurred while searching students.');
+      console.error('Error fetching registered students:', err);
+      setError('An error occurred while fetching registered students.');
     }
   };
-
-  const handleSelectStudent = (student) => {
-    if (!students.some(s => s.email === student.email)) {
-      setStudents([...students, student]);
-    }
-    setFilteredStudents([]);
-    setSearchTerm('');
-  };
-
-  const handleRemoveStudent = (email) => {
-    setStudents(students.filter(student => student.email !== email));
-  };
-
-  const handleRemoveStudentFromClass = async (studentEmail) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/class/${selectedClass._id}/remove-student`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ email: studentEmail }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setRegisteredStudents(data.class.students);
-      } else {
-        setError(data.error || 'Error removing student');
-      }
-    } catch (err) {
-      console.error('Error removing student:', err);
-      setError('An error occurred while removing student.');
-    }
-  };
-
-  const handleAddStudent = async (e) => {
-    e.preventDefault();
-    if (students.length === 0) {
-      setError('No students selected.');
-      return;
-    }
-
-    const emails = students.map(student => student.email);
-
-    try {
-      const response = await fetch(`http://localhost:5000/api/class/${selectedClass._id}/add-students`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ emails }),
-      });
-
-      const data = await response.json();
-      if (data.success) {
-        setRegisteredStudents(data.class.students);
-        setStudents([]);
-      } else {
-        setError(data.error || 'Error adding students');
-      }
-    } catch (err) {
-      console.error('Error adding student:', err);
-      setError('An error occurred while adding students.');
-    }
-  };
-
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
@@ -177,45 +105,29 @@ const ClassDetails = ({ selectedClass, onBack }) => {
                 {showSettings && (
                   <div id="class-details" className="settings-section">
                     <div className="join-class">
-                      <h3 className="colored regtext">Add Student</h3>
-                      <form onSubmit={handleAddStudent}>
-                        <div className="form-group">
-                          <label htmlFor="searchTerm">Search for a student</label>
-                          <input
-                            type="text"
-                            id="searchTerm"
-                            value={searchTerm}
-                            onChange={handleSearch}
-                            placeholder="Enter name or email"
-                            className="cd-input-group"
-                          />
-                          {filteredStudents.length > 0 && (
-                            <ul className="student-search-results">
-                              {filteredStudents.map(student => (
-                                <li key={student._id} onClick={() => handleSelectStudent(student)}>
-                                  {`${student.fname} ${student.lname} (${student.email})`}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                        <div className="selected-students">
-                          {students.map(student => (
-                            <div key={student.email} className="selected-student">
-                              <span>{`${student.fname} ${student.lname}`}</span>
-                              <button type="button" onClick={() => handleRemoveStudent(student.email)}>
-                                Remove
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                        <button type="submit" className="center-btn">Add Students to Class</button>
-                      </form>
-
-                      <div>
-                    <h3 className="colored regtext">Enrolled Students</h3>
-            
-                  </div>
+                      <h3 className="colored regtext">Enrolled Students</h3>
+                      <table className="enrolled-students-table">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                      </tr>
+                    </thead>
+                                      <tbody>
+                      {registeredStudents.length > 0 ? (
+                        registeredStudents.map(student => (
+                          <tr key={student.email} className="enrolled-student">
+                            <td>{`${student.fname} ${student.lname}`}</td>
+                          
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="2">No students enrolled.</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                    
                     </div>
                     <button className="back-to-classdeets" onClick={toggleSettings}>Back to Class Details</button>
                   </div>

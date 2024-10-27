@@ -7,13 +7,41 @@ import '../../css/CreateClass.css';
 import '../../css/studentClasses.css';
 import StudentClassDetails from './StudentClassDetails'; // Import ClassDetails component
 
-const StudentClasses = ({ showPrivate }) => {
+const StudentClasses = ({ showPrivate, setContent }) => {
   const [classes, setClasses] = useState([]); // All classes
   const [registeredClasses, setRegisteredClasses] = useState([]); // Registered private classes
   const [error, setError] = useState('');
   const [classCode, setClassCode] = useState(''); // State for class code input
   const [selectedClass, setSelectedClass] = useState(null); // State for selected class
   const navigate = useNavigate(); // useNavigate hook
+  const [user, setUser] = useState(null);
+
+  // Fetch user details to get the email
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/user', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, // Pass the token
+          },
+        });
+
+        const data = await response.json();
+        
+        if (data.success) {
+          setUser(data.user); // Store user data (including email)
+        } else {
+          setError(data.error || 'Error fetching user details');
+        }
+      } catch (err) {
+        console.error('Error fetching user details:', err);
+        setError('An error occurred while fetching user details.');
+      }
+    };
+
+    fetchUserDetails();
+  }, []);
 
   // Fetch all classes
   useEffect(() => {
@@ -86,10 +114,6 @@ const StudentClasses = ({ showPrivate }) => {
     }
   };
 
-  const handleClassClick = (classId) => {
-    navigate(`/class/${classId}`); // Navigate to class details page
-  };
-
   const getInitials = (name) => {
     return name.split(' ').map(word => word[0]).join('');
   };
@@ -102,17 +126,11 @@ const StudentClasses = ({ showPrivate }) => {
     setSelectedClass(null);
   };
 
-  // Filter registered classes based on the toggle state
-  const displayedRegisteredClasses = registeredClasses.filter(classItem =>
-    (showPrivate && classItem.type === 'private') ||
-    (!showPrivate && classItem.type === 'public')
-  );
+  // Filter classes based on the toggle state
+  const displayedClasses = showPrivate ? registeredClasses : classes.filter(classItem => classItem.type === 'public');
 
-  // Filter all classes based on the toggle state
-  const displayedClasses = classes.filter(classItem =>
-    (showPrivate && classItem.type === 'private') ||
-    (!showPrivate && classItem.type === 'public')
-  );
+  // Limit the displayed classes to 4
+  const limitedClasses = displayedClasses.slice(0, 4);
 
   if (selectedClass) {
     return <StudentClassDetails selectedClass={selectedClass} onBack={handleBackClick} />;
@@ -137,33 +155,40 @@ const StudentClasses = ({ showPrivate }) => {
         </div>
       </div>
 
-    
       <div className="section">
-        <h2 className="colored">{showPrivate ? 'Private' : 'Public'} Classes</h2>
-        {displayedRegisteredClasses.length === 0 && <p className='no'>No registered classes available.</p>}
+        <h2 className="colored">{showPrivate ? 'Private Classes' : 'Public Classes'}</h2>
+        {limitedClasses.length === 0 && <p className='no'>No classes available.</p>}
         <div className="grid">
-          {displayedRegisteredClasses.map((classItem) => (
+          {limitedClasses.map((classItem, index) => (
             <div
               className="card"
-              key={classItem._id}
-              onClick={() => handleClassClick(classItem._id)}
+              key={index}
+              onClick={() => handleCardClick(classItem)}
             >
-
               <div className="card-image-container">
                 {getInitials(classItem.name)}
               </div>
               <div className="card-content">
                 <h3 className="card-title">{classItem.name}</h3>
                 <hr />
-                <p>{classItem.description}</p>
+                <p className='card-description'>{classItem.description}</p>
                 <p className="card-text">
-                  <img src={personIcon} alt="Students Icon" className="icon-image" />
+                  <img
+                    src={personIcon}
+                    alt="Students Icon"
+                    className="icon-image"
+                  />
                   {classItem.students.length} Students Enrolled
                 </p>
               </div>
             </div>
           ))}
         </div>
+        {displayedClasses.length > 4 && (
+          <a href="#" className="nav-link see-more-btn" onClick={() => setContent("Classes")}>
+            See more
+          </a>
+        )}
       </div>
     </div>
   );
@@ -171,6 +196,7 @@ const StudentClasses = ({ showPrivate }) => {
 
 StudentClasses.propTypes = {
   showPrivate: PropTypes.bool.isRequired,
+  setContent: PropTypes.func.isRequired,
 };
 
 export default StudentClasses;
