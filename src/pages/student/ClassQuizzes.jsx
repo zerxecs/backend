@@ -1,18 +1,18 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { FaFilter } from 'react-icons/fa';
-import QuizResults from '../../component/QuizResults'; // Import QuizResults component
 import '../../css/InstructorQuizzes.css';
 import calendarIcon from '../../media/calendar.svg';
 import quizOverviewIcon from '../../media/quiz_overview.svg';
 import studentRecordIcon from '../../media/records.svg';
-import EditActivity from './EditActivity'; // Import EditActivity component
+import PerformanceAnalysis from './PerformanceAnalysis'; // Import PerformanceAnalysis component
+import SubmitQuiz from './SubmitQuiz'; // Import SubmitQuiz component
 
 const ClassQuizzes = ({ selectedClass, onBack }) => {
     const [quizzes, setQuizzes] = useState([]);
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [selectedQuiz, setSelectedQuiz] = useState(null); // State to manage selected quiz
-    const [showResults, setShowResults] = useState(false); // State to manage results view
+    const [showPerformance, setShowPerformance] = useState(false); // State to manage performance view
 
     useEffect(() => {
         // Fetch quizzes for the selected class
@@ -41,25 +41,25 @@ const ClassQuizzes = ({ selectedClass, onBack }) => {
         setDropdownVisible(!dropdownVisible);
     };
 
-    const handleQuizOverviewClick = (quiz) => {
+    const handleQuizClick = (quiz) => {
         setSelectedQuiz(quiz); // Set the selected quiz
     };
 
-    const handleResultsClick = (quiz) => {
+    const handlePerformanceClick = (quiz) => {
         setSelectedQuiz(quiz);
-        setShowResults(true);
+        setShowPerformance(true);
     };
 
-    if (selectedQuiz && showResults) {
-        return <QuizResults quizId={selectedQuiz._id} />;
+    if (selectedQuiz && showPerformance) {
+        return <PerformanceAnalysis quizId={selectedQuiz._id} />;
     }
 
     if (selectedQuiz) {
-        return <EditActivity onBackClick={() => setSelectedQuiz(null)} selectedClass={selectedClass} quiz={selectedQuiz} />;
+        return <SubmitQuiz quiz={selectedQuiz} />;
     }
 
     return (
-        <div id='instructor-quiz' className="container">
+        <div id='student-quiz' className="container">
             <header className="header">
                 <button className="button" onClick={onBack}>Back</button>
                 <button className="button">Upcoming</button>
@@ -108,23 +108,23 @@ const ClassQuizzes = ({ selectedClass, onBack }) => {
                         </div>
 
                         <div className="quiz-details">
-                            <button className="quiz-section" onClick={() => handleQuizOverviewClick(quiz)}>
+                            <button className="quiz-section" onClick={() => handleQuizClick(quiz)}>
                                 <div className="quiz-image-holder">
                                     <img src={quizOverviewIcon} alt="Quiz Overview" className="quiz-overview" />
                                 </div>
                                 <div className="description-holder">
-                                     Quiz Overview
-                                    <p className="description">Toggle between Preview Mode to view the quiz and Edit Mode to modify questions and settings in the same tab.</p>
+                                     Take Quiz
+                                    <p className="description">Start answering the quiz.</p>
                                 </div>
                             </button >
 
-                            <button className="quiz-section" onClick={() => handleResultsClick(quiz)}>
+                            <button className="quiz-section" onClick={() => handlePerformanceClick(quiz)}>
                                 <div className="quiz-image-holder">
-                                    <img src={studentRecordIcon} alt="Student Record" className="student-record" />
+                                    <img src={studentRecordIcon} alt="Performance Overview" className="student-record" />
                                 </div>
                                 <div className="description-holder">
-                                    Student Records
-                                    <p className="description">Displays overall scores, and performance analytics for the selected quiz.</p>
+                                    Performance Overview
+                                    <p className="description">View your performance and analytics for the selected quiz.</p>
                                 </div>
                             </button>
                         </div>

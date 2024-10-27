@@ -1,7 +1,7 @@
-import axios from 'axios'; 
+import axios from 'axios';
+import PropTypes from 'prop-types';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types'; 
 import '../css/questions_style.css';
 import addIcon from './../media/add.svg';
 import deleteIcon from './../media/delete.svg'; // Import delete icon
@@ -88,7 +88,7 @@ const QuizQuestions = ({ quiz, setQuiz, selectedClass, isEditMode }) => {
                 const response = await axios.post('http://localhost:5000/api/quizzes', quizData);
                 console.log('Quiz created:', response.data);
             }
-            navigate('/quizzes');
+            navigate(`/classes/${selectedClass._id}/quizzes`);
         } catch (error) {
             console.error('There was an error!', error);
         }
