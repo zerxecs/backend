@@ -54,7 +54,6 @@ router.get('/class/:id', authMiddleware, async (req, res) => {
   }
 });
 
-
 // POST route to add multiple students to a class
 router.post('/class/:id/add-students', authMiddleware, async (req, res) => {
   const classId = req.params.id;
@@ -68,14 +67,21 @@ router.post('/class/:id/add-students', authMiddleware, async (req, res) => {
     const classToUpdate = await Class.findById(classId);
     if (!classToUpdate) {
       return res.status(404).json({ success: false, error: 'Class not found' });
-    } 
+    }
 
+    // Update the Class model
     await Class.updateOne(
       { _id: classId },
-      { $addToSet: { students: { $each: emails } } } // Adding emails directly
+      { $addToSet: { students: { $each: emails } } }
     );
 
-    const updatedClass = await Class.findById(classId).populate('students'); // Assuming `students` is an ObjectId reference
+    // Update the User model for each student
+    await User.updateMany(
+      { email: { $in: emails } },
+      { $addToSet: { registeredClasses: classId } }
+    );
+
+    const updatedClass = await Class.findById(classId).populate('students');
     return res.json({ success: true, class: updatedClass });
   } catch (error) {
     console.error('Error adding students:', error);
@@ -103,6 +109,12 @@ router.post('/class/:id/remove-student', authMiddleware, async (req, res) => {
 
     // Save the updated class
     await classToUpdate.save();
+
+    // Remove the class from the student's registeredClasses
+    await User.updateOne(
+      { email },
+      { $pull: { registeredClasses: classId } }
+    );
 
     // Fetch the updated class to return
     const updatedClass = await Class.findById(classId);

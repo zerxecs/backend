@@ -53,6 +53,14 @@ const Home = ({ showPrivate, setContent }) => {
         },
       });
 
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error('Classes not found');
+        } else {
+          throw new Error('Error fetching classes');
+        }
+      }
+
       const data = await response.json();
       if (data.success) {
         setClasses(data.classes);
@@ -68,6 +76,14 @@ const Home = ({ showPrivate, setContent }) => {
         },
       });
 
+      if (!registeredResponse.ok) {
+        if (registeredResponse.status === 404) {
+          throw new Error('Registered classes not found');
+        } else {
+          throw new Error('Error fetching registered classes');
+        }
+      }
+
       const registeredData = await registeredResponse.json();
       if (registeredData.success) {
         setRegisteredClasses(registeredData.classes);
@@ -76,7 +92,7 @@ const Home = ({ showPrivate, setContent }) => {
       }
     } catch (err) {
       console.error('Error:', err);
-      setError('An error occurred while fetching classes.');
+      setError(err.message || 'An error occurred while fetching classes.');
     }
   };
 

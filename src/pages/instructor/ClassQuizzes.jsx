@@ -8,11 +8,15 @@ import studentRecordIcon from '../../media/records.svg';
 import EditActivity from './EditActivity'; // Import EditActivity component
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import QuizResults from '../../component/QuizResults'; // Import QuizResults component
+
 
 const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
     const [quizzes, setQuizzes] = useState([]);
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [selectedQuiz, setSelectedQuiz] = useState(null); // State to manage selected quiz
+    const [showResults, setShowResults] = useState(false); // State to manage results view
+
 
     const fetchQuizzes = async () => {
         try {
@@ -43,6 +47,16 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
     const handleQuizOverviewClick = (quiz) => {
         setSelectedQuiz(quiz); // Set the selected quiz
     };
+
+    
+    const handleResultsClick = (quiz) => {
+        setSelectedQuiz(quiz);
+        setShowResults(true);
+    };
+
+    if (selectedQuiz && showResults) {
+        return <QuizResults quizId={selectedQuiz._id} />;
+    }
 
     const handleQuizUpdate = (updatedQuiz) => {
         setQuizzes((prevQuizzes) =>
@@ -128,7 +142,7 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
                                 </div>
                             </button >
 
-                            <button className="quiz-section">
+                            <button className="quiz-section" onClick={() => handleResultsClick(quiz)}>
                                 <div className="quiz-image-holder">
                                     <img src={studentRecordIcon} alt="Student Record" className="student-record" />
                                 </div>

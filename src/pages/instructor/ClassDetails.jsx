@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Modal, Button } from "react-bootstrap"; // Import Modal and Button from react-bootstrap
+import { Modal, Button } from "react-bootstrap";
 import backIcon from '../../media/back.svg';
 import settingsIcon from '../../media/settings.svg';
 import activityIcon from '../../media/activity.svg';
@@ -8,28 +8,26 @@ import quizIcon from '../../media/quiz.svg';
 import examIcon from '../../media/exam.svg';
 import '../../css/class_content.css';
 import CreateActivity from './CreateActivity';
-import ClassQuizzes from './ClassQuizzes'; // Import ClassQuizzes
+import ClassQuizzes from './ClassQuizzes';
 
 const ClassDetails = ({ selectedClass, onBack }) => {
   const [registeredStudents, setRegisteredStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState([]); // Ensure this line is present
   const [error, setError] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const [showCreateActivity, setShowCreateActivity] = useState(false);
-  const [showQuizzes, setShowQuizzes] = useState(false); // State for showing quizzes
-  const [refresh, setRefresh] = useState(false); // State for triggering refresh
-  const [showModal, setShowModal] = useState(false); // State for modal visibility
-  const [studentToRemove, setStudentToRemove] = useState(null); // State for student to be removed
+  const [showQuizzes, setShowQuizzes] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [studentToRemove, setStudentToRemove] = useState(null);
 
-  // Fetch registered students when selectedClass or refresh changes
   useEffect(() => {
     console.log('Selected class:', selectedClass);
     fetchRegisteredStudents();
-  }, [selectedClass, refresh]); 
+  }, [selectedClass, refresh]);
 
-  // Fetch registered students from the API
   const fetchRegisteredStudents = async () => {
     try {
       const response = await fetch(`http://localhost:5000/api/students`, {
@@ -54,7 +52,6 @@ const ClassDetails = ({ selectedClass, onBack }) => {
     }
   };
 
-  // Handle search input change and fetch filtered students
   const handleSearch = async (e) => {
     const term = e.target.value;
     setSearchTerm(term);
@@ -88,7 +85,6 @@ const ClassDetails = ({ selectedClass, onBack }) => {
     }
   };
 
-  // Handle selecting a student from the search results
   const handleSelectStudent = (student) => {
     if (!students.some(s => s.email === student.email)) {
       setStudents([...students, student]);
@@ -97,24 +93,20 @@ const ClassDetails = ({ selectedClass, onBack }) => {
     setSearchTerm('');
   };
 
-  // Handle removing a student from the selected students list
   const handleRemoveStudent = (email) => {
     setStudents(students.filter(student => student.email !== email));
   };
 
-  // Handle opening the modal for removing a student
   const handleOpenModal = (student) => {
     setStudentToRemove(student);
     setShowModal(true);
   };
 
-  // Handle closing the modal
   const handleCloseModal = () => {
     setShowModal(false);
     setStudentToRemove(null);
   };
 
-  // Handle confirming the removal of a student
   const handleConfirmRemove = async () => {
     if (studentToRemove) {
       try {
@@ -141,15 +133,15 @@ const ClassDetails = ({ selectedClass, onBack }) => {
     }
   };
 
-  // Handle adding selected students to the class
   const handleAddStudent = async (e) => {
     e.preventDefault();
-    if (students.length === 0) {
+    if (!Array.isArray(students) || students.length === 0) {
       setError('No students selected.');
       return;
     }
 
     const emails = students.map(student => student.email);
+    console.log('Adding students with emails:', emails); // Log the emails being sent
 
     try {
       const response = await fetch(`http://localhost:5000/api/class/${selectedClass._id}/add-students`, {
@@ -175,27 +167,22 @@ const ClassDetails = ({ selectedClass, onBack }) => {
     }
   };
 
-  // Toggle the settings section visibility
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
 
-  // Show the create activity section
   const handleCreateActivityClick = () => {
     setShowCreateActivity(true);
   };
 
-  // Go back to class details from create activity section
   const handleBackToClassDetails = () => {
     setShowCreateActivity(false);
   };
 
-  // Show the quizzes section
   const handleShowQuizzes = () => {
     setShowQuizzes(true);
   };
 
-  // Go back to class details from quizzes section
   const handleBackFromQuizzes = () => {
     setShowQuizzes(false);
   };
