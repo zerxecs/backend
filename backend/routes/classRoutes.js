@@ -14,20 +14,22 @@ router.post('/create-class', authMiddleware, async (req, res) => {
       name,
       description,
       type,
-      students,
+      students, // Assuming this contains student emails
       createdBy: req.user._id,
     });
+
     await newClass.save();
-    res.status(201).json({ success: true, class: newClass });
+    res.status(201).json({ success: true, message: 'Class created successfully!', class: newClass });
   } catch (error) {
     console.error('Error creating class:', error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(400).json({ error: 'Error creating class: ' + error.message });
   }
 });
+
 // Route to get all classes for the logged-in user
 router.get('/classes', authMiddleware, async (req, res) => {
   try {
-    const classes = await Class.find().populate('createdBy', 'fname lname');
+    const classes = await Class.find({ createdBy: req.user._id });
     res.status(200).json({ success: true, classes });
   } catch (error) {
     console.error('Error fetching classes:', error);
@@ -38,70 +40,77 @@ router.get('/classes', authMiddleware, async (req, res) => {
 // Route to get class details by ID
 router.get('/class/:id', authMiddleware, async (req, res) => {
   try {
-    const classItem = await Class.findById(req.params.id).populate('createdBy', 'fname lname');
-    res.status(200).json({ success: true, class: classItem });
+    const classData = await Class.findById(req.params.id);
+    if (!classData) {
+      return res.status(404).json({ success: false, error: 'Class not found' });
+    }
+
+    // Find students based on emails stored in additionalInfo
+    const students = await User.find({ email: { $in: classData.students } });
+    
+    res.json({ success: true, class: { ...classData._doc, students } });
   } catch (error) {
-    console.error('Error fetching class details:', error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: 'Server error' });
   }
 });
+
 
 // POST route to add multiple students to a class
 router.post('/class/:id/add-students', authMiddleware, async (req, res) => {
   const classId = req.params.id;
-  const { students } = req.body;
+  const { emails } = req.body;
+
+  if (!Array.isArray(emails)) {
+    return res.status(400).json({ success: false, error: 'Invalid input. Emails must be an array.' });
+  }
 
   try {
-    const classItem = await Class.findById(classId);
-    if (!classItem) {
+    const classToUpdate = await Class.findById(classId);
+    if (!classToUpdate) {
       return res.status(404).json({ success: false, error: 'Class not found' });
-    }
+    } 
 
-    classItem.students.push(...students);
-    await classItem.save();
-    res.status(200).json({ success: true, class: classItem });
+    await Class.updateOne(
+      { _id: classId },
+      { $addToSet: { students: { $each: emails } } } // Adding emails directly
+    );
+
+    const updatedClass = await Class.findById(classId).populate('students'); // Assuming `students` is an ObjectId reference
+    return res.json({ success: true, class: updatedClass });
   } catch (error) {
-    console.error('Error adding students to class:', error);
-    res.status(500).json({ success: false, error: error.message });
+    console.error('Error adding students:', error);
+    return res.status(500).json({ success: false, error: 'An error occurred while adding students' });
   }
 });
 
 // Route to remove a student from a class
 router.post('/class/:id/remove-student', authMiddleware, async (req, res) => {
   const classId = req.params.id;
-  const { studentEmail } = req.body;
+  const { email } = req.body;
 
-  try {
-    const classItem = await Class.findById(classId);
-    if (!classItem) {
-      return res.status(404).json({ success: false, error: 'Class not found' });
-    }
-
-    classItem.students = classItem.students.filter(email => email !== studentEmail);
-    await classItem.save();
-    res.status(200).json({ success: true, class: classItem });
-  } catch (error) {
-    console.error('Error removing student from class:', error);
-    res.status(500).json({ success: false, error: error.message });
+  if (!email) {
+    return res.status(400).json({ success: false, error: 'Email is required.' });
   }
-});
-
-// Route to leave a class
-router.post('/class/:id/leave', authMiddleware, async (req, res) => {
-  const classId = req.params.id;
 
   try {
-    const classItem = await Class.findById(classId);
-    if (!classItem) {
-      return res.status(404).json({ success: false, error: 'Class not found' });
+    const classToUpdate = await Class.findById(classId);
+    if (!classToUpdate) {
+      return res.status(404).json({ success: false, error: 'Class not found.' });
     }
 
-    classItem.students = classItem.students.filter(email => email !== req.user.email);
-    await classItem.save();
-    res.status(200).json({ success: true, class: classItem });
+    // Remove the student by filtering out the email
+    classToUpdate.students = classToUpdate.students.filter(studentEmail => studentEmail !== email);
+
+    // Save the updated class
+    await classToUpdate.save();
+
+    // Fetch the updated class to return
+    const updatedClass = await Class.findById(classId);
+    
+    return res.json({ success: true, class: updatedClass });
   } catch (error) {
-    console.error('Error leaving class:', error);
-    res.status(500).json({ success: false, error: error.message });
+    console.error('Error removing student:', error);
+    return res.status(500).json({ success: false, error: 'An error occurred while removing the student.' });
   }
 });
 

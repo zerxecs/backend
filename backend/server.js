@@ -31,7 +31,7 @@ app.use('/api', classRoutes);
 
 // Student Routes
 const studentRoutes = require('./routes/studentRoutes');
-app.use('/api', studentRoutes);
+app.use('/api/students', studentRoutes); // Mount student routes
 
 // Quiz Routes
 const quizRoutes = require('./routes/quizRoutes');

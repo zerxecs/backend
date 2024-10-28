@@ -1,35 +1,36 @@
 const express = require('express');
 const router = express.Router();
 const Quiz = require('../models/Quiz');
+const Submission = require('../models/Submission'); // Import the Submission model
 
 // Create a new quiz
 router.post('/', async (req, res) => {
     try {
-        const {
-            quiz_title, quiz_desc, quiz_instructions, questions, 
-            timeLimit, deadline, passingScore, attemptsAllowed, class_id 
-        } = req.body;
+        const { quiz_title, quiz_desc, quiz_instructions, questions, timeLimit, deadline, passingScore, attemptsAllowed, class_id } = req.body;
 
-        // Validate input
-        if (!quiz_title || !quiz_desc || !quiz_instructions || !questions || 
-            questions.length === 0 || !timeLimit || !deadline || !passingScore || 
-            !attemptsAllowed || !class_id) {
+        // Validate the incoming data
+        if (!quiz_title || !quiz_desc || !quiz_instructions || !questions || questions.length === 0 || 
+            !timeLimit || !deadline || !passingScore || !attemptsAllowed || !class_id) {
             return res.status(400).send({ error: 'All fields are required.' });
         }
 
         // Validate questions
         for (const question of questions) {
-            if (!question.question || !question.correct_answer || 
-                question.choices.length !== 4 || !question.points) {
-                return res.status(400).send({ 
-                    error: 'Each question must have text, correct answer, 4 choices, and points.' 
-                });
+            if (!question.question || !question.correct_answer || question.choices.length !== 4 || !question.points) {
+                return res.status(400).send({ error: 'Each question must have a question text, correct answer, 4 choices, and points.' });
             }
         }
 
         const quiz = new Quiz({
-            quiz_title, quiz_desc, quiz_instructions, questions, 
-            timeLimit, deadline, passingScore, attemptsAllowed, class_id
+            quiz_title,
+            quiz_desc,
+            quiz_instructions,
+            questions,
+            timeLimit,
+            deadline,
+            passingScore,
+            attemptsAllowed,
+            class_id
         });
 
         await quiz.save();
@@ -40,49 +41,27 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Update an existing quiz
+// Update a quiz
 router.put('/:id', async (req, res) => {
     try {
-        const {
-            quiz_title, quiz_desc, quiz_instructions, questions, 
-            timeLimit, deadline, passingScore, attemptsAllowed, class_id
-        } = req.body;
+        const { questions } = req.body; // Only update questions in edit mode
 
-        // Validate input
-        if (!quiz_title || !quiz_desc || !quiz_instructions || !questions || 
-            questions.length === 0 || !timeLimit || !deadline || !passingScore || 
-            !attemptsAllowed || !class_id) {
-            return res.status(400).send({ error: 'All fields are required.' });
+        if (!questions || questions.length === 0) {
+            return res.status(400).send({ error: 'Questions are required to update the quiz.' });
         }
 
         // Validate questions
         for (const question of questions) {
-            if (!question.question || !question.correct_answer || 
-                question.choices.length !== 4 || !question.points) {
-                return res.status(400).send({ 
-                    error: 'Each question must have text, correct answer, 4 choices, and points.' 
-                });
+            if (!question.question || !question.correct_answer || question.choices.length !== 4 || !question.points) {
+                return res.status(400).send({ error: 'Each question must have a question text, correct answer, 4 choices, and points.' });
             }
         }
 
-        const updateData = {
-            quiz_title, quiz_desc, quiz_instructions, questions, 
-            timeLimit, deadline, passingScore, attemptsAllowed, class_id
-        };
-
-        console.log('Received update data:', updateData); // Log the received data
-
-        const updatedQuiz = await Quiz.findByIdAndUpdate(
-            req.params.id, 
-            updateData, 
-            { new: true, runValidators: true }
-        );
+        const updatedQuiz = await Quiz.findByIdAndUpdate(req.params.id, { questions }, { new: true });
 
         if (!updatedQuiz) {
             return res.status(404).send({ error: 'Quiz not found.' });
         }
-
-        console.log('Updated quiz:', updatedQuiz); // Log the updated quiz
 
         res.status(200).send({ message: 'Quiz updated successfully', quiz: updatedQuiz });
     } catch (error) {
@@ -104,19 +83,37 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Delete a quiz
-router.delete('/:id', async (req, res) => {
+// Route to get scores in order of submission
+router.get('/:quizId/scores', async (req, res) => {
     try {
-        const deletedQuiz = await Quiz.findByIdAndDelete(req.params.id);
+        const submissions = await Submission.find({ quizId: req.params.quizId }).sort('submittedAt');
+        res.json(submissions);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
-        if (!deletedQuiz) {
-            return res.status(404).send({ error: 'Quiz not found.' });
-        }
+// Route to get questions most people got incorrect
+router.get('/:quizId/incorrect-questions', async (req, res) => {
+    try {
+        const submissions = await Submission.find({ quizId: req.params.quizId });
+        const questionStats = {};
 
-        res.status(200).send({ message: 'Quiz deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting quiz:', error);
-        res.status(500).send({ error: 'An error occurred while deleting the quiz.' });
+        submissions.forEach(submission => {
+            submission.answers.forEach(answer => {
+                if (!answer.isCorrect) {
+                    if (!questionStats[answer.questionId]) {
+                        questionStats[answer.questionId] = 0;
+                    }
+                    questionStats[answer.questionId]++;
+                }
+            });
+        });
+
+        const sortedQuestions = Object.entries(questionStats).sort((a, b) => b[1] - a[1]);
+        res.json(sortedQuestions);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 });
 

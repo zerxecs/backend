@@ -36,7 +36,6 @@ router.post('/register', async (req, res) => {
     res.status(400).json({ error: 'Error registering user: ' + error.message });
   }
 });
-
 // Login Route
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -98,6 +97,7 @@ router.get('/students', async (req, res) => {
     res.status(500).json({ success: false, error: 'Failed to fetch students.' });
   }
 });
+
 
 
 
