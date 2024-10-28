@@ -55,7 +55,7 @@
                 }
             };
         
-            if (selectedQuiz) {
+            if (selectedQuiz && selectedQuiz._id) {
                 return (
                     <StudentQuizOverview 
                         quiz={selectedQuiz} 

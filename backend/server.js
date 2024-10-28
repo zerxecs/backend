@@ -21,21 +21,21 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true 
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// User Routes
+// Routes
 const userRoutes = require('./routes/userRoutes');
 app.use('/api', userRoutes);
 
-// Class Routes
 const classRoutes = require('./routes/classRoutes');
 app.use('/api', classRoutes);
 
-// Student Routes
 const studentRoutes = require('./routes/studentRoutes');
 app.use('/api', studentRoutes);
 
-// Quiz Routes
 const quizRoutes = require('./routes/quizRoutes');
-app.use('/api/quizzes', quizRoutes); // Mount quiz routes
+app.use('/api/quizzes', quizRoutes);
+
+const submissionRoutes = require('./routes/submissionRoutes');
+app.use('/api', submissionRoutes);
 
 // Start server
 app.listen(PORT, () => {

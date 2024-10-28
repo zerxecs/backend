@@ -1,33 +1,43 @@
 const mongoose = require('mongoose');
 
+// Define the schema for quiz submissions
 const submissionSchema = new mongoose.Schema({
-    studentName: String,
-    quizId: mongoose.Schema.Types.ObjectId,
-    answers: [{
-        questionId: mongoose.Schema.Types.ObjectId,
-        answer: String,
-        isCorrect: Boolean,
-    }],
-    score: Number,
-    submittedAt: { type: Date, default: Date.now },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    quizId: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz', required: true },
+    answers: { type: Map, of: String, required: true },
+    score: { type: Number, required: true },
+    submittedAt: { type: Date, default: Date.now }
 });
 
-submissionSchema.pre('save', async function (next) {
-    const quiz = await mongoose.model('Quiz').findById(this.quizId);
-    let score = 0;
+// Create the model for quiz submissions
+const Submission = mongoose.model('Submission', submissionSchema);
 
-    this.answers.forEach(answer => {
-        const question = quiz.questions.id(answer.questionId);
-        if (question.correct_answer === answer.answer) {
-            answer.isCorrect = true;
-            score += question.points;
-        } else {
-            answer.isCorrect = false;
+// Function to handle quiz submission
+const submitQuiz = async (req, res) => {
+    const { userId, quizId, answers, score } = req.body;
+
+    try {
+        // Validate the data
+        if (!userId || !quizId || !answers || score === undefined) {
+            return res.status(400).json({ message: 'Missing required fields' });
         }
-    });
 
-    this.score = score;
-    next();
-});
+        // Create a new submission document
+        const newSubmission = new Submission({
+            userId,
+            quizId,
+            answers,
+            score
+        });
 
-module.exports = mongoose.model('Submission', submissionSchema);
+        // Save the submission to the database
+        await newSubmission.save();
+
+        res.status(201).json({ message: 'Quiz submitted successfully', submission: newSubmission });
+    } catch (error) {
+        console.error('Error submitting quiz:', error);
+        res.status(500).json({ message: 'Error submitting quiz', error: error.message });
+    }
+};
+
+module.exports = { submitQuiz };
