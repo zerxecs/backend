@@ -1,10 +1,11 @@
-    import React, { useState, useEffect } from 'react';
+    import React, { useState, useEffect, useContext } from 'react';
     import PropTypes from 'prop-types';
     import { FaClock } from 'react-icons/fa';
     import { Modal, Button } from 'react-bootstrap';
     import { useNavigate } from 'react-router-dom';
     import axios from 'axios';
     import backIcon from '../media/back.svg'; // Import the backIcon image
+    import { TimerContext } from '../component/TimerContext'; // Import TimerContext
     
     const StudentQuizOverview = ({ quiz, onBackClick }) => {
         const navigate = useNavigate();
@@ -14,9 +15,9 @@
         const [userId, setUserId] = useState('');
         const [loading, setLoading] = useState(true);
         const [showModal, setShowModal] = useState(false);
-        const [remainingTime, setRemainingTime] = useState(0);
         const [answers, setAnswers] = useState({});
         const [score, setScore] = useState(0);
+        const { timers, startTimer, stopTimer } = useContext(TimerContext); // Use TimerContext
     
         useEffect(() => {
             const fetchUserName = async () => {
@@ -38,11 +39,9 @@
                     const storedQuizStarted = JSON.parse(localStorage.getItem(uniqueKey)) || false;
                     const storedRemainingTime = JSON.parse(localStorage.getItem(uniqueTimeKey));
                     setQuizStarted(storedQuizStarted);
-                    setRemainingTime(
-                        storedRemainingTime !== null
-                            ? storedRemainingTime
-                            : quiz.timeLimit.hours * 3600 + quiz.timeLimit.minutes * 60 + quiz.timeLimit.seconds
-                    );
+                    if (storedQuizStarted) {
+                        startTimer(quizId, storedRemainingTime !== null ? storedRemainingTime : quiz.timeLimit.hours * 3600 + quiz.timeLimit.minutes * 60 + quiz.timeLimit.seconds);
+                    }
                 } catch (error) {
                     console.error('Error fetching the student name:', error);
                 } finally {
@@ -51,22 +50,7 @@
             };
     
             fetchUserName();
-        }, [quizId, quiz.timeLimit]);
-    
-        useEffect(() => {
-            let timer;
-            if (quizStarted && remainingTime > 0) {
-                timer = setInterval(() => {
-                    setRemainingTime((prevTime) => {
-                        const newTime = prevTime - 1;
-                        const uniqueTimeKey = `remainingTime_${userId}_${quizId}`;
-                        localStorage.setItem(uniqueTimeKey, JSON.stringify(newTime));
-                        return newTime;
-                    });
-                }, 1000);
-            }
-            return () => clearInterval(timer);
-        }, [quizStarted, remainingTime, quizId, userId]);
+        }, [quizId, quiz.timeLimit, startTimer]);
     
         useEffect(() => {
             if (userId) {
@@ -81,9 +65,10 @@
     
         const handleConfirmStart = () => {
             setQuizStarted(true);
-            setRemainingTime(quiz.timeLimit.hours * 3600 + quiz.timeLimit.minutes * 60 + quiz.timeLimit.seconds);
+            const initialTime = quiz.timeLimit.hours * 3600 + quiz.timeLimit.minutes * 60 + quiz.timeLimit.seconds;
+            startTimer(quizId, initialTime);
             const uniqueTimeKey = `remainingTime_${userId}_${quizId}`;
-            localStorage.setItem(uniqueTimeKey, JSON.stringify(remainingTime));
+            localStorage.setItem(uniqueTimeKey, JSON.stringify(initialTime));
             setShowModal(false);
         };
     
@@ -145,6 +130,8 @@
             }
         };
     
+        console.log('Rendering StudentQuizOverview component'); // Add this line to log when the component is rendered
+    
         return (
             <div id="quiz-overview" className="container">
                 {!quizStarted ? (
@@ -188,7 +175,7 @@
                             <h2>{quiz.quiz_title}</h2>
                             <p className="time-remaining">
                                 <FaClock style={{ marginRight: '5px' }} />
-                                {formatTime(remainingTime)}
+                                {formatTime(timers[quizId] || 0)}
                             </p>
                             <hr />
                             <h3>{quiz.quiz_desc}</h3>
