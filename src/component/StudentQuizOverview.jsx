@@ -32,7 +32,7 @@
                     const data = await response.json();
                     console.log('Fetched User Data:', data); // Log the fetched user data
                     setUserName(data.user.fname);
-                    setUserId(data.user._id); // Ensure the correct field is used
+                    setUserId(data.user._id); 
                     const uniqueKey = `quizStarted_${data.user._id}_${quizId}`;
                     const uniqueTimeKey = `remainingTime_${data.user._id}_${quizId}`;
                     const storedQuizStarted = JSON.parse(localStorage.getItem(uniqueKey)) || false;
@@ -123,12 +123,12 @@
             let calculatedScore = 0;
             quiz.questions.forEach((question, index) => {
                 if (answers[index] === question.correct_answer) {
-                    calculatedScore += question.points; // Use points for each correct answer
+                    calculatedScore += question.points; 
                 }
             });
             setScore(calculatedScore);
     
-            // Log the userId to ensure it is set correctly
+            // Log the userId to ensure it is set correctly debuggin purposes
             console.log('Submitting quiz with userId:', userId);
     
             // Store or submit responses
@@ -256,7 +256,7 @@
                     question: PropTypes.string.isRequired,
                     choices: PropTypes.arrayOf(PropTypes.string).isRequired,
                     correct_answer: PropTypes.string.isRequired,
-                    points: PropTypes.number.isRequired, // Add points field
+                    points: PropTypes.number.isRequired, 
                 })
             ).isRequired,
         }).isRequired,
