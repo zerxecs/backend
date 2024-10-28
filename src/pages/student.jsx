@@ -41,7 +41,7 @@ const Sidebar = ({ setContent, setShowPrivate, isSidebarVisible }) => {
           </a>
         </li>
         <li className="nav-item">
-          <a href="#classes" className="nav-link" onClick={() => setContent("Classes")}>
+          <a href="#classes-student" className="nav-link" onClick={() => setContent("Classes")}>
             <Icon icon={classesIcon} /> Classes
           </a>
         </li>
@@ -96,7 +96,7 @@ const Sidebar = ({ setContent, setShowPrivate, isSidebarVisible }) => {
 
 Sidebar.propTypes = {
   setContent: PropTypes.func.isRequired,
-  setShowPrivate: PropTypes.func.isRequired, // Add this prop
+  setShowPrivate: PropTypes.func.isRequired, 
   isSidebarVisible: PropTypes.bool.isRequired,
 };
 
@@ -105,7 +105,7 @@ const Content = ({ content, classes, addClass, setContent, showPrivate }) => {
     case "Home":
       return <Home showPrivate={showPrivate} setContent={setContent} />; // Pass showPrivate and setContent props
     case "Classes":
-      return <Classes showPrivate={showPrivate} />; // Pass showPrivate prop
+      return <Classes showPrivate={showPrivate} setContent={setContent} />; // Pass showPrivate and setContent props
     case "Create Activity":
       return <CreateActivity />;
     case "Quizzes":

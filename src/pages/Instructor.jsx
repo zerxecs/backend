@@ -7,7 +7,7 @@ import homeIcon from '@iconify/icons-heroicons/home-solid';
 import classesIcon from '@iconify/icons-icomoon-free/books';
 import createClassIcon from '@iconify/icons-ic/baseline-create-new-folder';
 import quizzesIcon from '@iconify/icons-material-symbols/library-books';
-import examsIcon from '@iconify/icons-healthicons/i-exam-multiple-choice';
+// import examsIcon from '@iconify/icons-healthicons/i-exam-multiple-choice';
 import logoutIcon from '@iconify/icons-fluent/person-12-filled';
 import helpIcon from '@iconify/icons-fluent/settings-24-filled';
 import searchIcon from '@iconify/icons-material-symbols/search';
@@ -40,17 +40,17 @@ const Sidebar = ({ setContent, setShowPrivate, isSidebarVisible }) => {
       <ul className="nav nav-pills flex-column mb-auto">
         <li className="nav-item"><h6 className="nav-header">Menu</h6></li>
         <li className="nav-item">
-          <a href="#home-instructor" className="nav-link active" onClick={() => setContent("Home")}>
+          <a href="#/home" className="nav-link active" onClick={() => setContent("Home")}>
             <Icon icon={homeIcon} /> Home
           </a>
         </li>
         <li className="nav-item">
-          <a href="#classes" className="nav-link" onClick={() => setContent("Classes")}>
+          <a href="#/classes" className="nav-link" onClick={() => setContent("Classes")}>
             <Icon icon={classesIcon} /> Classes
           </a>
         </li>
         <li className="nav-item">
-          <a href="#create-class" className="nav-link" onClick={() => setContent("Create Class")}>
+          <a href="#/create-class" className="nav-link" onClick={() => setContent("Create Class")}>
             <Icon icon={createClassIcon} /> Create Class
           </a>
         </li>
@@ -71,23 +71,23 @@ const Sidebar = ({ setContent, setShowPrivate, isSidebarVisible }) => {
         </li>
         <li className="nav-item"><h6 className="nav-header">Assessment</h6></li>
         <li className="nav-item">
-          <a href="#quiz-instructor" className="nav-link" onClick={() => setContent("Quizzes")}>
+          <a href="#/quizzes" className="nav-link" onClick={() => setContent("Quizzes")}>
             <Icon icon={quizzesIcon} /> Quizzes
           </a>
         </li>
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <a href="#" className="nav-link" onClick={() => setContent("Exams")}>
             <Icon icon={examsIcon} /> Exams
           </a>
-        </li>
+        </li> */}
         <li className="nav-item"><h6 className="nav-header">User</h6></li>
         <li className="nav-item">
-          <a href="#" className="nav-link" onClick={() => setContent("Logout")}>
+          <a href="#logout" className="nav-link" onClick={() => setContent("Logout")}>
             <Icon icon={logoutIcon} /> Logout
           </a>
         </li>
         <li className="nav-item">
-          <a href="#" className="nav-link" onClick={() => setContent("Help & Support")}>
+          <a href="#/help-&-support" className="nav-link" onClick={() => setContent("Help & Support")}>
             <Icon icon={helpIcon} /> Help & Support
           </a>
         </li>
@@ -126,8 +126,8 @@ const Content = ({ content, classes, addClass, setContent, showPrivate }) => {
       return <CreateActivity />;
     case "Quizzes":
       return <Quizzes />;
-    case "Exams":
-      return <Exams />;
+    // case "Exams":
+    //   return <Exams />;
     case "Logout":
       return <Logout />;
     case "Help & Support":

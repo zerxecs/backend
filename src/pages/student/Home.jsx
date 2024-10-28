@@ -44,76 +44,49 @@ const Home = ({ showPrivate, setContent }) => {
   }, []);
 
   // Fetch all classes
-  useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/classes', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-
-        const data = await response.json();
-        if (data.success) {
-          setClasses(data.classes);
-        } else {
-          setError(data.error || 'Error fetching classes');
-        }
-
-        // Fetch registered classes
-        const registeredResponse = await fetch('http://localhost:5000/api/registered-classes', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-
-        const registeredData = await registeredResponse.json();
-        if (registeredData.success) {
-          setRegisteredClasses(registeredData.classes);
-        } else {
-          setError(registeredData.error || 'Error fetching registered classes');
-        }
-      } catch (err) {
-        console.error('Error:', err);
-        setError('An error occurred while fetching classes.');
-      }
-    };
-
-    fetchClasses();
-  }, []);
-
-  const handleRegisterClass = async () => {
-    if (!classCode) {
-      setError('Please enter a class code.');
-      return;
-    }
-
+  const fetchClasses = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/register-private-class', {
-        method: 'POST',
+      const response = await fetch('http://localhost:5000/api/public-classes', {
+        method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        body: JSON.stringify({ classCode }),
       });
 
       const data = await response.json();
       if (data.success) {
-        setRegisteredClasses((prev) => [...prev, data.class]); // Add the newly registered class
-        setClassCode(''); // Clear the input field
-        setError(''); // Clear any previous errors
+        setClasses(data.classes);
       } else {
-        setError(data.error || 'Error registering for the class');
+        setError(data.error || 'Error fetching classes');
+      }
+
+      // Fetch registered classes
+      const registeredResponse = await fetch('http://localhost:5000/api/registered-classes', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      const registeredData = await registeredResponse.json();
+      if (registeredData.success) {
+        setRegisteredClasses(registeredData.classes);
+      } else {
+        setError(registeredData.error || 'Error fetching registered classes');
       }
     } catch (err) {
       console.error('Error:', err);
-      setError('An error occurred while registering for the class.');
+      setError('An error occurred while fetching classes.');
     }
   };
 
+  useEffect(() => {
+    fetchClasses();
+  }, []);
+
+  const handleLeaveSuccess = () => {
+    fetchClasses(); // Refresh the list of classes
+  };
 
   const getInitials = (name) => {
     return name.split(' ').map(word => word[0]).join('');
@@ -134,7 +107,7 @@ const Home = ({ showPrivate, setContent }) => {
   const limitedClasses = displayedClasses.slice(0, 4);
 
   if (selectedClass) {
-    return <StudentClassDetails selectedClass={selectedClass} onBack={handleBackClick} />;
+    return <StudentClassDetails selectedClass={selectedClass} onBack={handleBackClick} onLeaveSuccess={handleLeaveSuccess}/>;
   }
 
   return (
@@ -167,7 +140,7 @@ const Home = ({ showPrivate, setContent }) => {
               <div className="card-content">
                 <h3 className="card-title">{classItem.name}</h3>
                 <hr />
-                <p className='card-description'>{classItem.description}</p>
+                <p className='card-description'>{classItem.createdBy.fname} {classItem.createdBy.lname}</p>
                 <p className="card-text">
                   <img
                     src={personIcon}
