@@ -36,17 +36,11 @@ width:100%;
     transition: background-color 0.3s ease;
 }
 
-#instructor-quiz .button:hover {
+#instructor-quiz .button:hover, #instructor-quiz .button:focus {
     color: #fff;
     background-color: #7E57C2;
 }
-
-#instructor-quiz .divider {
-    border: 1px solid #888;
-    margin: 0 0 0 -3%;
-    width: 130%;
-}
-
+v
 #instructor-quiz .quiz-list {
     margin-top: 16px;
 }
@@ -104,11 +98,23 @@ width:100%;
     border: 1px solid #DA88F9;
   width:320% ;
 }
-#instructor-quiz .card-divider{
+#instructor-quiz .card-divider, #instructor-quiz .student-card-divider{
+    
     border: 1px solid #db88f945;
     width: 100%;
     margin: 0 0 1.5% 0;
 }
+#instructor-quiz .student-card-divider{
+    width: 290%;
+}
+
+#instructor-quiz .divider {
+    border: 1px solid #888 !important;
+    margin: 0 0 2% -3%;
+    width: 130%;
+}
+
+
 .class-initials-card {
     width: 120px;
     height:120px;
@@ -223,6 +229,14 @@ width:100%;
     align-items: center;
   }
 
+  @media (max-width: 1024px) {
+
+  #instructor-quiz .student-card-divider{
+    width:150%;
+    }
+}
+
+
 /* Tablet layout */
 @media (max-width: 768px) {
     #instructor-quiz .hide-text {
@@ -240,7 +254,9 @@ width:100%;
         flex-direction: row;
         gap: 10px;
     }
-
+    #instructor-quiz .student-card-divider{
+        width: auto;
+    }
     #instructor-quiz .quiz-card {
         margin: 0 0 5% 5%;
         width: 90%;

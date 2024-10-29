@@ -5,7 +5,6 @@ import backIcon from '../../media/back.svg';
 import settingsIcon from '../../media/settings.svg';
 import activityIcon from '../../media/activity.svg';
 import quizIcon from '../../media/quiz.svg';
-import examIcon from '../../media/exam.svg';
 import '../../css/class_content.css';
 import CreateActivity from './CreateActivity';
 import ClassQuizzes from './ClassQuizzes';
@@ -228,9 +227,6 @@ const ClassDetails = ({ selectedClass, onBack }) => {
                     <div className="assessment-list">
                       <button className="assessment-btn" onClick={handleShowQuizzes}>
                         <img src={quizIcon} alt="Quiz Icon" className="quiz-icon" /> Quizzes
-                      </button>
-                      <button className="assessment-btn">
-                        <img src={examIcon} alt="Exam Icon" className="exam-icon" /> Exams
                       </button>
                     </div>
                   </div>

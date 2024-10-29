@@ -86,7 +86,7 @@
                         </div>
                     </header>
         
-                    <hr className="divider-quiz" />
+                    <hr className="divider" />
         
                     <div className="quiz-list">
                         {quizzes.map((quiz, index) => (
@@ -97,7 +97,7 @@
                                 <div className="quiz-wrapper">
                                     <div className="details-wrapper">
                                         <h2 className="quiz-title">{quiz.quiz_title}</h2>
-                                        <hr />
+                                        <div className="student-card-divider" />
                                         {quiz.deadline && (
                                             <div className="date-wrapper">
                                                 <img src={calendarIcon} alt="Calendar Icon" className="calendar-image icon" />

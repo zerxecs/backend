@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // Define the schema for quiz submissions
 const submissionSchema = new mongoose.Schema({
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    userEmail: { type: String, required: true }, // Use email instead of userId
     quizId: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz', required: true },
     answers: { type: Map, of: String, required: true },
     score: { type: Number, required: true },
@@ -14,17 +14,17 @@ const Submission = mongoose.model('Submission', submissionSchema);
 
 // Function to handle quiz submission
 const submitQuiz = async (req, res) => {
-    const { userId, quizId, answers, score } = req.body;
+    const { userEmail, quizId, answers, score } = req.body;
 
     try {
         // Validate the data
-        if (!userId || !quizId || !answers || score === undefined) {
+        if (!userEmail || !quizId || !answers || score === undefined) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
 
         // Create a new submission document
         const newSubmission = new Submission({
-            userId,
+            userEmail, // Use email instead of userId
             quizId,
             answers,
             score
@@ -40,4 +40,4 @@ const submitQuiz = async (req, res) => {
     }
 };
 
-module.exports = { submitQuiz };
+module.exports = { Submission, submitQuiz };

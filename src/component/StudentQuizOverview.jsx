@@ -12,7 +12,7 @@
         const quizId = quiz._id; // Use _id instead of id
         const [quizStarted, setQuizStarted] = useState(false);
         const [userName, setUserName] = useState('');
-        const [userId, setUserId] = useState('');
+        const [userEmail, setUserEmail] = useState(''); // Use email instead of userId
         const [loading, setLoading] = useState(true);
         const [showModal, setShowModal] = useState(false);
         const [answers, setAnswers] = useState({});
@@ -33,9 +33,9 @@
                     const data = await response.json();
                     console.log('Fetched User Data:', data); // Log the fetched user data
                     setUserName(data.user.fname);
-                    setUserId(data.user._id); 
-                    const uniqueKey = `quizStarted_${data.user._id}_${quizId}`;
-                    const uniqueTimeKey = `remainingTime_${data.user._id}_${quizId}`;
+                    setUserEmail(data.user.email); // Set email instead of userId
+                    const uniqueKey = `quizStarted_${data.user.email}_${quizId}`;
+                    const uniqueTimeKey = `remainingTime_${data.user.email}_${quizId}`;
                     const storedQuizStarted = JSON.parse(localStorage.getItem(uniqueKey)) || false;
                     const storedRemainingTime = JSON.parse(localStorage.getItem(uniqueTimeKey));
                     setQuizStarted(storedQuizStarted);
@@ -53,11 +53,11 @@
         }, [quizId, quiz.timeLimit, startTimer]);
     
         useEffect(() => {
-            if (userId) {
-                const uniqueKey = `quizStarted_${userId}_${quizId}`;
+            if (userEmail) {
+                const uniqueKey = `quizStarted_${userEmail}_${quizId}`;
                 localStorage.setItem(uniqueKey, JSON.stringify(quizStarted));
             }
-        }, [quizStarted, quizId, userId]);
+        }, [quizStarted, quizId, userEmail]);
     
         const handleStartQuiz = () => {
             setShowModal(true);
@@ -67,7 +67,7 @@
             setQuizStarted(true);
             const initialTime = quiz.timeLimit.hours * 3600 + quiz.timeLimit.minutes * 60 + quiz.timeLimit.seconds;
             startTimer(quizId, initialTime);
-            const uniqueTimeKey = `remainingTime_${userId}_${quizId}`;
+            const uniqueTimeKey = `remainingTime_${userEmail}_${quizId}`;
             localStorage.setItem(uniqueTimeKey, JSON.stringify(initialTime));
             setShowModal(false);
         };
@@ -113,13 +113,13 @@
             });
             setScore(calculatedScore);
     
-            // Log the userId to ensure it is set correctly debuggin purposes
-            console.log('Submitting quiz with userId:', userId);
+            // Log the userEmail to ensure it is set correctly for debugging purposes
+            console.log('Submitting quiz with userEmail:', userEmail);
     
             // Store or submit responses
             try {
                 const response = await axios.post('http://localhost:5000/api/submit-quiz', {
-                    userId,
+                    userEmail, // Send email instead of userId
                     quizId,
                     answers,
                     score: calculatedScore,
