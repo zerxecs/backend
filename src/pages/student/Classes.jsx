@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import personIcon from '../../media/person-icon.svg';
 import '../../css/Classes.css';
-import '../../css/CreateClass.css';
-import '../../css/studentClasses.css';
+// import '../../css/CreateClass.css';
+// import '../../css/studentClasses.css';
 import StudentClassDetails from './StudentClassDetails'; // Import ClassDetails component
 
 const StudentClasses = ({ showPrivate, setContent }) => {

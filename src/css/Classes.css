@@ -109,6 +109,7 @@
 
 #student-classes .section {
   margin-bottom: 20px;
+ 
 }
 #student-classes .section h2 {
   margin-left: 30px;
@@ -130,8 +131,8 @@
   padding: 20px;
   border-radius: 10px;
   margin: 20px 0 50px 0;
-  width: 110%;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 110%;
 }
 
 #classes .join-class label {
@@ -146,7 +147,7 @@
   border: 2px solid #DA88F9;
   border-radius: 10px; 
   padding: 10px;
-  width: 100%;
+  width:100%;
   overflow: hidden; 
 }
 
@@ -238,6 +239,8 @@
     padding: 0;
 
     }
+   
+
     .grid {
       grid-template-columns: 1fr;
       display: flex;
@@ -260,13 +263,10 @@
       padding: 25px;
     }
     
-  
-  #home-user .see-more-btn {
-    width:20%;
-    margin: 5% 0 15% 0 !important;
-    padding: 2;
-  }
-  
+   #classes .join-class {
+      width: 100%;
+    }
+
 
   #classes .card {
     display: flex;

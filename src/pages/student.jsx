@@ -17,6 +17,7 @@ import Quizzes from './student/Quizzes';
 import Logout from './student/Logout';
 import HelpSupport from './student/HelpSupport';
 import HeaderSideBar from '../component/HeaderSideBar';
+import JoinClass from './student/JoinClass';
 
 // Sidebar Component
 const Sidebar = ({ setContent, setShowPrivate, isSidebarVisible }) => {
@@ -45,7 +46,11 @@ const Sidebar = ({ setContent, setShowPrivate, isSidebarVisible }) => {
             <Icon icon={classesIcon} /> Classes
           </a>
         </li>
-      
+        <li className="nav-item">
+          <a href="#join-class" className="nav-link" onClick={() => setContent("Join Class")}>
+            <Icon icon={classesIcon} /> Join Class
+          </a>
+        </li>
         <li className="nav-item">
           <div className="form-check form-switch">
             <input
@@ -114,6 +119,8 @@ const Content = ({ content, classes, addClass, setContent, showPrivate }) => {
       return <Logout />;
     case "Help & Support":
       return <HelpSupport />;
+    case "Join Class":
+      return <JoinClass />;
     default:
       return <div>{content}</div>;
   }
