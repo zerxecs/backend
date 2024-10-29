@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import personIcon from '../../media/person-icon.svg';
 import '../../css/Classes.css';
-// import '../../css/CreateClass.css';
-// import '../../css/studentClasses.css';
 import StudentClassDetails from './StudentClassDetails'; // Import ClassDetails component
 
 const StudentClasses = ({ showPrivate, setContent }) => {
@@ -46,21 +44,22 @@ const StudentClasses = ({ showPrivate, setContent }) => {
   // Fetch all classes
   const fetchClasses = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/public-classes', {
+      // Fetch public classes the user is registered to
+      const publicResponse = await fetch('http://localhost:5000/api/public-classes', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
 
-      const data = await response.json();
-      if (data.success) {
-        setClasses(data.classes);
+      const publicData = await publicResponse.json();
+      if (publicData.success) {
+        setClasses(publicData.classes);
       } else {
-        setError(data.error || 'Error fetching classes');
+        setError(publicData.error || 'Error fetching public classes');
       }
 
-      // Fetch registered classes
+      // Fetch registered private classes
       const registeredResponse = await fetch('http://localhost:5000/api/registered-classes', {
         method: 'GET',
         headers: {
@@ -146,60 +145,60 @@ const StudentClasses = ({ showPrivate, setContent }) => {
     return <StudentClassDetails selectedClass={selectedClass} onBack={handleBackClick} onLeaveSuccess={handleLeaveSuccess} />;
   }
 
-   return (
-      <div id='classes' className="main-content">
-        {error && <p className="error">{error}</p>}
-        
-        {showPrivate && (
-          <div className="section">
-            <div className="join-class">
-              <h2 className="colored regtext">Enter Class Code to Register for Private Class</h2>
-              <div className="input-group">
-                <input
-                  type="text"
-                  value={classCode}
-                  onChange={(e) => setClassCode(e.target.value)}
-                  placeholder="Enter class code"
-                />
-                <button onClick={handleRegisterClass}>Register</button>
-              </div>
+  return (
+    <div id='classes' className="main-content">
+      {error && <p className="error">{error}</p>}
+      
+      {showPrivate && (
+        <div className="section">
+          <div className="join-class">
+            <h2 className="colored regtext">Enter Class Code to Register for Private Class</h2>
+            <div className="input-group">
+              <input
+                type="text"
+                value={classCode}
+                onChange={(e) => setClassCode(e.target.value)}
+                placeholder="Enter class code"
+              />
+              <button onClick={handleRegisterClass}>Register</button>
             </div>
           </div>
-        )}
-  
-        <div className="section">
-          <h2 className="colored">{showPrivate ? 'Private Classes' : 'Public Classes'}</h2>
-          {displayedClasses.length === 0 && <p className='no'>No classes available.</p>}
-          <div className="grid">
-            {displayedClasses.map((classItem, index) => (
-              <div
-                className="card"
-                key={index}
-                onClick={() => handleCardClick(classItem)}
-              >
-                <div className="card-image-container">
-                  {getInitials(classItem.name)}
-                </div>
-                <div className="card-content">
-                  <h3 className="card-title">{classItem.name}</h3>
-                  <hr />
-                  <p className='card-description'>{classItem.createdBy.fname} {classItem.createdBy.lname}</p>
-                  <p className="card-text">
-                    <img
-                      src={personIcon}
-                      alt="Students Icon"
-                      className="icon-image"
-                    />
-                    {classItem.students.length} Students Enrolled
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-         
         </div>
+      )}
+
+      <div className="section">
+        <h2 className="colored">{showPrivate ? 'Private Classes' : 'Public Classes'}</h2>
+        {displayedClasses.length === 0 && <p className='no'>No classes available.</p>}
+        <div className="grid">
+          {displayedClasses.map((classItem, index) => (
+            <div
+              className="card"
+              key={index}
+              onClick={() => handleCardClick(classItem)}
+            >
+              <div className="card-image-container">
+                {getInitials(classItem.name)}
+              </div>
+              <div className="card-content">
+                <h3 className="card-title">{classItem.name}</h3>
+                <hr />
+                <p className='card-description'>{classItem.createdBy.fname} {classItem.createdBy.lname}</p>
+                <p className="card-text">
+                  <img
+                    src={personIcon}
+                    alt="Students Icon"
+                    className="icon-image"
+                  />
+                  {classItem.students.length} Students Enrolled
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+       
       </div>
-    );
+    </div>
+  );
 };
 
 StudentClasses.propTypes = {

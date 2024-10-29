@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Modal, Button } from "react-bootstrap"; // Import Modal and Button from react-bootstrap
-import personIcon from '../../media/person-icon.svg';
 import backIcon from '../../media/back.svg';
 import settingsIcon from '../../media/settings.svg';
-import activityIcon from '../../media/activity.svg';
 import quizIcon from '../../media/quiz.svg';
-import examIcon from '../../media/exam.svg';
 import '../../css/class_content.css';
 import StudentClassQuizzes from './StudentClassQuizzes'; // Import ClassQuizzes
 
@@ -143,17 +140,17 @@ const ClassDetails = ({ selectedClass, onBack, onLeaveSuccess }) => {
                       <button className="assessment-btn" onClick={handleShowQuizzes}>
                         <img src={quizIcon} alt="Quiz Icon" className="quiz-icon" /> Quizzes
                       </button>
-                      <button className="assessment-btn">
-                        <img src={examIcon} alt="Exam Icon" className="exam-icon" /> Exams
-                      </button>
+                     
                     </div>
                   </div>
                 </>
               )}
               {showSettings && (
                 <div id="class-details" className="settings-section">
+
+
                   <div className="join-class">
-                  <button className="remove-btn" onClick={handleOpenModal}>Leave Class</button>
+                  <button className="remove-btn-student" onClick={handleOpenModal}>Leave Class</button>
 
                     <h3 className="colored regtext">Enrolled Students</h3>
                     <table className="enrolled-students-table">
@@ -184,18 +181,26 @@ const ClassDetails = ({ selectedClass, onBack, onLeaveSuccess }) => {
           )}
         </>
       )}
-      <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal className="leave-modal" show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Leave Class</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to leave the class?
+        Are you sure you want to leave the class {selectedClass.name}?
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Modal.Footer>
+          <Button 
+            variant="secondary" 
+            onClick={handleCloseModal} 
+            className="custom-cancel-btn"
+          >
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleConfirmLeave}>
+          <Button 
+            variant="primary" 
+            onClick={handleConfirmLeave} 
+            className="custom-leave-btn"
+          >
             Leave
           </Button>
         </Modal.Footer>

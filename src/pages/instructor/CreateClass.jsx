@@ -11,9 +11,10 @@ const CreateClass = () => {
   const [students, setStudents] = useState([]); // Store selected students
   const [registeredStudents, setRegisteredStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(''); // Add state for search query
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
   useEffect(() => {
+    // Fetch registered students from the server
     fetch('http://localhost:5000/api/students')
       .then((response) => response.json())
       .then((data) => {
@@ -61,9 +62,9 @@ const CreateClass = () => {
         type: classType,
         students: students.map(student => student.email), // Use emails for submission
       };
-
-      console.log('Sending class data to server:', newClass);
-
+  
+      console.log('Sending class data to server:', newClass); // Log the payload
+  
       fetch('http://localhost:5000/api/create-class', {
         method: 'POST',
         headers: {
@@ -171,7 +172,7 @@ const CreateClass = () => {
           {students.map(student => (
             <div key={student.email} className="selected-student">
               <span>{student.name}</span>   
-              <button className="remove-btn"onClick={() => handleRemoveStudent(student.email)}>Remove</button>
+              <button className="remove-btn" onClick={() => handleRemoveStudent(student.email)}>Remove</button>
             </div>
           ))}
         </div>

@@ -215,13 +215,13 @@
 }
 
 .modal-footer .btn-primary {
-  background-color: #8240c8;
-  border-color: #8240c8;
+  background-color: #ff4d4d;
+  border-color: #ff4d4d;
 }
 
-.modal-footer .btn-primary:active {
-  background-color: #5a2a8a; /* Change to your desired color */
-  border-color: #5a2a8a; /* Change to your desired color */
+.modal-footer .btn-primary:hover {
+  background-color: #d93d3d; /* Change to your desired color */
+  border-color: #d93d3d; /* Change to your desired color */
 }
 
 .modal-footer .btn-secondary {
@@ -232,6 +232,7 @@
     background-color: #454a4e;
     border-color:  #454a4e;
 }
+
 
 #quiz-overview .back-btn img {
   width: 20px;

@@ -5,10 +5,14 @@ const User = require('../models/User');
 
 const router = express.Router();
 
-// Route to fetch all public classes
-router.get('/public-classes', async (req, res) => {
+// Route to fetch all public classes that the logged-in student is registered to or belongs to
+router.get('/public-classes', authMiddleware, async (req, res) => {
   try {
-    const publicClasses = await Class.find({ type: 'public' }).populate('createdBy', 'fname lname');
+    const userEmail = req.user.email;
+
+    // Find all public classes where the student's email is in the students array
+    const publicClasses = await Class.find({ type: 'public', students: userEmail }).populate('createdBy', 'fname lname');
+
     res.status(200).json({ success: true, classes: publicClasses });
   } catch (error) {
     console.error('Error fetching public classes:', error);

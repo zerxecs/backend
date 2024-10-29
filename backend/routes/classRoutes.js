@@ -2,6 +2,7 @@ const express = require('express');
 const authMiddleware = require('../middleware/authMiddleware');
 const Class = require('../models/Class');
 const User = require('../models/User');
+const { v4: uuidv4 } = require('uuid'); // Use UUID for unique code generation
 
 const router = express.Router();
 
@@ -10,21 +11,28 @@ router.post('/create-class', authMiddleware, async (req, res) => {
   const { name, description, type, students } = req.body;
 
   try {
-    const newClass = new Class({
+    const newClass = await Class.create({
       name,
       description,
       type,
-      students, // Assuming this contains student emails
+      students,
       createdBy: req.user._id,
+      code: type === 'public' ? `public-${uuidv4().slice(0, 8)}` : uuidv4().slice(0, 8)
     });
 
-    await newClass.save();
+    // Update the registered classes for each student
+    await User.updateMany(
+      { email: { $in: students } },
+      { $addToSet: { registeredClasses: newClass._id } }
+    );
+
     res.status(201).json({ success: true, message: 'Class created successfully!', class: newClass });
   } catch (error) {
     console.error('Error creating class:', error);
     res.status(400).json({ error: 'Error creating class: ' + error.message });
   }
 });
+
 
 // Route to get all classes for the logged-in user
 router.get('/classes', authMiddleware, async (req, res) => {
@@ -158,6 +166,59 @@ router.delete('/class/:id', authMiddleware, async (req, res) => {
 
 
 
+// Route to get public classes that the logged-in student is not registered for
+router.get('/public-classes/unregistered', authMiddleware, async (req, res) => {
+  try {
+    // Fetch all public classes and populate the createdBy field with fname and lname
+    const publicClasses = await Class.find({ type: 'public' }).populate('createdBy', 'fname lname');
 
+    // Fetch the logged-in user's registered classes
+    const user = await User.findById(req.user._id).select('registeredClasses');
+    const registeredClassIds = user.registeredClasses.map(classId => classId.toString());
+
+    // Filter out the classes the user is already registered for
+    const unregisteredClasses = publicClasses.filter(
+      classItem => !registeredClassIds.includes(classItem._id.toString())
+    );
+
+    res.status(200).json({ success: true, classes: unregisteredClasses });
+  } catch (error) {
+    console.error('Error fetching unregistered public classes:', error);
+    res.status(500).json({ success: false, error: 'Error fetching unregistered public classes' });
+  }
+});
+
+
+// Route to join a public class
+router.post('/join-public-class/:id', authMiddleware, async (req, res) => {
+  const classId = req.params.id;
+  const userId = req.user._id;
+
+  try {
+    // Find the class by ID and ensure it is a public class
+    const classToJoin = await Class.findById(classId);
+    if (!classToJoin || classToJoin.type !== 'public') {
+      return res.status(404).json({ success: false, error: 'Public class not found' });
+    }
+
+    // Add the student's email to the class's students array if not already added
+    if (!classToJoin.students.includes(req.user.email)) {
+      classToJoin.students.push(req.user.email);
+      await classToJoin.save();
+    }
+
+    // Add the class ID to the user's registeredClasses array if not already added
+    const user = await User.findById(userId);
+    if (!user.registeredClasses.includes(classId)) {
+      user.registeredClasses.push(classId);
+      await user.save();
+    }
+
+    res.status(200).json({ success: true, class: classToJoin });
+  } catch (error) {
+    console.error('Error joining public class:', error);
+    res.status(500).json({ success: false, error: 'An error occurred while joining the class' });
+  }
+});
 
 module.exports = router;

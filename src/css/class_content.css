@@ -244,17 +244,23 @@ width:90%;
   margin-right: 10px;
   color: #ffff;
 }
-#class-details .remove-btn {
-  background-color: #ff4d4d;
+#class-details .remove-btn, #class-details .remove-btn-student {
   color: white;
-  border: none;
+  background-color: #ff4d4d;
+  border-color: #ff4d4d;
   padding: 5px 10px;
   cursor: pointer;
   border-radius: 5px;
+  
+}
+#class-details .remove-btn-student{
+  display: flex;
+  margin: 0 0 0 auto;
 }
 
 #class-details .remove-btn:hover {
-  background-color: #ff1a1a;
+  background-color: #d93d3d; /* Change to your desired color */
+  border-color: #d93d3d; /* Change to your desired color */
 }
 
 #class-details .error {
@@ -353,6 +359,7 @@ width: 135px;
 #class-details .enrolled-students-table .remove-btn:hover, #class-details .delete-class-btn:hover {
   background-color: #ff3333;
 }
+
 
 
 

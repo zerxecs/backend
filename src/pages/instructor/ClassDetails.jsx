@@ -371,7 +371,7 @@ const ClassDetails = ({ selectedClass, onBack, onDelete }) => {
           <Button variant="secondary" onClick={handleCloseDeleteClassModal}>
             Cancel
           </Button>
-          <Button variant="danger" onClick={handleConfirmDeleteClass}>
+          <Button variant="primary" onClick={handleConfirmDeleteClass}>
             Delete
           </Button>
         </Modal.Footer>
