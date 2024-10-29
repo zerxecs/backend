@@ -40,32 +40,54 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update a quiz
+// Update an existing quiz
 router.put('/:id', async (req, res) => {
   try {
-    const { questions } = req.body; // Only update questions in edit mode
+      const {
+          quiz_title, quiz_desc, quiz_instructions, questions, 
+          timeLimit, deadline, passingScore, attemptsAllowed, class_id
+      } = req.body;
 
-    if (!questions || questions.length === 0) {
-      return res.status(400).send({ error: 'Questions are required to update the quiz.' });
-    }
-
-    // Validate questions
-    for (const question of questions) {
-      if (!question.question || !question.correct_answer || question.choices.length !== 4 || !question.points) {
-        return res.status(400).send({ error: 'Each question must have a question text, correct answer, 4 choices, and points.' });
+      // Validate input
+      if (!quiz_title || !quiz_desc || !quiz_instructions || !questions || 
+          questions.length === 0 || !timeLimit || !deadline || !passingScore || 
+          !attemptsAllowed || !class_id) {
+          return res.status(400).send({ error: 'All fields are required.' });
       }
-    }
 
-    const updatedQuiz = await Quiz.findByIdAndUpdate(req.params.id, { questions }, { new: true });
+      // Validate questions
+      for (const question of questions) {
+          if (!question.question || !question.correct_answer || 
+              question.choices.length !== 4 || !question.points) {
+              return res.status(400).send({ 
+                  error: 'Each question must have text, correct answer, 4 choices, and points.' 
+              });
+          }
+      }
 
-    if (!updatedQuiz) {
-      return res.status(404).send({ error: 'Quiz not found.' });
-    }
+      const updateData = {
+          quiz_title, quiz_desc, quiz_instructions, questions, 
+          timeLimit, deadline, passingScore, attemptsAllowed, class_id
+      };
 
-    res.status(200).send({ message: 'Quiz updated successfully', quiz: updatedQuiz });
+      console.log('Received update data:', updateData); // Log the received data
+
+      const updatedQuiz = await Quiz.findByIdAndUpdate(
+          req.params.id, 
+          updateData, 
+          { new: true, runValidators: true }
+      );
+
+      if (!updatedQuiz) {
+          return res.status(404).send({ error: 'Quiz not found.' });
+      }
+
+      console.log('Updated quiz:', updatedQuiz); // Log the updated quiz
+
+      res.status(200).send({ message: 'Quiz updated successfully', quiz: updatedQuiz });
   } catch (error) {
-    console.error('Error updating quiz:', error);
-    res.status(500).send({ error: 'An error occurred while updating the quiz.' });
+      console.error('Error updating quiz:', error);
+      res.status(500).send({ error: 'An error occurred while updating the quiz.' });
   }
 });
 
