@@ -8,12 +8,13 @@ import quizIcon from '../../media/quiz.svg';
 import '../../css/class_content.css';
 import CreateActivity from './CreateActivity';
 import ClassQuizzes from './ClassQuizzes';
+import { FaTrash } from 'react-icons/fa';
 
-const ClassDetails = ({ selectedClass, onBack }) => {
+const ClassDetails = ({ selectedClass, onBack, onDelete }) => {
   const [registeredStudents, setRegisteredStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [students, setStudents] = useState([]); // Ensure this line is present
+  const [students, setStudents] = useState([]);
   const [error, setError] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const [showCreateActivity, setShowCreateActivity] = useState(false);
@@ -21,6 +22,7 @@ const ClassDetails = ({ selectedClass, onBack }) => {
   const [refresh, setRefresh] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [studentToRemove, setStudentToRemove] = useState(null);
+  const [showDeleteClassModal, setShowDeleteClassModal] = useState(false);
 
   useEffect(() => {
     console.log('Selected class:', selectedClass);
@@ -140,7 +142,7 @@ const ClassDetails = ({ selectedClass, onBack }) => {
     }
 
     const emails = students.map(student => student.email);
-    console.log('Adding students with emails:', emails); // Log the emails being sent
+    console.log('Adding students with emails:', emails);
 
     try {
       const response = await fetch(`http://localhost:5000/api/class/${selectedClass._id}/add-students`, {
@@ -186,6 +188,37 @@ const ClassDetails = ({ selectedClass, onBack }) => {
     setShowQuizzes(false);
   };
 
+  const handleDeleteClass = () => {
+    setShowDeleteClassModal(true);
+  };
+
+  const handleCloseDeleteClassModal = () => {
+    setShowDeleteClassModal(false);
+  };
+
+  const handleConfirmDeleteClass = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/class/${selectedClass._id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        onDelete(); // Call the callback function to update the list of classes
+        onBack(); // Navigate back after successful deletion
+      } else {
+        setError(data.error || 'Error deleting class');
+      }
+    } catch (err) {
+      console.error('Error deleting class:', err);
+      setError('An error occurred while deleting the class.');
+    }
+    handleCloseDeleteClassModal();
+  };
+
   return (
     <div id="class-details">
       {error && <p className="error">{error}</p>}
@@ -207,7 +240,13 @@ const ClassDetails = ({ selectedClass, onBack }) => {
                     <button className="settings-btn" onClick={toggleSettings}>
                       <img src={settingsIcon} alt="Settings Icon" />
                     </button>
-                  </div>
+                   
+                  </div> 
+                  {showSettings && (
+                      <button className="delete-class-btn" onClick={handleDeleteClass}>
+                        <FaTrash className="delete-icon" /> Delete Class
+                      </button>
+                    )}
                   <hr className="divider" />
                   <p className="description"><strong>Description:</strong> {selectedClass.description}</p>
                   {selectedClass.type === 'private' ? (
@@ -285,7 +324,7 @@ const ClassDetails = ({ selectedClass, onBack }) => {
                             <td>{`${student.fname} ${student.lname}`}</td>
                             <td>
                               <button type="button" className="remove-btn" onClick={() => handleOpenModal(student)}>
-                                Remove
+                              <FaTrash className="delete-icon" /> Remove
                               </button>
                             </td>
                           </tr>
@@ -321,6 +360,22 @@ const ClassDetails = ({ selectedClass, onBack }) => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <Modal show={showDeleteClassModal} onHide={handleCloseDeleteClassModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Class</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete the class {selectedClass.name}?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteClassModal}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleConfirmDeleteClass}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
@@ -328,6 +383,7 @@ const ClassDetails = ({ selectedClass, onBack }) => {
 ClassDetails.propTypes = {
   selectedClass: PropTypes.object.isRequired,
   onBack: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired, // Add this prop
 };
 
 export default ClassDetails;

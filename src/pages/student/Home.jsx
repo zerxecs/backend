@@ -127,21 +127,20 @@ const Home = ({ showPrivate, setContent }) => {
   }
 
   return (
-    <div id='classes' className="main-content">
-      {error && <p className="error">{error}</p>}
-      
-      <div className="main-card">
-          {error && <p className="error">{error}</p>}
-          <h2 className="welcome-title">
-            Welcome to class<span className="iz">iz</span>,
-            <span className='name'>
-              {user ? user.fname : 'User'}!
-            </span> 
-          </h2>
-        </div>
+    <div id='home-user' className="main-content">
+        <div className="welcome-card">
+        {error && <p className="error">{error}</p>}
+        
+        <h2 className="welcome-title">
+          Welcome to class<span className="colored">iz</span>, 
+          <span className='name'>
+            {user ? user.fname : ' User'}!
+          </span> 
+        </h2>
+      </div>
 
       <div className="section">
-        <h2 className="colored">{showPrivate ? 'Private Classes' : 'Public Classes'}</h2>
+        <h2 className="class-type">{showPrivate ? 'Private Classes' : 'Public Classes'}</h2>
         {limitedClasses.length === 0 && <p className='no'>No classes available.</p>}
         <div className="grid">
           {limitedClasses.map((classItem, index) => (

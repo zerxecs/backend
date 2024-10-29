@@ -126,4 +126,38 @@ router.post('/class/:id/remove-student', authMiddleware, async (req, res) => {
   }
 });
 
+
+// Route to delete a class by ID
+router.delete('/class/:id', authMiddleware, async (req, res) => {
+  const classId = req.params.id;
+
+  try {
+    const classToDelete = await Class.findById(classId);
+    if (!classToDelete) {
+      return res.status(404).json({ success: false, error: 'Class not found' });
+    }
+
+    // Ensure the user is authorized to delete the class
+    if (classToDelete.createdBy.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ success: false, error: 'Unauthorized' });
+    }
+
+    // Remove the class from the registeredClasses array of all users
+    await User.updateMany(
+      { registeredClasses: classId },
+      { $pull: { registeredClasses: classId } }
+    );
+
+    await Class.findByIdAndDelete(classId);
+    res.status(200).json({ success: true, message: 'Class deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting class:', error);
+    res.status(500).json({ success: false, error: 'An error occurred while deleting the class' });
+  }
+});
+
+
+
+
+
 module.exports = router;
