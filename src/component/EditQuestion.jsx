@@ -67,7 +67,7 @@ const EditQuestion = ({ quiz, setQuiz, selectedClass, onQuizUpdate }) => {
         e.preventDefault();
     
         if (!isQuizValid()) {
-            alert("Please fill out all fields before submitting the quiz.");
+            alert("Please fill out all fields before updating the quiz.");
             return;
         }
     
