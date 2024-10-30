@@ -375,7 +375,14 @@ width: 135px;
         width: 750px;
         max-width: 110%;
     }
+    #class-details .create-btn  {
+      margin: 5% 0;
 
+    }
+    #class-details .assessments {
+      margin: 8% 0;
+  }
+  
     #class-details .join-class {
      
       margin: 10px 0 0 -5%;
