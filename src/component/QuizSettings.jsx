@@ -14,7 +14,7 @@ const QuizSettings = ({ quiz, setQuiz }) => {
     } else if (name in deadline) {
       setQuiz({ ...quiz, deadline: { ...deadline, [name]: value } });
     } else if (name === 'passingScore') {
-      if (value === '' || (Number.isInteger(Number(value)) && Number(value) >= 0)) {
+      if (value === '' || (Number.isInteger(Number(value)) && Number(value) >= 0 && Number(value) <= 100)) {
         setQuiz({ ...quiz, passingScore: value });
       }
     } else if (name === 'attemptsAllowed') {
@@ -23,7 +23,6 @@ const QuizSettings = ({ quiz, setQuiz }) => {
       }
     }
   };
-
   const handleOptionChange = (e) => {
     const { name, checked } = e.target;
     setQuiz({ ...quiz, options: { ...options, [name]: checked } });
@@ -99,7 +98,7 @@ const QuizSettings = ({ quiz, setQuiz }) => {
           />
           <p className="help-text">Set a deadline for quiz completion</p>
         </div>
-        <div className="input-group">
+         <div className="input-group">
           <div className="title-wrapper">
             <img src={passingIcon} alt="Passing Icon" className="icon" />
             <label className="Category">Passing Score (%)</label>
@@ -111,8 +110,8 @@ const QuizSettings = ({ quiz, setQuiz }) => {
             name="passingScore"
             value={passingScore}
             min="0"
-            max="100"       
-              onKeyPress={handleKeyPress}
+            max="100"
+            onKeyPress={handleKeyPress}
             onChange={handleInputChange}
           />
           <p className="help-text">Set a percentage required to pass the quiz</p>
