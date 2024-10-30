@@ -78,7 +78,6 @@ router.post('/register-private-class', authMiddleware, async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 // Route to fetch a quiz by ID
 router.get('/quiz/:quizId', async (req, res) => {
     try {
@@ -150,6 +149,4 @@ router.get('/performance/:submissionId', async (req, res) => {
     }
 });
 
-=======
->>>>>>> 7a62157df6d2bcfa97fd5da1cb6b8e1bf5f5c370
 module.exports = router;
