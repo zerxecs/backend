@@ -2,18 +2,18 @@
 
 body {
   margin: 0;
-  padding: 0;
+  padding: 0 0 5% 0;
   background-color: hsl(0, 0%, 100%);
   overflow-x: hidden;
 }
 
 #create-class .create-class-container {
   width: 800px;
-  padding: 0 30px 30px;
-  height: 85vh;
+  padding: 15px 30px 30px;
+  height: auto;
   border: 1px solid #DA88F9;
   border-radius: 25px;
-  margin: -6% 25%;
+  margin: -6% 0 0 25%;
   background-color: #3C2A5D;
   display: flex;
   flex-direction: column;
@@ -38,7 +38,14 @@ body {
 #create-class ::-ms-input-placeholder { 
   color: #DA88F9 !important;
 }
-
+#create-class .remove-btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
 #create-class h1 {
   text-align: start;
   margin: 1% 0 7% 28%;
@@ -132,7 +139,7 @@ body {
   color: #BA68C8 !important;
 }
 
-#create-class .form-group ::placeholder { /* Modern browsers */
+.form-group ::placeholder { /* Modern browsers */
   color: #BA68C8 !important;
 }
 
@@ -156,8 +163,17 @@ body {
   font-size: 1em;
 }
 
-
-
+#create-class .selected-students{
+  display: flex;
+  flex-direction: column;
+  margin: 1% 0 2% 3%;
+align-items: start;
+}
+#create-class .selected-student{
+  display: flex;
+  margin: 1% 0;
+  
+} 
 
 
 @media (max-width: 1024px) {
@@ -192,6 +208,12 @@ body {
 }
 
 @media (max-width: 768px) {
+  body {
+    margin: 0;
+    padding: 0 0 15% 0 !important;
+    background-color: hsl(0, 0%, 100%);
+    overflow-x: hidden;
+  }
   #create-class .create-class-container {
     width: 95%;
     margin:5% 0 10% auto;

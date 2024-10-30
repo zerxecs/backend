@@ -11,8 +11,10 @@ const CreateClass = () => {
   const [students, setStudents] = useState([]); // Store selected students
   const [registeredStudents, setRegisteredStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(''); // State for search query
 
   useEffect(() => {
+    // Fetch registered students from the server
     fetch('http://localhost:5000/api/students')
       .then((response) => response.json())
       .then((data) => {
@@ -30,6 +32,7 @@ const CreateClass = () => {
 
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
+    setSearchQuery(query); // Update search query state
     // Filter students based on the query
     const results = registeredStudents.filter(student => 
       `${student.fname} ${student.lname}`.toLowerCase().includes(query) || 
@@ -59,9 +62,9 @@ const CreateClass = () => {
         type: classType,
         students: students.map(student => student.email), // Use emails for submission
       };
-
-      console.log('Sending class data to server:', newClass);
-
+  
+      console.log('Sending class data to server:', newClass); // Log the payload
+  
       fetch('http://localhost:5000/api/create-class', {
         method: 'POST',
         headers: {
@@ -80,6 +83,7 @@ const CreateClass = () => {
           setClassType('private');
           setStudents([]); // Reset selected students
           setFilteredStudents(registeredStudents);
+          setSearchQuery(''); // Reset search query
         } else {
           alert(`Error: ${data.error}`);
         }
@@ -154,7 +158,7 @@ const CreateClass = () => {
             placeholder="Enter name or email"
             className="form-control"
           />
-          {filteredStudents.length > 0 && (
+          {searchQuery && filteredStudents.length > 0 && (
             <ul className="student-search-results">
               {filteredStudents.map(student => (
                 <li key={student._id} onClick={() => handleSelectStudent(student)}>
@@ -168,7 +172,7 @@ const CreateClass = () => {
           {students.map(student => (
             <div key={student.email} className="selected-student">
               <span>{student.name}</span>   
-              <button onClick={() => handleRemoveStudent(student.email)}>Remove</button>
+              <button className="remove-btn" onClick={() => handleRemoveStudent(student.email)}>Remove</button>
             </div>
           ))}
         </div>

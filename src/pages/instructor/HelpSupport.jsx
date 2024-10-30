@@ -8,9 +8,9 @@ const HelpSupport = () => {
   useEffect(() => {
     const canvas = document.getElementById('performanceChart');
     if (canvas) {
-      drawBarChart(canvas);  // Pass the canvas element to the script.
+      drawBarChart(canvas); 
     }
-  }, []); // Empty dependency array ensures it runs once after component mounts.
+  }, []); 
 
   return (
     <div id='instructor-performance-ov' className="perfomance-container">

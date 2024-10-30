@@ -91,7 +91,7 @@ const CreateActivity = ({ onBackClick, selectedClass, quiz: initialQuiz }) => {
         )}
         {activeComponent === 'overview' && <QuizOverview quiz={quiz} />}
       </div>
-      <button onClick={handleSave} className="btn-save">Save</button>
+      {/* <button onClick={handleSave} className="btn-save">Save</button> */}
     </div>
   );
 };

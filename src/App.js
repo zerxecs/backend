@@ -5,6 +5,10 @@ import LandingPage from './pages/landingpage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Student from './pages/student';
+<<<<<<< HEAD
+=======
+import 'bootstrap/dist/css/bootstrap.min.css';
+>>>>>>> 7a62157df6d2bcfa97fd5da1cb6b8e1bf5f5c370
 
 function App() {
   return (

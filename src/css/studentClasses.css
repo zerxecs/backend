@@ -20,7 +20,7 @@
 #student-classes .section {
   margin-bottom: 20px;
 }
-#student-classes .section h2 {
+#student-classes .colored {
   margin-left: 30px;
   font-size: 1.4rem;
   font-weight: 600;
@@ -99,6 +99,8 @@
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.2s;
+
+  
 }
 
 #student-classes .card:hover {
@@ -130,3 +132,8 @@
   text-align: start;
   margin: 0 3%;
 }
+
+
+
+
+
