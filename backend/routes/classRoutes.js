@@ -135,6 +135,45 @@ router.post('/class/:id/remove-student', authMiddleware, async (req, res) => {
 });
 
 
+
+
+// Route to leave a class
+router.post('/class/:id/leave', authMiddleware, async (req, res) => {
+  const classId = req.params.id;
+  const userId = req.user._id;
+  const userEmail = req.user.email;
+
+  try {
+    const classToLeave = await Class.findById(classId);
+    if (!classToLeave) {
+      return res.status(404).json({ success: false, error: 'Class not found' });
+    }
+
+    // Remove the student's email from the class's students array
+    classToLeave.students = classToLeave.students.filter(email => email !== userEmail);
+    await classToLeave.save();
+
+    // Remove the class ID from the user's registeredClasses array
+    await User.updateOne(
+      { _id: userId },
+      { $pull: { registeredClasses: classId } }
+    );
+
+    res.status(200).json({ success: true, message: 'Successfully left the class' });
+  } catch (error) {
+    console.error('Error leaving the class:', error);
+    res.status(500).json({ success: false, error: 'An error occurred while leaving the class' });
+  }
+});
+
+
+
+
+
+
+
+
+
 // Route to delete a class by ID
 router.delete('/class/:id', authMiddleware, async (req, res) => {
   const classId = req.params.id;

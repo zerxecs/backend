@@ -152,7 +152,7 @@ const StudentClasses = ({ showPrivate, setContent }) => {
       {showPrivate && (
         <div className="section">
           <div className="join-class">
-            <h2 className="colored regtext">Enter Class Code to Register for Private Class</h2>
+            <h2 className="colored regtext">Enter Class Code to Join for Private Class</h2>
             <div className="input-group">
               <input
                 type="text"
@@ -160,7 +160,7 @@ const StudentClasses = ({ showPrivate, setContent }) => {
                 onChange={(e) => setClassCode(e.target.value)}
                 placeholder="Enter class code"
               />
-              <button onClick={handleRegisterClass}>Register</button>
+              <button onClick={handleRegisterClass}>Join</button>
             </div>
           </div>
         </div>
