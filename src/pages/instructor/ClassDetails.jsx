@@ -219,13 +219,20 @@ const ClassDetails = ({ selectedClass, onBack, onDelete }) => {
     handleCloseDeleteClassModal();
   };
 
+  const handleQuizCreate = (createdQuiz) => {
+    console.log('Quiz created:', createdQuiz);
+    setShowCreateActivity(false);
+    setShowQuizzes(true);
+  };
+
+  
   return (
     <div id="class-details">
       {error && <p className="error">{error}</p>}
       {selectedClass && (
         <>
           {showCreateActivity ? (
-            <CreateActivity onBackClick={handleBackToClassDetails} selectedClass={selectedClass} />
+            <CreateActivity onBackClick={handleBackToClassDetails} selectedClass={selectedClass} onQuizCreate={handleQuizCreate} />
           ) : showQuizzes ? (
             <ClassQuizzes selectedClass={selectedClass} onBack={handleBackFromQuizzes} />
           ) : (
@@ -240,13 +247,12 @@ const ClassDetails = ({ selectedClass, onBack, onDelete }) => {
                     <button className="settings-btn" onClick={toggleSettings}>
                       <img src={settingsIcon} alt="Settings Icon" />
                     </button>
-                   
-                  </div> 
+                  </div>
                   {showSettings && (
-                      <button className="delete-class-btn" onClick={handleDeleteClass}>
-                        <FaTrash className="delete-icon" /> Delete Class
-                      </button>
-                    )}
+                    <button className="delete-class-btn" onClick={handleDeleteClass}>
+                      <FaTrash className="delete-icon" /> Delete Class
+                    </button>
+                  )}
                   <hr className="divider" />
                   <p className="description"><strong>Description:</strong> {selectedClass.description}</p>
                   {selectedClass.type === 'private' ? (
@@ -308,34 +314,33 @@ const ClassDetails = ({ selectedClass, onBack, onDelete }) => {
                       </div>
                       <button type="submit" className="center-btn">Add Students to Class</button>
                     </form>
-                   
-                  <h3 className="colored regtext">Enrolled Students</h3>
-                   <table className="enrolled-students-table">
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {registeredStudents.length > 0 ? (
-                        registeredStudents.map(student => (
-                          <tr key={student.email} className="enrolled-student">
-                            <td>{`${student.fname} ${student.lname}`}</td>
-                            <td>
-                              <button type="button" className="remove-btn" onClick={() => handleOpenModal(student)}>
-                              <FaTrash className="delete-icon" /> Remove
-                              </button>
-                            </td>
-                          </tr>
-                        ))
-                      ) : (
+                    <h3 className="colored regtext">Enrolled Students</h3>
+                    <table className="enrolled-students-table">
+                      <thead>
                         <tr>
-                          <td colSpan="2">No students enrolled.</td>
+                          <th>Name</th>
+                          <th>Action</th>
                         </tr>
-                      )}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {registeredStudents.length > 0 ? (
+                          registeredStudents.map(student => (
+                            <tr key={student.email} className="enrolled-student">
+                              <td>{`${student.fname} ${student.lname}`}</td>
+                              <td>
+                                <button type="button" className="remove-btn" onClick={() => handleOpenModal(student)}>
+                                  <FaTrash className="delete-icon" /> Remove
+                                </button>
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan="2">No students enrolled.</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
                   </div>
                   <button className="back-to-classdeets" onClick={toggleSettings}>Back to Class Details</button>
                 </div>
@@ -383,7 +388,7 @@ const ClassDetails = ({ selectedClass, onBack, onDelete }) => {
 ClassDetails.propTypes = {
   selectedClass: PropTypes.object.isRequired,
   onBack: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired, // Add this prop
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default ClassDetails;

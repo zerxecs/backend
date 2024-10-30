@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import QuizQuestions from '../../component/QuizQuestions';
 import QuizSettings from '../../component/QuizSettings';
@@ -13,9 +13,9 @@ import backIcon from './../../media/back.svg';
 import '../../css/CreateActivity.css';
 import '../../css/settings_style.css';
 
-const CreateActivity = ({ onBackClick, selectedClass, quiz: initialQuiz }) => {
+const CreateActivity = ({ onBackClick, selectedClass, onQuizCreate }) => {
   const [activeComponent, setActiveComponent] = useState('questions');
-  const [quiz, setQuiz] = useState(initialQuiz || {
+  const [quiz, setQuiz] = useState({
     quiz_title: '',
     quiz_desc: '',
     quiz_instructions: '',
@@ -25,13 +25,13 @@ const CreateActivity = ({ onBackClick, selectedClass, quiz: initialQuiz }) => {
         question: '',
         choices: ['', '', '', ''],
         correct_answer: '',
-        points: '',
+        points: 0, // Initialize points as a number
       },
     ],
-    timeLimit: { hours: '', minutes: '', seconds: '' },
+    timeLimit: { hours: 0, minutes: 0, seconds: 0 }, // Initialize as numbers
     deadline: { date: '', time: '' },
-    passingScore: '',
-    attemptsAllowed: '',
+    passingScore: 0, // Initialize passingScore as a number
+    attemptsAllowed: 0, // Initialize attemptsAllowed as a number
   });
 
   const handleButtonClick = (component) => {
@@ -40,10 +40,11 @@ const CreateActivity = ({ onBackClick, selectedClass, quiz: initialQuiz }) => {
 
   const handleSave = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/quizzes/${quiz._id}`, quiz);
-      console.log('Quiz updated:', response.data);
+      const response = await axios.post('http://localhost:5000/api/quizzes', quiz);
+      console.log('Quiz created:', response.data);
+      onQuizCreate(response.data); // Call the onQuizCreate function with the created quiz
     } catch (error) {
-      console.error('Error updating quiz:', error);
+      console.error('Error creating quiz:', error);
     }
   };
 
@@ -83,15 +84,15 @@ const CreateActivity = ({ onBackClick, selectedClass, quiz: initialQuiz }) => {
         </button>
       </div>
       <div className="main-content">
-        {activeComponent === 'questions' && (
-          <QuizQuestions quiz={quiz} setQuiz={setQuiz} selectedClass={selectedClass} />
-        )}
-        {activeComponent === 'settings' && (
-          <QuizSettings quiz={quiz} setQuiz={setQuiz} />
-        )}
-        {activeComponent === 'overview' && <QuizOverview quiz={quiz} />}
-      </div>
-      {/* <button onClick={handleSave} className="btn-save">Save</button> */}
+            {activeComponent === 'questions' && (
+                <QuizQuestions quiz={quiz} setQuiz={setQuiz} selectedClass={selectedClass} onQuizCreate={onQuizCreate} />
+            )}
+            {activeComponent === 'settings' && (
+                <QuizSettings quiz={quiz} setQuiz={setQuiz} />
+            )}
+            {activeComponent === 'overview' && <QuizOverview quiz={quiz} />}
+        </div>
+        <button onClick={handleSave} className="btn-save">Save</button>
     </div>
   );
 };
@@ -99,7 +100,7 @@ const CreateActivity = ({ onBackClick, selectedClass, quiz: initialQuiz }) => {
 CreateActivity.propTypes = {
   onBackClick: PropTypes.func.isRequired,
   selectedClass: PropTypes.object.isRequired, // Ensure selectedClass is required
-  quiz: PropTypes.object, // Quiz can be null or an object
+  onQuizCreate: PropTypes.func.isRequired, // Ensure onQuizCreate is required
 };
 
 export default CreateActivity;

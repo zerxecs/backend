@@ -1,13 +1,17 @@
-import axios from 'axios';
-import PropTypes from 'prop-types';
-import React from 'react';
+import axios from 'axios'; 
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types'; 
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../css/questions_style.css';
 import addIcon from './../media/add.svg';
 import deleteIcon from './../media/delete.svg'; // Import delete icon
+import ClassQuizzes from '../pages/instructor/ClassQuizzes'; // Correct import path for ClassQuizzes component
 
-const QuizQuestions = ({ quiz, setQuiz, selectedClass }) => {
+const QuizQuestions = ({ quiz, setQuiz, selectedClass, onQuizCreate }) => {
     const navigate = useNavigate();
+    const [showClassQuizzes, setShowClassQuizzes] = useState(false); // State to manage rendering of ClassQuizzes
 
     const handleChange = (e, index, choiceIndex) => {
         const { name, value } = e.target;
@@ -16,7 +20,7 @@ const QuizQuestions = ({ quiz, setQuiz, selectedClass }) => {
         if (name.startsWith('choice')) {
             updatedQuestions[index].choices[choiceIndex] = value;
         } else {
-            updatedQuestions[index][name] = value;
+            updatedQuestions[index][name] = name === 'points' ? Number(value) : value;
         }
 
         setQuiz({ ...quiz, questions: updatedQuestions });
@@ -32,7 +36,7 @@ const QuizQuestions = ({ quiz, setQuiz, selectedClass }) => {
             ...quiz,
             questions: [
                 ...quiz.questions,
-                { question: '', choices: ['', '', '', ''], correct_answer: '', points: '' },
+                { question: '', choices: ['', '', '', ''], correct_answer: '', points: 0 },
             ],
         });
     };
@@ -67,25 +71,37 @@ const QuizQuestions = ({ quiz, setQuiz, selectedClass }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (!isQuizValid()) {
             alert("Please fill out all fields before submitting the quiz.");
             return;
         }
 
-        // Prepare the data to send
-        const quizData = {
-            ...quiz,
-            class_id: selectedClass._id,
-        };
-
         try {
-            const response = await axios.post('http://localhost:5000/api/quizzes', quizData);
+            const quizData = { ...quiz, class_id: selectedClass._id };
+            console.log('Submitting quiz data:', quizData); 
+
+            const response = await axios.post(
+                'http://localhost:5000/api/quizzes',
+                quizData
+            );
             console.log('Quiz created:', response.data);
-            navigate('/quizzes');
+
+            await new Promise((resolve) => {
+                toast.success('Quiz created successfully!', {
+                    className: 'custom-toast',
+                    onClose: resolve
+                });
+            });
+
+            onQuizCreate(response.data); 
         } catch (error) {
-            console.error('There was an error!', error);
+            console.error('There was an error creating the quiz:', error.response ? error.response.data : error.message);
+            alert('Something went wrong. Please try again.');
         }
     };
+
+    
 
     return (
         <div>
@@ -190,10 +206,10 @@ const QuizQuestions = ({ quiz, setQuiz, selectedClass }) => {
 
                 <button type="submit" className="btn-create">Create</button>
             </form>
+            <ToastContainer />
         </div>
     );
 };
-
 QuizQuestions.propTypes = {
     quiz: PropTypes.shape({
         quiz_title: PropTypes.string,
@@ -221,6 +237,6 @@ QuizQuestions.propTypes = {
     }).isRequired,
     setQuiz: PropTypes.func.isRequired,
     selectedClass: PropTypes.object.isRequired,
+    onQuizCreate: PropTypes.func.isRequired, // Ensure this line is present
 };
-
 export default QuizQuestions;

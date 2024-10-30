@@ -8,6 +8,7 @@ import backIcon from '../../media/back.svg';
 import calendarIcon from '../../media/calendar.svg';
 import quizOverviewIcon from '../../media/quiz_overview.svg';
 import studentRecordIcon from '../../media/records.svg';
+import CreateActivity from './CreateActivity'; // Import CreateActivity component
 import EditActivity from './EditActivity'; // Import EditActivity component
 
 const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
@@ -21,6 +22,7 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
         completed: []
     });
     const [selectedCategory, setSelectedCategory] = useState('upcoming'); // State to manage selected category
+    const [creatingQuiz, setCreatingQuiz] = useState(false); // State to manage quiz creation
 
     const fetchQuizzes = async () => {
         try {
@@ -81,7 +83,7 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
         }
     };
 
-      const categorizeQuizzes = async (quizzes) => {
+    const categorizeQuizzes = async (quizzes) => {
         const upcoming = [];
         const pastDue = [];
         const completed = [];
@@ -124,10 +126,6 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
         setShowResults(true);
     };
 
-    if (selectedQuiz && showResults) {
-        return <QuizResults quizId={selectedQuiz._id} />;
-    }
-
     const handleQuizUpdate = (updatedQuiz) => {
         setQuizzes((prevQuizzes) =>
             prevQuizzes.map((quiz) => (quiz._id === updatedQuiz._id ? updatedQuiz : quiz))
@@ -142,6 +140,22 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
         }
     };
 
+    const handleQuizCreate = (createdQuiz) => {
+        setQuizzes((prevQuizzes) => [...prevQuizzes, createdQuiz]);
+        setCreatingQuiz(false); // Close the CreateActivity component
+        fetchQuizzes(); // Fetch the latest quizzes after creation
+        toast.success('Quiz created successfully!', {
+            className: 'custom-toast'
+        });
+        if (onQuizUpdateSuccess) {
+            onQuizUpdateSuccess(createdQuiz); 
+        }
+    };
+
+    if (selectedQuiz && showResults) {
+        return <QuizResults quizId={selectedQuiz._id} />;
+    }
+
     if (selectedQuiz) {
         return (
             <>
@@ -151,6 +165,14 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
         );
     }
 
+    if (creatingQuiz) {
+        return (
+            <>
+                <CreateActivity onBackClick={() => setCreatingQuiz(false)} selectedClass={selectedClass} onQuizCreate={handleQuizCreate} />
+                <ToastContainer />
+            </>
+        );
+    }
     return (
         <div id='instructor-quiz' >
             <header className="header">
@@ -160,6 +182,7 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
                 <button className="button" onClick={() => setSelectedCategory('upcoming')}>Upcoming</button>
                 <button className="button" onClick={() => setSelectedCategory('pastDue')}>Incomplete</button>
                 <button className="button" onClick={() => setSelectedCategory('completed')}>Completed</button>
+                <button className="button" onClick={() => setCreatingQuiz(true)}>Create New Quiz</button>
             </header>
 
             <hr className="divider" />
