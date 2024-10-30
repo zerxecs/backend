@@ -228,8 +228,6 @@ v
     width: 20px;
     height:20px;
       filter: invert(13%) sepia(76%) saturate(7486%) hue-rotate(268deg) brightness(90%) contrast(104%);
-      display: flex;
-      justify-content: start;
     }
 
 

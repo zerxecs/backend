@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import '../../css/InstructorQuizzes.css';
 import { FaFilter } from 'react-icons/fa'; 
+import backIcon from '../../media/back.svg';
 import calendarIcon from '../../media/calendar.svg';
 import quizOverviewIcon from '../../media/quiz_overview.svg';
 import studentRecordIcon from '../../media/records.svg';
@@ -154,7 +155,9 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
     return (
         <div id='instructor-quiz' >
             <header className="header">
-                <button className="button" onClick={onBack}>Back</button>
+                <button className="back-btn" onClick={onBack}>          
+                 <img src={backIcon} alt="Back Icon" />
+                </button>            
                 <button className="button" onClick={() => setSelectedCategory('upcoming')}>Upcoming</button>
                 <button className="button" onClick={() => setSelectedCategory('pastDue')}>Incomplete</button>
                 <button className="button" onClick={() => setSelectedCategory('completed')}>Completed</button>
