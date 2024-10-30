@@ -5,7 +5,8 @@
         import calendarIcon from '../../media/calendar.svg';
         import StudentQuizOverview from '../../component/StudentQuizOverview'; 
         import 'react-toastify/dist/ReactToastify.css';
-        
+        import backIcon from '../../media/back.svg';
+
         const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
             const [quizzes, setQuizzes] = useState([]);
             const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -68,12 +69,14 @@
             return (
                 <div id='instructor-quiz' >
                     <header className="header">
-                        <button className="button" onClick={onBack}>Back</button>
+                        <button className="back-btn" onClick={onBack}>          
+                         <img src={backIcon} alt="Back Icon" />
+                        </button>
                         <button className="button">Upcoming</button>
                         <button className="button">Incomplete</button>
                         <button className="button">Completed</button>
         
-                        <div className="dropdown">
+                        {/* <div className="dropdown">
                             <button className="button dropdown-button" onClick={toggleDropdown}>
                                 <FaFilter className="filter-icon" />Filter By
                             </button>
@@ -83,7 +86,7 @@
                                     <button className="dropdown-item">Private</button>
                                 </div>
                             )}
-                        </div>
+                        </div> */}
                     </header>
         
                     <hr className="divider" />
