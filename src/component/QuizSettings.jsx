@@ -102,7 +102,7 @@ const QuizSettings = ({ quiz, setQuiz }) => {
         <div className="input-group">
           <div className="title-wrapper">
             <img src={passingIcon} alt="Passing Icon" className="icon" />
-            <label className="Category">Passing Score</label>
+            <label className="Category">Passing Score (%)</label>
           </div>
           <input
             type="number"
@@ -111,10 +111,11 @@ const QuizSettings = ({ quiz, setQuiz }) => {
             name="passingScore"
             value={passingScore}
             min="0"
-            onKeyPress={handleKeyPress}
+            max="100"       
+              onKeyPress={handleKeyPress}
             onChange={handleInputChange}
           />
-          <p className="help-text">Set a score required to pass the quiz</p>
+          <p className="help-text">Set a percentage required to pass the quiz</p>
         </div>
         <div className="input-group">
           <div className="title-wrapper">

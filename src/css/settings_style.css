@@ -155,7 +155,7 @@
     padding: 8px;
     width: 100%;
     max-width: 150px;
-    color: #3C2A5D;
+    color: #4b3278;
     margin-left: 2rem;
 }
 #quiz-setting .input-field-dl {
@@ -266,6 +266,10 @@
     background-color: #7E57C2;
 }
 
+
+#quiz-setting input::placeholder {
+    color: #806aa9;
+}
 /* Responsive styles */
 @media (max-width: 768px) {
     #quiz-setting .settings-card {
