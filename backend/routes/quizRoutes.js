@@ -105,45 +105,4 @@ router.get('/', async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-// Route to get scores in order of submission
-router.get('/:quizId/scores', async (req, res) => {
-    try {
-        const submissions = await Submission.find({ quizId: req.params.quizId }).sort('submittedAt');
-        res.json(submissions);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
-
-// Route to get questions most people got incorrect
-router.get('/:quizId/incorrect-questions', async (req, res) => {
-    try {
-        const submissions = await Submission.find({ quizId: req.params.quizId });
-        const questionStats = {};
-
-        submissions.forEach(submission => {
-            submission.answers.forEach(answer => {
-                if (!answer.isCorrect) {
-                    if (!questionStats[answer.questionId]) {
-                        questionStats[answer.questionId] = 0;
-                    }
-                    questionStats[answer.questionId]++;
-                }
-            });
-        });
-
-        const sortedQuestions = Object.entries(questionStats).sort((a, b) => b[1] - a[1]);
-        res.json(sortedQuestions);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
-=======
-
-
-
-
->>>>>>> 7a62157df6d2bcfa97fd5da1cb6b8e1bf5f5c370
-
 module.exports = router;

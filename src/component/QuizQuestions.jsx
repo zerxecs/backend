@@ -79,20 +79,9 @@ const QuizQuestions = ({ quiz, setQuiz, selectedClass }) => {
         };
 
         try {
-<<<<<<< HEAD
-            if (isEditMode) {
-                const response = await axios.put(`http://localhost:5000/api/quizzes/${quiz._id}`, quizData);
-                console.log('Quiz updated:', response.data);
-            } else {
-                const response = await axios.post('http://localhost:5000/api/quizzes', quizData);
-                console.log('Quiz created:', response.data);
-            }
-            navigate(`/classes/${selectedClass._id}/quizzes`);
-=======
             const response = await axios.post('http://localhost:5000/api/quizzes', quizData);
             console.log('Quiz created:', response.data);
             navigate('/quizzes');
->>>>>>> 7a62157df6d2bcfa97fd5da1cb6b8e1bf5f5c370
         } catch (error) {
             console.error('There was an error!', error);
         }

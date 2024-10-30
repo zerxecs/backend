@@ -1,28 +1,20 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { FaFilter } from 'react-icons/fa';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import QuizResults from '../../component/QuizResults'; // Import QuizResults component
 import '../../css/InstructorQuizzes.css';
-<<<<<<< HEAD
-=======
-import { FaFilter } from 'react-icons/fa'; 
 import backIcon from '../../media/back.svg';
->>>>>>> 7a62157df6d2bcfa97fd5da1cb6b8e1bf5f5c370
 import calendarIcon from '../../media/calendar.svg';
 import quizOverviewIcon from '../../media/quiz_overview.svg';
 import studentRecordIcon from '../../media/records.svg';
 import EditActivity from './EditActivity'; // Import EditActivity component
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import QuizResults from '../../component/QuizResults'; // Import QuizResults component
 
 const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
     const [quizzes, setQuizzes] = useState([]);
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [selectedQuiz, setSelectedQuiz] = useState(null); // State to manage selected quiz
     const [showResults, setShowResults] = useState(false); // State to manage results view
-<<<<<<< HEAD
-=======
     const [categorizedQuizzes, setCategorizedQuizzes] = useState({
         upcoming: [],
         pastDue: [],
@@ -114,7 +106,6 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
     
         setCategorizedQuizzes({ upcoming, pastDue, completed });
     };
->>>>>>> 7a62157df6d2bcfa97fd5da1cb6b8e1bf5f5c370
 
     useEffect(() => {
         fetchQuizzes();
@@ -137,8 +128,6 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
         return <QuizResults quizId={selectedQuiz._id} />;
     }
 
-<<<<<<< HEAD
-=======
     const handleQuizUpdate = (updatedQuiz) => {
         setQuizzes((prevQuizzes) =>
             prevQuizzes.map((quiz) => (quiz._id === updatedQuiz._id ? updatedQuiz : quiz))
@@ -153,7 +142,6 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
         }
     };
 
->>>>>>> 7a62157df6d2bcfa97fd5da1cb6b8e1bf5f5c370
     if (selectedQuiz) {
         return (
             <>
@@ -261,11 +249,6 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
                                     </div>
                                 </div>
 
-<<<<<<< HEAD
-                            <button className="quiz-section" onClick={() => handleResultsClick(quiz)}>
-                                <div className="quiz-image-holder">
-                                    <img src={studentRecordIcon} alt="Student Record" className="student-record" />
-=======
                                 <div className="quiz-details">
                                     <button className="quiz-section" onClick={() => handleQuizOverviewClick(quiz)}>
                                         <div className="quiz-image-holder">
@@ -286,7 +269,6 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
                                             <p className="description">Displays overall scores, and performance analytics for the selected quiz.</p>
                                         </div>
                                     </button>
->>>>>>> 7a62157df6d2bcfa97fd5da1cb6b8e1bf5f5c370
                                 </div>
                             </div>
                         ))}
