@@ -1,0 +1,138 @@
+/* General styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+.performance-container {
+    width: 87%;
+    margin: 0 0 55% 6%;
+    padding: 30px;
+    background-color: #3C2A5D !important; /* Container color */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-wrapper {
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    border: 2px solid #DA88F9; /* Border color */
+    padding: 10px;
+}
+
+.details-wrapper {
+    text-align: left;
+}
+
+.quiz-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #DA88F9; /* Title color */
+}
+
+.date-wrapper {
+    margin-top: 10px;
+}
+
+.due-date {
+    font-size: 16px;
+    color: #DA88F9; /* Due date color */
+}
+
+.performance-overview {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.performance-header {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the performance header */
+}
+
+.performance-header .performance-icon {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.chart {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.chart-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #3C2A5D; /* Container color */
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #DA88F9; /* Border color */
+}
+
+.chart-container canvas {
+    display: block;          /* Prevent inline canvas behavior */
+    width: 100%;             /* Ensure canvas scales with the container */
+    height: auto;            /* Allow height to adjust proportionally */
+}
+
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.navigation-buttons button {
+    background-color: #5B4C76; /* Navigation button background color */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.navigation-buttons button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.navigation-buttons button:hover:not(:disabled) {
+    background-color: #7E57C2;
+}
+
+/* Student List */
+.student-list {
+    margin-top: 40px;
+}
+
+.student-list table {
+    margin-top: 30px;
+    background: linear-gradient(to right, #3C295C, #7E57C2);
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.student-list th, .student-list td {
+    padding: 12px;
+    text-align: left;
+    color: #fff; /* Text color */
+}
+
+.student-list th {
+    background-color: #fff; /* Header background color */
+    color: #3C2A5D; /* Header text color for readability */
+    font-weight: bold;
+}
+
+.student-list tr:nth-child(even) {
+    background-color: #5B4C76; /* Even row background color */
+}
+
+.student-list tr:hover {
+    background-color: #ddd;
+    color: #000; /* Hover text color */
+}
