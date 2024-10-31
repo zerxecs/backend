@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import QuizResults from '../../component/QuizResults'; // Import QuizResults component
+import PerformanceOverview from '../../component/PerformanceOverview'; // Import PerformanceOverview component
 import '../../css/InstructorQuizzes.css';
 import backIcon from '../../media/back.svg';
 import calendarIcon from '../../media/calendar.svg';
@@ -153,7 +153,7 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
     };
 
     if (selectedQuiz && showResults) {
-        return <QuizResults quizId={selectedQuiz._id} />;
+        return <PerformanceOverview quizId={selectedQuiz._id} />; // Replace QuizResults with PerformanceOverview
     }
 
     if (selectedQuiz) {
