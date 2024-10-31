@@ -141,7 +141,7 @@ const Home = ({ showPrivate, setContent }) => {
 
       <div className="section">
         <h2 className="class-type">{showPrivate ? 'Private Classes' : 'Public Classes'}</h2>
-        {limitedClasses.length === 0 && <p className='no'>No classes available.</p>}
+        {limitedClasses.length === 0 && <p className='no-classes'>No classes available.</p>}
         <div className="grid">
           {limitedClasses.map((classItem, index) => (
             <div

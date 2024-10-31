@@ -168,7 +168,7 @@ const StudentClasses = ({ showPrivate, setContent }) => {
 
       <div className="section">
         <h2 className="colored">{showPrivate ? 'Private Classes' : 'Public Classes'}</h2>
-        {displayedClasses.length === 0 && <p className='no'>No classes available.</p>}
+        {displayedClasses.length === 0 && <p className='no-classes'>No classes available.</p>}
         <div className="grid">
           {displayedClasses.map((classItem, index) => (
             <div

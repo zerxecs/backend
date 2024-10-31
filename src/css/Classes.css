@@ -189,9 +189,10 @@
 
   text-align: start;
 }
-#classes .no{
-  text-align: start;
-  margin: 0 4%;
+#classes .no-classes{
+  display: flex;  
+  text-align: left;
+  margin: 0 3%;
 }
 .class-initials-card {
   width: 120px;
