@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Quiz = require('../models/Quiz');
-const Submission = require('../models/Submission'); // Import the Submission model
+const Submission = require('../models/Submission');
+const Performance = require('../models/Performance');
 
 // Create a new quiz
 router.post('/', async (req, res) => {
@@ -102,6 +103,36 @@ router.get('/', async (req, res) => {
   } catch (error) {
     console.error('Error fetching quizzes:', error);
     res.status(500).send({ error: 'An error occurred while retrieving quizzes.' });
+  }
+});
+
+// Get quiz details
+router.get('/:quizId', async (req, res) => {
+  try {
+    const quiz = await Quiz.findById(req.params.quizId);
+    res.json(quiz);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch quiz details' });
+  }
+});
+
+// Get student submissions
+router.get('/:quizId/submissions', async (req, res) => {
+  try {
+    const submissions = await Submission.find({ quizId: req.params.quizId });
+    res.json(submissions);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch student submissions' });
+  }
+});
+
+// Get performance analysis data
+router.get('/:quizId/performance', async (req, res) => {
+  try {
+    const performance = await Performance.findOne({ quizId: req.params.quizId });
+    res.json(performance);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch performance analysis data' });
   }
 });
 
