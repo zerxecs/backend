@@ -106,6 +106,19 @@ router.get('/', async (req, res) => {
 
 
 
+// Get a quiz by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const quiz = await Quiz.findById(req.params.id);
+    if (!quiz) {
+      return res.status(404).send({ error: 'Quiz not found.' });
+    }
+    res.status(200).send(quiz);
+  } catch (error) {
+    console.error('Error fetching quiz:', error);
+    res.status(500).send({ error: 'An error occurred while retrieving the quiz.' });
+  }
+});
 
 
 

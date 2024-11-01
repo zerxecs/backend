@@ -35,7 +35,7 @@ const quizRoutes = require('./routes/quizRoutes');
 app.use('/api/quizzes', quizRoutes);
 
 const submissionRoutes = require('./routes/submissionRoutes');
-app.use('/api', submissionRoutes);
+app.use('/api/submissions', submissionRoutes); // Ensure the correct path
 
 // Start server
 app.listen(PORT, () => {

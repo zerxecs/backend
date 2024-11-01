@@ -46,7 +46,7 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
 
     const fetchSubmissions = async (quizId) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/quiz/${quizId}/submissions`, {
+            const response = await fetch(`http://localhost:5000/api/submissions/quiz/${quizId}/submissions`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
@@ -183,7 +183,7 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
                 <button className="button" onClick={() => setSelectedCategory('upcoming')}>Upcoming</button>
                 <button className="button" onClick={() => setSelectedCategory('pastDue')}>Incomplete</button>
                 <button className="button" onClick={() => setSelectedCategory('completed')}>Completed</button>
-                <button className="button" onClick={() => setCreatingQuiz(true)}>Create New Quiz</button>
+                {/* <button className="button" onClick={() => setCreatingQuiz(true)}>Create New Quiz</button> */}
             </header>
 
             <hr className="divider" />

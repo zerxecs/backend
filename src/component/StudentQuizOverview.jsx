@@ -4,19 +4,28 @@
     import { Modal, Button } from 'react-bootstrap';
     import { useNavigate } from 'react-router-dom';
     import axios from 'axios';
-    import backIcon from '../media/back.svg'; // Import the backIcon image
-    import { TimerContext } from '../component/TimerContext'; // Import TimerContext
-    
+    import backIcon from '../media/back.svg'; 
+    import { TimerContext } from '../component/TimerContext';
+    import StudentQuizResults from '../pages/student/StudentQuizResults'; 
     const StudentQuizOverview = ({ quiz, onBackClick }) => {
         const navigate = useNavigate();
-        const quizId = quiz._id; // Use _id instead of id
+        const quizId = quiz._id; 
         const [quizStarted, setQuizStarted] = useState(false);
         const [userName, setUserName] = useState('');
-        const [userEmail, setUserEmail] = useState(''); // Use email instead of userId
+        const [userEmail, setUserEmail] = useState(''); 
         const [loading, setLoading] = useState(true);
         const [showModal, setShowModal] = useState(false);
         const [answers, setAnswers] = useState({});
         const [score, setScore] = useState(0);
+
+        //FOR REDIRECTING TO RESULTS PAGE
+        const [showResults, setShowResults] = useState(false); // State to manage showing results
+        const [submissions, setSubmissions] = useState([]); // State to store submissions
+        const [data, setData] = useState(null); // State to store data
+        const [allSubmissions, setAllSubmissions] = useState([]); // State to store all submissions
+        const [selectedQuizData, setSelectedQuizData] = useState(null); // State to store selected quiz data
+        const [quizResultsData, setQuizResultsData] = useState(null); // State to store quiz results data
+        const [selectedQuiz, setSelectedQuiz] = useState(null); // State to store selected quiz
         const { timers, startTimer, stopTimer } = useContext(TimerContext); // Use TimerContext
     
         useEffect(() => {
@@ -31,9 +40,9 @@
                         throw new Error('Network response was not ok');
                     }
                     const data = await response.json();
-                    console.log('Fetched User Data:', data); // Log the fetched user data
+                    console.log('Fetched User Data:', data)
                     setUserName(data.user.fname);
-                    setUserEmail(data.user.email); // Set email instead of userId
+                    setUserEmail(data.user.email); 
                     const uniqueKey = `quizStarted_${data.user.email}_${quizId}`;
                     const uniqueTimeKey = `remainingTime_${data.user.email}_${quizId}`;
                     const storedQuizStarted = JSON.parse(localStorage.getItem(uniqueKey)) || false;
@@ -118,19 +127,64 @@
     
             // Store or submit responses
             try {
-                const response = await axios.post('http://localhost:5000/api/submit-quiz', {
-                    userEmail, // Send email instead of userId
+                const response = await axios.post('http://localhost:5000/api/submissions/submit-quiz', {
+                    userEmail, 
                     quizId,
                     answers,
                     score: calculatedScore,
                 });
                 console.log('Quiz submitted successfully:', response.data);
+                setSubmissions(response.data.submissions || []); 
+                setShowResults(true); // Show results after submission
+    
+                // Additional logic from handleQuizClick
+                if (!userEmail) {
+                    alert('User email not found. Please log in again.');
+                    return;
+                }
+    
+                const checkSubmissionResponse = await fetch(`http://localhost:5000/api/submissions/quiz/${quiz._id}/check-submission?userEmail=${userEmail}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                });
+                const checkSubmissionData = await checkSubmissionResponse.json();
+                setData(checkSubmissionData); 
+    
+                if (checkSubmissionResponse.ok) {
+                    const submissionsResponse = await fetch(`http://localhost:5000/api/submissions/quiz/${quiz._id}/submissions`, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        },
+                    });
+                    const submissionsData = await submissionsResponse.json();
+                    setAllSubmissions(submissionsData.submissions); 
+    
+                    const quizResponse = await fetch(`http://localhost:5000/api/quizzes/${quiz._id}`, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        },
+                    });
+                    const quizData = await quizResponse.json();
+                    setSelectedQuizData(quizData); 
+    
+                    if (checkSubmissionData.hasSubmitted) {
+                        setQuizResultsData(quizData); 
+                        setShowResults(true); 
+                    } else {
+                        setSelectedQuiz(quiz);
+                    }
+                } else {
+                    console.error('Error checking submission:', checkSubmissionData.error);
+                }
             } catch (error) {
                 console.error('Error submitting quiz:', error.response ? error.response.data : error.message);
             }
         };
     
-        console.log('Rendering StudentQuizOverview component'); // Add this line to log when the component is rendered
+            if (showResults) {
+          return <StudentQuizResults quizData={quizResultsData} allSubmissions={allSubmissions} data={{ attempts: allSubmissions.length }} userEmail={userEmail} />;
+        }
     
         return (
             <div id="quiz-overview" className="container">
@@ -206,7 +260,7 @@
                         </form>
                     </>
                 )}
-                <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal show={showModal} onHide={handleCloseModal} className="retake-quiz-modal">
                     <Modal.Header closeButton>
                         <Modal.Title>Start Quiz</Modal.Title>
                     </Modal.Header>
@@ -228,7 +282,7 @@
     
     StudentQuizOverview.propTypes = {
         quiz: PropTypes.shape({
-            _id: PropTypes.string.isRequired, // Use _id instead of id
+            _id: PropTypes.string.isRequired, 
             quiz_title: PropTypes.string.isRequired,
             quiz_desc: PropTypes.string.isRequired,
             quiz_instructions: PropTypes.string.isRequired,

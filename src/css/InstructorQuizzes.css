@@ -53,7 +53,7 @@ v
     margin: 0 0 16px 0;
     width:100%;
 }
-#instructor-quiz .quiz-card:hover {
+#instructor-quiz .quiz-card:hover,  #instructor-quiz .student-quiz-card:hover {
     background-color: #593e8a;
    border: #704db0;
     cursor: pointer;

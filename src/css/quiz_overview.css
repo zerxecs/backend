@@ -228,7 +228,7 @@
   background-color: #6c757d;
   border-color: #6c757d;
 }
-.modal-footer .btn-secondary:active {
+.modal-footer .btn-secondary:active,.modal-footer .btn-secondary:hover {
     background-color: #454a4e;
     border-color:  #454a4e;
 }

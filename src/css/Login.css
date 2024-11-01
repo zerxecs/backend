@@ -10,7 +10,7 @@
     color: rgb(20, 20, 20);
     font-size: 25px;
     font-weight: 700;
-    margin: -10px auto;
+    margin: 0 auto;
 }
 .left-text span{
     color: #BA68C8;
@@ -110,9 +110,40 @@ input::placeholder {
   text-decoration: underline;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 769px) {
+  #login  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
   .form-container {
     margin: 20px auto;
     width: 90%;
   }
+
+  .forgot-pw {
+    color: #DA88F9;
+    font-size: 13px;
+    margin: 1% !important;
+  }
+}
+  @media (max-width: 425px) {
+  .link-row {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  text-align: left;
+}
+.forgot-pw{
+  margin: 0;
+  display: flex !important;
+}
+
+#login  .form-container {
+  
+  height: 75vh;
+  
+}
+
 }

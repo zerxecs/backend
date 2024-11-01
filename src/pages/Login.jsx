@@ -29,14 +29,15 @@ const Login = () => {
       alert(data.message || data.error);
 
       if (response.ok) {
-        // Save the token
-      localStorage.setItem('token', data.token);
-      
-      if (data.role === 'instructor') {
-        window.location.href = './instructor'; 
-      } else if (data.role === 'student') {
-        window.location.href = './student'; 
-      }
+        // Save the token and email
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userEmail', email); // Store the email in localStorage
+
+        if (data.role === 'instructor') {
+          window.location.href = './instructor'; 
+        } else if (data.role === 'student') {
+          window.location.href = './student'; 
+        }
       }
     } catch (error) {
       alert('Error logging in: ' + error.message);
