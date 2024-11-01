@@ -154,9 +154,20 @@
                 });
             }, [quizzes]);
         
-            if (showQuizResults) {
-                return <StudentQuizResults quizData={quizResultsData} allSubmissions={allSubmissions} data={data} userEmail={localStorage.getItem('userEmail')} onRetakeQuiz={handleRetakeQuiz} onBack={handleBackToQuizList} onStartQuiz={handleStartQuiz} />;
+            if (showQuizResults && quizResultsData) {
+                return (
+                    <StudentQuizResults
+                        quizData={quizResultsData}
+                        allSubmissions={allSubmissions}
+                        data={data}
+                        userEmail={localStorage.getItem('userEmail')}
+                        onRetakeQuiz={handleRetakeQuiz}
+                        onBack={handleBackToQuizList}
+                        onStartQuiz={handleStartQuiz}
+                    />
+                );
             }
+        
             if (selectedQuiz && selectedQuiz._id) {
                 return (
                     <StudentQuizOverview 

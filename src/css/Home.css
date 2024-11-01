@@ -49,7 +49,7 @@
 }
 
 #home-user .welcome-card .name{
-  margin: 15px;
+  margin: 0 1px;
   width: 100%;
 }
 
@@ -191,7 +191,7 @@
 }
 
 #home-user .welcome-title .name {
-  margin: 0 3%;
+  margin: 0;
   width: 110%;
 }
 
@@ -282,6 +282,9 @@
       font-size: 35px;
       padding: 12% 0 0 0;
     
+  }
+  #home-user .welcome-title {
+  width: 100%;
   }
 }
 

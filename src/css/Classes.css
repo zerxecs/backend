@@ -19,6 +19,7 @@
 }
 
 #classes .welcome-title {
+  width: 100%;
     font-size: 20px;
     font-weight: bold;
     color: hsl(0, 0%, 10%);
@@ -320,8 +321,15 @@
       padding: 0 15px; 
       box-sizing: border-box;  */
     }
+
+    .card-title {
+      font-size: 12px;
+  
+  }
+  #classes .welcome-title {
+width: 100%;
   }
   
     
   
-  
+}

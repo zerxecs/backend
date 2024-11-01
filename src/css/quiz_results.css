@@ -90,10 +90,12 @@ body {
     color: #fff;
 }
 
-/* Student List */
+#student-result .performance-status {
+    margin: 50px 0 0 0;
+}
 
 #student-result .student-list {
-    margin-top: 0px;
+    margin: 0;
     width: auto;
 }
 
@@ -343,6 +345,8 @@ body {
     box-shadow: 0 0 0 1px #ba68c82f;;
 }
 /* Responsive Styles */
+
+
 @media (max-width: 768px) {
     #student-result body {
 margin: 15% 0 20% 0;
@@ -373,11 +377,13 @@ margin: 15% 0 20% 0;
     }
 
     #student-result .student-list table {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 
     #student-result .status-box {
         padding: 30px;
+        flex-direction: column;
+        align-items: center;
     }
 
     #student-result .attempt-selector {
@@ -389,14 +395,25 @@ margin: 15% 0 20% 0;
         margin-bottom: 10px;
     }
 
-    .status-grid {
+    .status-box {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
       }
     
-      .status-box {
-        width: 100%;
-        margin: 10px 0;
+      .status-box img {
+        margin: 0 0 0 65px;
+        height: 30px;
+        width: 40px;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .status-box p {
+        margin: 20px 0 0 0;
+        font-size: .8rem;
+        align-items: center;
+        justify-content: center;
       }
 }
 
@@ -428,4 +445,13 @@ margin: 15% 0 20% 0;
     #student-result .attempt-selector select {
         font-size: 0.875rem;
     }
+
+    .status-box img {
+        margin: 0 0 0 40px !important;
+      }
+
+      .status-box p {
+        font-size: .7rem;
+        margin: 10px 0 0 0;
+      }
 }
