@@ -18,3 +18,8 @@
   .custom-nav {
     background-color: #ffffff !important; 
   }
+
+  .nav-item{
+    text-align: start;
+    margin: 0 25px;
+  }

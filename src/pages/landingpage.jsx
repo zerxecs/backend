@@ -57,10 +57,10 @@ const LandingPage = () => {
         <div className="col-12 col-md-6">
           <img src={aboutImage} alt="About" className="img-fluid responsive-img" loading="lazy" />
         </div>
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-md-6 ">
           <div className="gradient-line my-3"></div>
           <h1 className="navbar-brand about-start">Get started!</h1>
-          <p className="lead mt-3">
+          <p className="lead mt-3 why-classiz-text">
             Want to experience the thrill of knowledge? Create engaging quizzes, gain insights, and embark on this knowledge journey with us? Dive right in!
           </p>
           <div className="d-flex mt-3 regbtn">
@@ -79,12 +79,12 @@ const LandingPage = () => {
 
       <div className="row">
         <div className="col-12 col-md-6">
-          <p>
+          <p className='why-classiz-text'>
             At classiz, we believe in learning with fun. Our dynamic quiz framework not only feeds your curiosity but also helps you track your growth over time.
           </p>
         </div>
         <div className="col-12 col-md-6">
-          <p>
+          <p className='why-classiz-text'>
             Our course creators handpick each question, ensuring you tackle real-world problems and keep your grey cells active!
           </p>
         </div>

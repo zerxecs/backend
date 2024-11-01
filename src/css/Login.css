@@ -128,7 +128,7 @@ input::placeholder {
     margin: 1% !important;
   }
 }
-  @media (max-width: 425px) {
+  @media (max-width: 426px) {
   .link-row {
   display: flex;
   flex-direction: column;
