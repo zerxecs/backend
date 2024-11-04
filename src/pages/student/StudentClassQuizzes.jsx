@@ -100,6 +100,7 @@
                         } else {
                             setSelectedQuiz(quiz);
                         }
+                        fetchQuizzes(); // Fetch quizzes again to update the list
                     } else {
                         console.error('Error checking submission:', data.error);
                     }
@@ -108,11 +109,10 @@
                 }
             };
         
-            const handleRetakeQuiz = () => {
-                setShowQuizResults(false);
-                setSelectedQuiz(selectedQuizData);
+              const handleRetakeQuiz = () => {
+              setShowQuizResults(false);
+              setSelectedQuiz(selectedQuizData); // Set the selected quiz to display the quiz overview
             };
-        
             const handleQuizUpdate = (updatedQuiz) => {
                 setQuizzes((prevQuizzes) =>
                     prevQuizzes.map((quiz) => (quiz._id === updatedQuiz._id ? updatedQuiz : quiz))
@@ -156,28 +156,29 @@
         
             if (showQuizResults && quizResultsData) {
                 return (
-                    <StudentQuizResults
-                        quizData={quizResultsData}
-                        allSubmissions={allSubmissions}
-                        data={data}
-                        userEmail={localStorage.getItem('userEmail')}
-                        onRetakeQuiz={handleRetakeQuiz}
-                        onBack={handleBackToQuizList}
-                        onStartQuiz={handleStartQuiz}
-                    />
+                  <StudentQuizResults
+                    quizData={quizResultsData}
+                    allSubmissions={allSubmissions}
+                    data={data}
+                    userEmail={localStorage.getItem('userEmail')}
+                    onRetakeQuiz={handleRetakeQuiz}
+                    onBack={handleBackToQuizList}
+                    onStartQuiz={handleStartQuiz}
+                  />
                 );
-            }
-        
+              }
+              
+             // Inside ClassQuizzes component
             if (selectedQuiz && selectedQuiz._id) {
                 return (
                     <StudentQuizOverview 
                         quiz={selectedQuiz} 
-                        onBackClick={() => setSelectedQuiz(null)} 
+                        onBackClick={handleBackToQuizList} // Pass the handleBackToQuizList function as a prop
                         onQuizUpdate={handleQuizUpdate}
+                        onQuizSubmit={fetchQuizzes} // Pass the fetchQuizzes function as a prop
                     />
                 );
             }
-        
             return (
                 <div id='instructor-quiz'>
                     <header className="header">
