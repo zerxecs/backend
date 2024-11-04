@@ -1,0 +1,41 @@
+.chart-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #3C2A5D; /* Container color */
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #DA88F9; /* Border color */
+  }
+  
+  .chart-container canvas {
+    display: block;          /* Prevent inline canvas behavior */
+    width: 100%;             /* Ensure canvas scales with the container */
+    height: auto;            /* Allow height to adjust proportionally */
+  }
+  
+  .navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .navigation-buttons button {
+    background-color: #5B4C76; /* Navigation button background color */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .navigation-buttons button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .navigation-buttons button:hover:not(:disabled) {
+    background-color: #7E57C2;
+  }

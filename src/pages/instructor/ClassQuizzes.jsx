@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import QuizResults from '../../component/QuizResults'; // Import PerformanceOverview component
 import '../../css/InstructorQuizzes.css';
-import { FaFilter } from 'react-icons/fa'; 
 import backIcon from '../../media/back.svg';
 import calendarIcon from '../../media/calendar.svg';
 import quizOverviewIcon from '../../media/quiz_overview.svg';
 import studentRecordIcon from '../../media/records.svg';
-import EditActivity from './EditActivity'; // Import EditActivity component
 import CreateActivity from './CreateActivity'; // Import CreateActivity component
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import QuizResults from '../../component/QuizResults'; // Import QuizResults component
+import EditActivity from './EditActivity'; // Import EditActivity component
 
 const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
     const [quizzes, setQuizzes] = useState([]);
@@ -154,7 +153,7 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
     };
 
     if (selectedQuiz && showResults) {
-        return <QuizResults quizId={selectedQuiz._id} />;
+        return <QuizResults quizId={selectedQuiz._id} />; // Replace QuizResults with PerformanceOverview
     }
 
     if (selectedQuiz) {

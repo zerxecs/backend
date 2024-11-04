@@ -1,0 +1,48 @@
+.incorrect-questions {
+    width: 100%;
+    margin-top: 20px;
+    background-color: #3C2A5D; /* Container color */
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid #DA88F9; /* Border color */
+  }
+  
+  .incorrect-questions h2 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #DA88F9; /* Title color */
+  }
+  
+  .incorrect-questions table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+  }
+  
+  .incorrect-questions th, .incorrect-questions td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    color: #fff; /* Text color */
+  }
+  
+  .incorrect-questions th {
+    background-color: #fff; /* Header background color */
+    color: #3C2A5D; /* Header text color for readability */
+    font-weight: bold;
+  }
+  
+  .incorrect-questions tr:nth-child(even) {
+    background-color: #5B4C76; /* Even row background color */
+  }
+  
+  .incorrect-questions ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .incorrect-questions li {
+    text-align: left;
+  }
