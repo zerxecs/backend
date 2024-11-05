@@ -304,7 +304,7 @@
 }
 
 /* Adjust sizes for phone and tablet layouts */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .home-section .row, 
   .about-section .row, 
   .contact-section .row {
@@ -408,7 +408,7 @@
 }
 
 /* Adjust sizes for smaller phones */
-@media (max-width: 424px) {
+@media (max-width: 425px) {
   .home-section .row, 
   .about-section .row, 
   .contact-section .row {

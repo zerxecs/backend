@@ -349,12 +349,11 @@ body {
 
 @media (max-width: 768px) {
     #student-result body {
-margin: 15% 0 20% 0;
+        margin: 15% 0 20% 0;
     }
     .result-container {
         padding: 20px;
-        margin: 15% 0 20% 0;
-
+        margin: 15% 0 20% 0; /* Adjusted margin */
     }
 
     #student-result .quiz-wrapper {
@@ -398,28 +397,29 @@ margin: 15% 0 20% 0;
     .status-box {
         flex-direction: column;
         align-items: flex-start;
-      }
-    
-      .status-box img {
+    }
+
+    .status-box img {
         margin: 0 0 0 65px;
         height: 30px;
         width: 40px;
         align-items: center;
         justify-content: center;
         text-align: center;
-      }
+    }
 
-      .status-box p {
+    .status-box p {
         margin: 20px 0 0 0;
         font-size: .8rem;
         align-items: center;
         justify-content: center;
-      }
+    }
 }
 
 @media (max-width: 480px) {
     .result-container {
         padding: 10px;
+        margin-bottom: 20px; /* Added margin-bottom */
     }
 
     #student-result .quiz-wrapper {
@@ -429,6 +429,7 @@ margin: 15% 0 20% 0;
     #student-result .quiz-title {
         font-size: 0.875rem;
     }
+
     #student-result .student-list table {
         font-size: 0.7rem;
     }
@@ -448,10 +449,10 @@ margin: 15% 0 20% 0;
 
     .status-box img {
         margin: 0 0 0 40px !important;
-      }
+    }
 
-      .status-box p {
+    .status-box p {
         font-size: .7rem;
         margin: 10px 0 0 0;
-      }
+    }
 }

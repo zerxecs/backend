@@ -23,7 +23,7 @@ const ClassDetails = ({ selectedClass, onBack, onDelete }) => {
   const [showModal, setShowModal] = useState(false);
   const [studentToRemove, setStudentToRemove] = useState(null);
   const [showDeleteClassModal, setShowDeleteClassModal] = useState(false);
-
+const [totalAssignedStudents, setTotalAssignedStudents] = useState(0);
   useEffect(() => {
     console.log('Selected class:', selectedClass);
     fetchRegisteredStudents();
@@ -37,13 +37,14 @@ const ClassDetails = ({ selectedClass, onBack, onDelete }) => {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-
+  
       const data = await response.json();
       if (data.success) {
         const registered = data.students.filter(student =>
           selectedClass.students.includes(student.email)
         );
         setRegisteredStudents(registered);
+        setTotalAssignedStudents(registered.length); // Set total assigned students
       } else {
         setError(data.error || 'Error fetching registered students');
       }
@@ -234,7 +235,7 @@ const ClassDetails = ({ selectedClass, onBack, onDelete }) => {
           {showCreateActivity ? (
             <CreateActivity onBackClick={handleBackToClassDetails} selectedClass={selectedClass} onQuizCreate={handleQuizCreate} />
           ) : showQuizzes ? (
-            <ClassQuizzes selectedClass={selectedClass} onBack={handleBackFromQuizzes} />
+            <ClassQuizzes selectedClass={selectedClass} onBack={handleBackFromQuizzes} totalAssignedStudents={totalAssignedStudents}    registeredStudents={registeredStudents} />
           ) : (
             <>
               <div id="class-details" className="header-content">

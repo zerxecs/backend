@@ -1,74 +1,49 @@
-import React, { useEffect } from 'react';
-import '../../css/performance_overview.css';
-import drawBarChart from '../../component/performance_chart';
-import calendarIcon from '../../media/calendar.svg';
-import performanceIcon from '../../media/performance.svg';
+import React from 'react';
+import contactImage from '../../assets/contact.webp'; 
+import '../../css/contact.css';
 
-const HelpSupport = () => {
-  useEffect(() => {
-    const canvas = document.getElementById('performanceChart');
-    if (canvas) {
-      drawBarChart(canvas); 
-    }
-  }, []); 
-
+const ContactSection = () => {
   return (
-    <div id='instructor-performance-ov' className="perfomance-container">
-
-      <div className="quiz-wrapper">
-        <div className="details-wrapper">
-          <h1 className="quiz-title">Chemistry</h1>
-          <h2 className="quiz-title">Chemistry Quiz 1</h2>
-          <hr />
-          <div className="date-wrapper">
-            <img src={calendarIcon} alt="Calendar Icon" className="image icon" />
-            <p className="due-date">Due Date: Sept 20 1:00 PM</p>
-          </div>
-          <p className="course-code">Section: BSCH2002</p>
+    <section id="contact" className="contact-section container">
+      <div className="row">
+        <div className="col-12 col-md-6">
+          <div className="gradient-contact my-3"></div>
+          <h1>Contact Us</h1>
+          <p>Feel free to message us!</p>
+          <form className="mt-4">
+            <div className="mb-3">
+              <label htmlFor="name" className="form-label">Name</label>
+              <input type="text" className="form-control" id="name" placeholder="Your Name" />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">Email</label>
+              <input type="email" className="form-control" id="email" placeholder="Your Email" />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="message" className="form-label">Message</label>
+              <textarea className="form-control" id="message" rows="4" placeholder="Your Message"></textarea>
+            </div>
+            <button type="submit" className="btn btn-primary">Send Message</button>
+          </form>
+        </div>
+        <div className="col-12 col-md-6">
+          <img src={contactImage} alt="Contact" className="img-fluid" width="600" height="400" loading="lazy" />
         </div>
       </div>
 
-      <div className="performance-overview">
-        <div className="image-wrapper">
-          <img src={performanceIcon} alt="Performance Overview" className="performance-icon" />
-          <h2>Performance Overview</h2>
-        </div>
-        <div className="chart">
-          <canvas id="performanceChart" width="600" height="400"></canvas>
-        </div>
+      <div className="social-icons mt-4">
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="me-3" aria-label="Facebook">
+          <i className="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="me-3" aria-label="Instagram">
+          <i className="fab fa-instagram"></i>
+        </a>
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+          <i className="fab fa-twitter"></i>
+        </a>
       </div>
-
-      <div className="student-list">
-        <h2>List of Students</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Student Name</th>
-              <th>Submitted</th>
-              <th>Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>1</td><td>Swift</td><td>Yes</td><td>85</td></tr>
-            <tr><td>2</td><td>Carpenter</td><td>Yes</td><td>92</td></tr>
-            <tr><td>3</td><td>Rodrigo</td><td>Yes</td><td>78</td></tr>
-            <tr><td>4</td><td>Zefanya</td><td>Yes</td><td>88</td></tr>
-            <tr><td>5</td><td>Kim</td><td>Yes</td><td>91</td></tr>
-            <tr><td>6</td><td>Vergara</td><td>Yes</td><td>95</td></tr>
-            <tr><td>7</td><td>Grande</td><td>Yes</td><td>83</td></tr>
-            <tr><td>8</td><td>Roan</td><td>Yes</td><td>100</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div className="student-summary">
-        <p><span className="bold">Assigned: </span> 8 students</p>
-        <p><span className="bold">Turned-in: </span> 8 students</p>
-        <p><span className="bold">Missed: </span> 0 students</p>
-      </div>
-    </div>
+    </section>
   );
 };
 
-export default HelpSupport;
+export default ContactSection;

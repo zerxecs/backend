@@ -181,7 +181,7 @@ const JoinClass = () => {
                 </div>
             </div>
 
-            <Modal show={showModal} onHide={handleCloseModal}>
+            <Modal show={showModal} onHide={handleCloseModal} className="retake-quiz-modal">
                 <Modal.Header closeButton>
                     <Modal.Title>Join Class</Modal.Title>
                 </Modal.Header>

@@ -6,24 +6,25 @@ import backIcon from '../../media/back.svg';
 import calendarIcon from '../../media/calendar.svg';
 import quizOverviewIcon from '../../media/quiz_overview.svg';
 import studentRecordIcon from '../../media/records.svg';
-import EditActivity from './EditActivity'; // Import EditActivity component
-import CreateActivity from './CreateActivity'; // Import CreateActivity component
+import EditActivity from './EditActivity'; 
+import CreateActivity from './CreateActivity'; 
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import QuizResults from '../../component/QuizResults'; // Import QuizResults component
+import QuizResults from './QuizResults'; 
 
-const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
+const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess, userEmail, totalAssignedStudents, registeredStudents }) => {
     const [quizzes, setQuizzes] = useState([]);
     const [dropdownVisible, setDropdownVisible] = useState(false);
-    const [selectedQuiz, setSelectedQuiz] = useState(null); // State to manage selected quiz
-    const [showResults, setShowResults] = useState(false); // State to manage results view
+    const [selectedQuiz, setSelectedQuiz] = useState(null); 
+    const [showResults, setShowResults] = useState(false); 
+    const [submissions, setSubmissions] = useState([]); // Add state for submissions
     const [categorizedQuizzes, setCategorizedQuizzes] = useState({
         upcoming: [],
         pastDue: [],
         completed: []
     });
-    const [selectedCategory, setSelectedCategory] = useState('upcoming'); // State to manage selected category
-    const [creatingQuiz, setCreatingQuiz] = useState(false); // State to manage quiz creation
+    const [selectedCategory, setSelectedCategory] = useState('upcoming'); 
+    const [creatingQuiz, setCreatingQuiz] = useState(false); 
 
     const fetchQuizzes = async () => {
         try {
@@ -64,7 +65,7 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
             }
 
             const data = await response.json();
-            console.log(`Fetched submissions for quiz ID ${quizId}:`, data); // Debugging log
+            console.log(`Fetched submissions for quiz ID ${quizId}:`, data); 
 
             const submissions = data.submissions;
             if (!Array.isArray(submissions)) {
@@ -75,12 +76,51 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
             // Return distinct student submissions
             const distinctSubmissions = Array.from(new Set(submissions.map(submission => submission.userEmail)))
                 .map(email => submissions.find(submission => submission.userEmail === email));
-            console.log(`Distinct submissions for quiz ID ${quizId}:`, distinctSubmissions); // Debugging log
+            console.log(`Distinct submissions for quiz ID ${quizId}:`, distinctSubmissions);
 
             return distinctSubmissions;
         } catch (error) {
             console.error('Error fetching submissions:', error);
             return [];
+        }
+    };
+
+    const fetchQuizSubmissions = async (quizId) => {
+        try {
+            console.log('Fetching submissions for quiz ID:', quizId);
+            const response = await fetch(`http://localhost:5000/api/submissions/quiz/${quizId}/submissions-record`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            console.log('Fetched submissions:', data);
+            return data.submissions;
+        } catch (error) {
+            console.error('Error fetching submissions:', error);
+            return [];
+        }
+    };
+
+    const fetchQuizDetails = async (quizId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/quizzes/${quizId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            console.log('Fetched quiz details:', data);
+            return data;
+        } catch (error) {
+            console.error('Error fetching quiz details:', error);
+            return null;
         }
     };
 
@@ -91,8 +131,7 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
     
         for (const quiz of quizzes) {
             const submissions = await fetchSubmissions(quiz._id);
-            console.log(`Submissions count for quiz ID ${quiz._id}:`, submissions.length); // Debugging log
-    
+            console.log(`Submissions count for quiz ID ${quiz._id}:`, submissions.length); 
             const totalStudents = selectedClass.students.length;
             const submittedStudents = submissions.length;
             const now = new Date();
@@ -119,20 +158,26 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
     };
 
     const handleQuizOverviewClick = (quiz) => {
-        setSelectedQuiz(quiz); // Set the selected quiz
+        setSelectedQuiz(quiz); 
     };
 
-    const handleResultsClick = (quiz) => {
-        setSelectedQuiz(quiz);
-        setShowResults(true);
+    const handleResultsClick = async (quiz) => {
+        const fetchedSubmissions = await fetchQuizSubmissions(quiz._id);
+        const fetchedQuizDetails = await fetchQuizDetails(quiz._id);
+        if (fetchedQuizDetails) {
+            console.log('Selected Quiz:', fetchedQuizDetails); // Add this line to check the quiz object
+            setSelectedQuiz(fetchedQuizDetails);
+            setSubmissions(fetchedSubmissions);
+            setShowResults(true);
+        }
     };
 
     const handleQuizUpdate = (updatedQuiz) => {
         setQuizzes((prevQuizzes) =>
             prevQuizzes.map((quiz) => (quiz._id === updatedQuiz._id ? updatedQuiz : quiz))
         );
-        setSelectedQuiz(null); // Close the EditActivity component
-        fetchQuizzes(); // Fetch the latest quizzes after an update
+        setSelectedQuiz(null); 
+        fetchQuizzes(); 
         toast.success('Quiz updated successfully!', {
             className: 'custom-toast'
         });
@@ -143,8 +188,8 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
 
     const handleQuizCreate = (createdQuiz) => {
         setQuizzes((prevQuizzes) => [...prevQuizzes, createdQuiz]);
-        setCreatingQuiz(false); // Close the CreateActivity component
-        fetchQuizzes(); // Fetch the latest quizzes after creation
+        setCreatingQuiz(false); 
+        fetchQuizzes(); 
         toast.success('Quiz created successfully!', {
             className: 'custom-toast'
         });
@@ -153,10 +198,24 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
         }
     };
 
-    if (selectedQuiz && showResults) {
-        return <QuizResults quizId={selectedQuiz._id} />;
-    }
+    const handleBackFromResults = () => {
+        setSelectedQuiz(null);
+        setShowResults(false);
+    };
 
+    if (selectedQuiz && showResults) {
+      return (
+        <QuizResults 
+          quiz={selectedQuiz} 
+          submissions={submissions} 
+          className={selectedClass.name}
+          totalAssignedStudents={totalAssignedStudents} 
+          registeredStudents={registeredStudents} 
+          onBack={handleBackFromResults} 
+          backIcon={backIcon} 
+        />
+      );
+    }
     if (selectedQuiz) {
         return (
             <>
@@ -214,8 +273,7 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
                                                 </p>
                                             </div>
                                         )}
-                                        <p className="course-code">Description: {selectedClass.description}</p>
-                                    </div>
+                                        <p className="course-code">Description: {quiz.quiz_desc}</p>                                    </div>
                                 </div>
 
                                 <div className="quiz-details">
@@ -269,7 +327,7 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
                                                 </p>
                                             </div>
                                         )}
-                                        <p className="course-code">Description: {selectedClass.description}</p>
+                                        <p className="course-code">Description: {quiz.quiz_desc}</p>
                                     </div>
                                 </div>
 
@@ -324,7 +382,7 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
                                                 </p>
                                             </div>
                                         )}
-                                        <p className="course-code">Description: {selectedClass.description}</p>
+                                        <p className="course-code">Description: {quiz.quiz_desc}</p>
                                     </div>
                                 </div>
 
@@ -360,9 +418,11 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess }) => {
 };
 
 ClassQuizzes.propTypes = {
-    selectedClass: PropTypes.object.isRequired,
-    onBack: PropTypes.func.isRequired,
-    onQuizUpdateSuccess: PropTypes.func, // Add new prop type
+  selectedClass: PropTypes.object.isRequired,
+  onBack: PropTypes.func.isRequired,
+  onQuizUpdateSuccess: PropTypes.func,
+  userEmail: PropTypes.string,
+  totalAssignedStudents: PropTypes.number.isRequired, // Add new prop type
+  registeredStudents: PropTypes.array.isRequired, // Add new prop type
 };
-
 export default ClassQuizzes;

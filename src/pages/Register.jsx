@@ -3,6 +3,8 @@ import Header from '../component/header';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/Register.css';
 import loginImage from '../assets/loginreg.webp';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
   const [role, setRole] = useState('');
@@ -24,7 +26,7 @@ const Register = () => {
       fname: e.target.fname.value,
       lname: e.target.lname.value,
       password: e.target.password.value,
-      confirmPassword: e.target.confirmPassword.value, // Include confirmPassword
+      confirmPassword: e.target.confirmPassword.value,
     };
 
     try {
@@ -37,9 +39,13 @@ const Register = () => {
       });
 
       const data = await response.json();
-      alert(data.message || data.error);
+      if (response.ok) {
+        toast.success(data.message || 'Registration successful!');
+      } else {
+        toast.error(data.error || 'Registration failed!');
+      }
     } catch (error) {
-      alert('Error registering user: ' + error.message);
+      toast.error('Error registering user: ' + error.message);
     }
   };
 
@@ -99,6 +105,7 @@ const Register = () => {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

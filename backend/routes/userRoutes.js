@@ -36,6 +36,7 @@ router.post('/register', async (req, res) => {
     res.status(400).json({ error: 'Error registering user: ' + error.message });
   }
 });
+
 // Login Route
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -70,8 +71,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-
-
 // Route to get the logged-in user's details
 router.get('/user', authMiddleware, async (req, res) => {
   try {
@@ -86,7 +85,6 @@ router.get('/user', authMiddleware, async (req, res) => {
   }
 });
 
-
 // Route to fetch registered students
 router.get('/students', async (req, res) => {
   try {
@@ -99,6 +97,22 @@ router.get('/students', async (req, res) => {
 });
 
 
+// Route to fetch user names based on emails
+router.post('/names', async (req, res) => {
+  const { emails } = req.body;
+
+  try {
+    const users = await User.find({ email: { $in: emails } }).select('email fname lname');
+    const userNames = {};
+    users.forEach(user => {
+      userNames[user.email] = `${user.fname} ${user.lname}`;
+    });
+    res.json(userNames);
+  } catch (error) {
+    console.error('Error fetching user names:', error);
+    res.status(500).json({ error: 'Failed to fetch user names.' });
+  }
+});
 
 
 module.exports = router;

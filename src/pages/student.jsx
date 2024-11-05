@@ -37,7 +37,7 @@ const Sidebar = ({ setContent, setShowPrivate, isSidebarVisible }) => {
       <ul className="nav nav-pills flex-column mb-auto">
         <li className="nav-item"><h6 className="nav-header">Menu</h6></li>
         <li className="nav-item">
-          <a href="#home-student" className="nav-link active" onClick={() => setContent("Home")}>
+          <a href="#home-student" className="nav-link" onClick={() => setContent("Home")}>
             <Icon icon={homeIcon} /> Home
           </a>
         </li>

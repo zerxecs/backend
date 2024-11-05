@@ -1,94 +1,49 @@
 import React from 'react';
-import '../../css/quiz_results.css';
-import calendarIcon from '../../media/calendar.svg';
-import summaryIcon from '../../media/graph.svg';
-import correctIcon from '../../media/check.svg';
-import incorrectIcon from '../../media/incorrect.svg';
-import attemptsIcon from '../../media/retry copy.svg';
+import contactImage from '../../assets/contact.webp'; 
+import '../../css/contact.css';
 
-function StudentQuizResults() {
+const ContactSection = () => {
   return (
-    <div id='student-result' className="container">
-      <div className="quiz-wrapper">
-        {/* <div className="image-container">
-          <img src={quizImage} alt="Quiz" className="quiz-image" />
-        </div> */}
-        <div className="details-wrapper">
-          <h2 className="quiz-title">Calculus Quiz 1</h2>
-          <hr />
-          <div className="date-wrapper">
-            <img src={calendarIcon} alt="Calendar Icon" className="image icon" />
-            <p className="due-date">Due Date: Sept 20 1:00 PM</p>
-          </div>
-          <p className="course-code">Section: BSCH2002</p>
+    <section id="contact" className="contact-section container">
+      <div className="row">
+        <div className="col-12 col-md-6">
+          <div className="gradient-contact my-3"></div>
+          <h1>Contact Us</h1>
+          <p>Feel free to message us!</p>
+          <form className="mt-4">
+            <div className="mb-3">
+              <label htmlFor="name" className="form-label">Name</label>
+              <input type="text" className="form-control" id="name" placeholder="Your Name" />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">Email</label>
+              <input type="email" className="form-control" id="email" placeholder="Your Email" />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="message" className="form-label">Message</label>
+              <textarea className="form-control" id="message" rows="4" placeholder="Your Message"></textarea>
+            </div>
+            <button type="submit" className="btn btn-primary">Send Message</button>
+          </form>
+        </div>
+        <div className="col-12 col-md-6">
+          <img src={contactImage} alt="Contact" className="img-fluid" width="600" height="400" loading="lazy" />
         </div>
       </div>
 
-      {/* Quiz Summary */}
-      <div className="quiz-summary">
-        <h3>
-          <img src={summaryIcon} alt="Summary Icon" /> Quiz Summary
-        </h3>
-
-        {/* Progress Bar */}
-        <p>Level of Accuracy</p>
-
-        <div className="progress-border">
-          <div className="progress-bar">
-            <div className="progress" style={{ width: '70%' }}></div>
-          </div>
-        </div>
+      <div className="social-icons mt-4">
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="me-3" aria-label="Facebook">
+          <i className="fab fa-facebook-f"></i>
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="me-3" aria-label="Instagram">
+          <i className="fab fa-instagram"></i>
+        </a>
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+          <i className="fab fa-twitter"></i>
+        </a>
       </div>
-
-      
-
-      <div className="performance-status">
-        <div className="title">Performance Status</div>
-
-        <div className="status-grid">
-          <div className="status-box correct-items">
-            <img src={correctIcon} alt="Correct Items" className="status-icon" />
-            correct items
-          </div>
-          <div className="status-box incorrect-items">
-            <img src={incorrectIcon} alt="Incorrect Items" className="status-icon" />
-            incorrect items
-          </div>
-          <div className="status-box attempts">
-            <img src={attemptsIcon} alt="Attempts" className="status-icon" />
-            attempts
-          </div>
-        </div>
-
-        <div className="student-list">
-          <table>
-            <thead>
-              <tr>
-                <th>Attempt</th>
-                <th>Score</th>
-                <th>Submission Date</th>
-                <th>Time Spent</th>
-                <th>Accuracy</th>
-                <th>Feedback</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>First</td>
-                <td>85/100</td>
-                <td>10/15/2024 11:00 PM</td>
-                <td>1 hour</td>
-                <td>85%</td>
-                <td>Pass</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-      
-      </div>
-    </div>
+    </section>
   );
 };
 
-export default StudentQuizResults;
+export default ContactSection;

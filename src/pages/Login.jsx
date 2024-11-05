@@ -3,6 +3,9 @@ import Header from '../component/header';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/Login.css';
 import loginImage from '../assets/loginreg.webp';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -10,12 +13,12 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const userData = {
       email,
       password,
     };
-
+  
     try {
       const response = await fetch('http://localhost:5000/api/login', {
         method: 'POST',
@@ -24,23 +27,24 @@ const Login = () => {
         },
         body: JSON.stringify(userData),
       });
-
+  
       const data = await response.json();
-      alert(data.message || data.error);
-
       if (response.ok) {
+        toast.success(data.message || 'Login successful!');
         // Save the token and email
         localStorage.setItem('token', data.token);
-        localStorage.setItem('userEmail', email); // Store the email in localStorage
-
+        localStorage.setItem('userEmail', email); 
+  
         if (data.role === 'instructor') {
           window.location.href = './instructor'; 
         } else if (data.role === 'student') {
           window.location.href = './student'; 
         }
+      } else {
+        toast.error(data.error || 'Login failed!');
       }
     } catch (error) {
-      alert('Error logging in: ' + error.message);
+      toast.error('Error logging in: ' + error.message);
     }
   };
 

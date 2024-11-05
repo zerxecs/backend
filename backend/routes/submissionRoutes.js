@@ -100,5 +100,69 @@ router.get('/submissions', verifyToken, async (req, res) => {
 });
 
 
+// Route to get all submissions for a quiz
+router.get('/quiz/:quizId/submissions', async (req, res) => {
+    const { quizId } = req.params;
+
+    try {
+        // Find the quiz by ID
+        const quiz = await Quiz.findById(quizId);
+
+        if (!quiz) {
+            return res.status(404).json({ message: 'Quiz not found' });
+        }
+
+        // Find all submissions for the quiz
+        const submissions = await Submission.find({ quizId });
+
+        res.status(200).json({ submissions });
+    } catch (error) {
+        console.error('Error getting submissions:', error);
+        res.status(500).json({ message: 'Error getting submissions', error: error.message });
+    }
+});
+
+// Route to get the number of distinct quizzes passed by a student
+router.get('/student/:userEmail/passed-quizzes', async (req, res) => {
+    const { userEmail } = req.params;
+
+    try {
+        // Find all submissions by the student
+        const submissions = await Submission.find({ userEmail });
+
+        // Filter out the quizzes that have been passed
+        const passedQuizzes = submissions.filter(submission => submission.score >= passingScore); // Define your passing score
+
+        // Get distinct quiz IDs
+        const distinctPassedQuizzes = [...new Set(passedQuizzes.map(submission => submission.quizId))];
+
+        res.status(200).json({ passedQuizzesCount: distinctPassedQuizzes.length });
+    } catch (error) {
+        console.error('Error getting passed quizzes:', error);
+        res.status(500).json({ message: 'Error getting passed quizzes', error: error.message });
+    }
+});
+
+router.get('/quiz/:quizId/submissions-record', async (req, res) => {
+    const { quizId } = req.params;
+
+    try {
+        console.log('Fetching quiz with ID:', quizId); // Add this line
+        const quiz = await Quiz.findById(quizId);
+
+        if (!quiz) {
+            console.log('Quiz not found with ID:', quizId); // Add this line
+            return res.status(404).json({ message: 'Quiz not found' });
+        }
+
+        // Find all submissions for the quiz
+        const submissions = await Submission.find({ quizId });
+
+        res.status(200).json({ submissions });
+    } catch (error) {
+        console.error('Error getting submissions:', error);
+        res.status(500).json({ message: 'Error getting submissions', error: error.message });
+    }
+});
 
 module.exports = router;
