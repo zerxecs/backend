@@ -1,0 +1,95 @@
+.performance-analysis-container {
+    padding: 20px;
+  }
+  
+  .result-container {
+    padding: 20px;
+    background-color: #3C2A5D;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #fff;
+  }
+  
+  .quiz-title-container {
+    margin-bottom: 20px;
+  }
+  
+  .quiz-title-container h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .quiz-title-container .due-date {
+    margin: 5px 0 0;
+    font-size: 16px;
+    color: #DA88F9;
+  }
+  
+  .quiz-summary, .performance-analysis, .results-table-container {
+    margin-bottom: 20px;
+  }
+  
+  .progress-bar-container {
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 10px 0;
+  }
+  
+  .progress-bar {
+    height: 20px;
+    background-color: #4caf50;
+    text-align: center;
+    line-height: 20px;
+    color: white;
+    transition: width 0.3s ease;
+  }
+  
+  .progress-bar:hover::after {
+    content: attr(title);
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+  
+  .result-summary {
+    margin: 10px 0;
+  }
+  
+  .results-table, .attempts-table, .student-summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .results-table th, .results-table td, .attempts-table th, .attempts-table td, .student-summary-table th, .student-summary-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    color: #fff;
+  }
+  
+  .results-table th, .attempts-table th, .student-summary-table th {
+    background-color: #7E57C2;
+    font-weight: bold;
+  }
+  
+  .results-table tr:nth-child(even), .attempts-table tr:nth-child(even), .student-summary-table tr:nth-child(even) {
+    background-color: #5B4C76;
+  }
+  
+  .results-table tr.correct {
+    background-color: rgba(75, 192, 192, 0.2);
+  }
+  
+  .results-table tr.wrong {
+    background-color: rgba(255, 99, 132, 0.2);
+  }

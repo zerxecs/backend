@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import QuizResults from '../../component/QuizResults'; // Import PerformanceOverview component
 import '../../css/InstructorQuizzes.css';
-import { FaFilter } from 'react-icons/fa'; 
 import backIcon from '../../media/back.svg';
 import calendarIcon from '../../media/calendar.svg';
 import quizOverviewIcon from '../../media/quiz_overview.svg';
 import studentRecordIcon from '../../media/records.svg';
-import EditActivity from './EditActivity'; 
-import CreateActivity from './CreateActivity'; 
+import EditActivity from './EditActivity'; // Import EditActivity component
+import CreateActivity from './CreateActivity'; // Import CreateActivity component
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import QuizResults from './QuizResults'; 
+import QuizResults from '../../component/QuizResults'; // Import QuizResults component
 
 const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess, userEmail, totalAssignedStudents, registeredStudents }) => {
     const [quizzes, setQuizzes] = useState([]);
@@ -204,17 +206,7 @@ const ClassQuizzes = ({ selectedClass, onBack, onQuizUpdateSuccess, userEmail, t
     };
 
     if (selectedQuiz && showResults) {
-      return (
-        <QuizResults 
-          quiz={selectedQuiz} 
-          submissions={submissions} 
-          className={selectedClass.name}
-          totalAssignedStudents={totalAssignedStudents} 
-          registeredStudents={registeredStudents} 
-          onBack={handleBackFromResults} 
-          backIcon={backIcon} 
-        />
-      );
+        return <QuizResults quizId={selectedQuiz._id} />;
     }
     if (selectedQuiz) {
         return (

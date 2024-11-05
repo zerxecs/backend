@@ -29,7 +29,7 @@ const classRoutes = require('./routes/classRoutes');
 app.use('/api', classRoutes);
 
 const studentRoutes = require('./routes/studentRoutes');
-app.use('/api', studentRoutes);
+app.use('/api/students', studentRoutes); // Mount student routes
 
 const quizRoutes = require('./routes/quizRoutes');
 app.use('/api/quizzes', quizRoutes);

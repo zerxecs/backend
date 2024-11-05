@@ -2,6 +2,8 @@ const express = require('express');
 const authMiddleware = require('../middleware/authMiddleware');
 const Class = require('../models/Class');
 const User = require('../models/User');
+const Submission = require('../models/Submission');
+const Quiz = require('../models/Quiz');
 
 const router = express.Router();
 
